@@ -1,0 +1,38 @@
+#spring:
+#  datasource:
+#    url: ${DB_URL}/travel-tour-service
+#    username: ${DB_USERNAME}
+#    password: ${DB_PASSWORD}
+#  jpa:
+#    properties:
+#      hibernate:
+#        dialect: org.hibernate.dialect.PostgreSQLDialect
+#    hibernate:
+#      ddl-auto: update
+#      show-sql: always
+#  application:
+#    name: TOUR-SERVICE
+#
+#eureka:
+#  client:
+#    serviceUrl:
+#      defaultZone: http://localhost:8761/eureka/
+#
+#management:
+#  tracing:
+#    sampling:
+#      probability: 1.0
+#
+#logging:
+#  pattern:
+#    level: '%5p [${spring.application.name:},%X{traceId:-},%X{spanId:-}]'
+#  level:
+#    org:
+#      springframework:
+#        web: DEBUG
+
+spring:
+  application:
+    name: TOUR-SERVICE
+  config:
+    import: optional:configserver:http://localhost:8888
