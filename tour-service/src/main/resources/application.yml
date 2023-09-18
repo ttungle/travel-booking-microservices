@@ -36,3 +36,5 @@ spring:
     name: TOUR-SERVICE
   config:
     import: optional:configserver:http://localhost:8888
+  jackson:
+    time-zone: Asia/Ho_Chi_Minh
