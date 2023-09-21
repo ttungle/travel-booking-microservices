@@ -1,13 +1,13 @@
 package site.thanhtungle.tourservice.controller;
 
 import lombok.AllArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import site.thanhtungle.tourservice.model.dto.TourRequest;
 import site.thanhtungle.tourservice.model.dto.TourResponse;
 import site.thanhtungle.tourservice.model.response.BaseApiResponse;
+import site.thanhtungle.tourservice.model.response.PagingApiResponse;
 import site.thanhtungle.tourservice.service.TourService;
 
 import java.util.List;
@@ -15,7 +15,6 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/v1/tours")
 @AllArgsConstructor
-@Slf4j
 public class TourController {
 
     private final TourService tourService;
@@ -29,13 +28,17 @@ public class TourController {
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
+    /*
+    * http://localhost:9191/api/v1/tours?page=1&size=10&sort=name:asc
+    * */
     @GetMapping
-    public ResponseEntity<BaseApiResponse<List<TourResponse>>> getAllTours() {
-        List<TourResponse> tourResponseList = tourService.getAllTours();
-        BaseApiResponse<List<TourResponse>> response = new BaseApiResponse<>();
-        response.setStatus(HttpStatus.OK.value());
-        response.setData(tourResponseList);
+    public ResponseEntity<PagingApiResponse<List<TourResponse>>> getAllTours(
+            @RequestParam(name = "page", defaultValue = "1") Integer page,
+            @RequestParam(name = "size", defaultValue = "10") Integer pageSize,
+            @RequestParam(name = "sort", required = false) String sort
+    ) {
+        PagingApiResponse<List<TourResponse>> tourResponseList = tourService.getAllTours(page, pageSize, sort);
 
-        return ResponseEntity.ok().body(response);
+        return ResponseEntity.ok().body(tourResponseList);
     }
 }
