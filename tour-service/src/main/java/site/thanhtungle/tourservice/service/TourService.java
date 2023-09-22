@@ -1,9 +1,9 @@
 package site.thanhtungle.tourservice.service;
 
 import jakarta.transaction.Transactional;
+import site.thanhtungle.commons.model.response.PagingApiResponse;
 import site.thanhtungle.tourservice.model.dto.TourRequest;
 import site.thanhtungle.tourservice.model.dto.TourResponse;
-import site.thanhtungle.tourservice.model.response.PagingApiResponse;
 
 import java.util.List;
 

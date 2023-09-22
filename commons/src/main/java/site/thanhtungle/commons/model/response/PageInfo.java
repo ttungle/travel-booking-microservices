@@ -1,4 +1,4 @@
-package site.thanhtungle.tourservice.model.response;
+package site.thanhtungle.commons.model.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
