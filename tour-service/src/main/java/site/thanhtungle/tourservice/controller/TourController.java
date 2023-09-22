@@ -4,10 +4,10 @@ import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import site.thanhtungle.commons.model.response.BaseApiResponse;
+import site.thanhtungle.commons.model.response.PagingApiResponse;
 import site.thanhtungle.tourservice.model.dto.TourRequest;
 import site.thanhtungle.tourservice.model.dto.TourResponse;
-import site.thanhtungle.tourservice.model.response.BaseApiResponse;
-import site.thanhtungle.tourservice.model.response.PagingApiResponse;
 import site.thanhtungle.tourservice.service.TourService;
 
 import java.util.List;

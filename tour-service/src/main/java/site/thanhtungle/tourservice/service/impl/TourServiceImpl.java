@@ -7,12 +7,12 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import site.thanhtungle.commons.model.response.PageInfo;
+import site.thanhtungle.commons.model.response.PagingApiResponse;
 import site.thanhtungle.tourservice.mapper.TourMapper;
 import site.thanhtungle.tourservice.model.dto.TourRequest;
 import site.thanhtungle.tourservice.model.dto.TourResponse;
 import site.thanhtungle.tourservice.model.entity.Tour;
-import site.thanhtungle.tourservice.model.response.PageInfo;
-import site.thanhtungle.tourservice.model.response.PagingApiResponse;
 import site.thanhtungle.tourservice.repository.TourRepository;
 import site.thanhtungle.tourservice.service.TourService;
 
