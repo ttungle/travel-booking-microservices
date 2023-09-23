@@ -7,17 +7,11 @@ import java.util.List;
 
 @Getter
 @Setter
-@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
 @Table(name = "tour_exclude")
-public class TourExclude {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
-    private Long id;
+public class TourExclude extends BaseEntity {
 
     @Column(name = "content")
     private String content;

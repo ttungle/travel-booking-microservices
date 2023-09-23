@@ -5,17 +5,11 @@ import lombok.*;
 
 @Getter
 @Setter
-@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
 @Table(name = "tour_language")
-public class TourLanguage {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
-    private Long id;
+public class TourLanguage extends BaseEntity {
 
     @Column(name = "language")
     private String language;
