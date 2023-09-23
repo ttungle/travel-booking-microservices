@@ -8,17 +8,11 @@ import java.util.List;
 
 @Getter
 @Setter
-@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
 @Table(name = "tour_category")
-public class TourCategory {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
-    private Long id;
+public class TourCategory extends BaseEntity {
 
     @NotBlank(message = "Tour category name cannot be empty or null.")
     @Column(name = "name")

@@ -7,17 +7,11 @@ import java.time.Instant;
 
 @Getter
 @Setter
-@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
 @Table(name = "tour_itinerary")
-public class TourItinerary {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
-    private Long id;
+public class TourItinerary extends BaseEntity {
 
     @Column(name = "title")
     private String title;

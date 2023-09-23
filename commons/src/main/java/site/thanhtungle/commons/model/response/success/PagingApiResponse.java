@@ -1,4 +1,4 @@
-package site.thanhtungle.commons.model.response;
+package site.thanhtungle.commons.model.response.success;
 
 import lombok.Getter;
 import lombok.Setter;

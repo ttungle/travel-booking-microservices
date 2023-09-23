@@ -6,8 +6,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.lang.Nullable;
 
 import java.time.Instant;
@@ -19,12 +17,7 @@ import java.util.List;
 @AllArgsConstructor
 @Entity
 @Table(name = "tour")
-public class Tour {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
-    private Long id;
+public class Tour extends BaseEntity {
 
     @NotBlank(message = "Tour name cannot be empty or null.")
     @Column(name = "name")
@@ -70,16 +63,6 @@ public class Tour {
     @Column(name = "start_date")
     @Temporal(TemporalType.TIMESTAMP)
     private Instant startDate;
-
-    @Column(name = "created_at", nullable = false)
-    @CreatedDate
-    @Temporal(TemporalType.TIMESTAMP)
-    private Instant createdAt;
-
-    @Column(name = "updated_at", nullable = false)
-    @LastModifiedDate
-    @Temporal(TemporalType.TIMESTAMP)
-    private Instant updatedAt;
 
     @Column(name = "slug")
     private String slug;
