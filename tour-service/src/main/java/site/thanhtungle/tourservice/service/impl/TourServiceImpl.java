@@ -7,6 +7,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 import site.thanhtungle.commons.exception.CustomNotFoundException;
 import site.thanhtungle.commons.model.response.success.PageInfo;
 import site.thanhtungle.commons.model.response.success.PagingApiResponse;
@@ -18,6 +19,8 @@ import site.thanhtungle.tourservice.repository.TourRepository;
 import site.thanhtungle.tourservice.service.TourService;
 
 import java.security.InvalidParameterException;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
@@ -90,13 +93,29 @@ public class TourServiceImpl implements TourService {
     }
 
     private Sort getSort(String sort) {
-        if (!sort.contains(":")) return Sort.by(Sort.Direction.ASC, sort);
+        int sortParameterCount = StringUtils.countOccurrencesOf(sort, ",");
+        if (sortParameterCount >= 2) throw new InvalidParameterException("Cannot sort more than 2 fields.");
 
-        String[] sortElements = sort.split(":");
-        return switch (sortElements[1]) {
-            case "asc" -> Sort.by(Sort.Direction.ASC, sortElements[0]);
-            case "desc" -> Sort.by(Sort.Direction.DESC, sortElements[0]);
-            default -> null;
-        };
+        List<Sort.Order> orderList = new ArrayList<>();
+        if (!sort.contains(":")) {
+            orderList = Arrays.stream(sort.split(","))
+                    .map(field -> new Sort.Order(Sort.Direction.ASC, field))
+                    .toList();
+            return Sort.by(orderList);
+        }
+
+        String[] sortElements = sort.split(",");
+        orderList = Arrays.stream(sortElements).map(element -> {
+            if (!element.contains(":")) return new Sort.Order(Sort.Direction.ASC, element);
+
+            String[] splitFields = element.split(":");
+            return switch (splitFields[1]) {
+                case "asc" -> new Sort.Order(Sort.Direction.ASC, splitFields[0]);
+                case "desc" -> new Sort.Order(Sort.Direction.DESC, splitFields[0]);
+                default -> throw new InvalidParameterException(
+                        "Invalid sort direction. Sorting direction should be 'asc' or 'desc'.");
+            };
+        }).toList();
+        return orderList.isEmpty() ? null : Sort.by(orderList);
     }
 }
