@@ -1,0 +1,14 @@
+spring:
+  servlet:
+    multipart:
+      max-file-size: 100MB
+      max-request-size: 100MB
+
+minio:
+  url: http://localhost:9000
+  username: minioadmin
+  password: minioadmin
+  bucket:
+    name: travel-booking-storage
+  part:
+    size: -1
