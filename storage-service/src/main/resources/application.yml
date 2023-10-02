@@ -3,11 +3,16 @@ spring:
     multipart:
       max-file-size: 100MB
       max-request-size: 100MB
+  application:
+    name: STORAGE-SERVICE
+
+server:
+  port: 9002
 
 minio:
   url: http://localhost:9000
-  username: minioadmin
-  password: minioadmin
+  username: ${MINIO_USERNAME}
+  password: ${MINIO_PASSWORD}
   bucket:
     name: travel-booking-storage
   part:
