@@ -35,6 +35,20 @@ public interface StorageService {
     Resource getFile(String filePath);
 
     /**
+     * Delete a file
+     *
+     * @param filePath
+     * */
+    void deleteFile(String filePath);
+
+    /**
+     * Delete list files
+     *
+     * @param filePathList
+     * */
+    void deleteFiles(List<String> filePathList);
+
+    /**
      * Get a public file url
      *
      * @param filePath

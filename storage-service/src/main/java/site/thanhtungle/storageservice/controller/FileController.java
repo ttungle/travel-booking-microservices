@@ -1,6 +1,8 @@
 package site.thanhtungle.storageservice.controller;
 
 import lombok.AllArgsConstructor;
+import org.springframework.core.io.Resource;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -28,5 +30,17 @@ public class FileController {
                                                     @RequestParam("filePaths") List<String> filePathList) {
         List<FileDto> response = storageService.uploadFiles(fileList, filePathList);
         return ResponseEntity.ok().body(response);
+    }
+
+    @GetMapping
+    public ResponseEntity<Resource> getFile(@RequestParam("filePath") String filePath) {
+        Resource content = storageService.getFile(filePath);
+        return ResponseEntity.ok().body(content);
+    }
+
+    @DeleteMapping
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteFiles(@RequestParam("filePath") List<String> filePathList) {
+        storageService.deleteFiles(filePathList);
     }
 }

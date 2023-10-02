@@ -84,6 +84,16 @@ public class StorageServiceImpl implements StorageService {
     }
 
     @Override
+    public void deleteFile(String filePath) {
+        minioStorageService.removeObject(filePath);
+    }
+
+    @Override
+    public void deleteFiles(List<String> filePathList) {
+        minioStorageService.removeObjects(filePathList);
+    }
+
+    @Override
     public String getPublicFileUrl(String filePath) {
         String path = String.format("%s/%s/%s", minioUrl, bucketName, filePath);
         return UriUtils.encodePath(path, StandardCharsets.UTF_8);
