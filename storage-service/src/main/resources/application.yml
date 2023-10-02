@@ -1,19 +1,41 @@
+#spring:
+#  servlet:
+#    multipart:
+#      max-file-size: 100MB
+#      max-request-size: 100MB
+#
+#server:
+#  port: 9002
+#
+#eureka:
+#  client:
+#    serviceUrl:
+#      defaultZone: http://localhost:8761/eureka/
+#
+#management:
+#  tracing:
+#    sampling:
+#      probability: 1.0
+#
+#logging:
+#  pattern:
+#    level: '%5p [${spring.application.name:},%X{traceId:-},%X{spanId:-}]'
+#  level:
+#    org:
+#      springframework:
+#        web: DEBUG
+#
+#minio:
+#  url: http://localhost:9000
+#  username: ${MINIO_USERNAME}
+#  password: ${MINIO_PASSWORD}
+#  bucket:
+#    name: travel-booking-storage
+#  part:
+#    size: -1
+
 spring:
-  servlet:
-    multipart:
-      max-file-size: 100MB
-      max-request-size: 100MB
   application:
     name: STORAGE-SERVICE
-
-server:
-  port: 9002
-
-minio:
-  url: http://localhost:9000
-  username: ${MINIO_USERNAME}
-  password: ${MINIO_PASSWORD}
-  bucket:
-    name: travel-booking-storage
-  part:
-    size: -1
+  config:
+    import: optional:configserver:http://localhost:8888
