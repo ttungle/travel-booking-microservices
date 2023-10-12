@@ -38,3 +38,6 @@ spring:
     import: optional:configserver:http://localhost:8888
   jackson:
     time-zone: Asia/Ho_Chi_Minh
+  servlet:
+    multipart:
+      enabled: true

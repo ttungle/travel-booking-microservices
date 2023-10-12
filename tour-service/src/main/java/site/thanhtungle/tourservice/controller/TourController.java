@@ -1,9 +1,13 @@
 package site.thanhtungle.tourservice.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import site.thanhtungle.commons.model.response.success.BaseApiResponse;
 import site.thanhtungle.commons.model.response.success.PagingApiResponse;
 import site.thanhtungle.tourservice.model.dto.TourRequest;
@@ -18,11 +22,16 @@ import java.util.List;
 public class TourController {
 
     private final TourService tourService;
-    @PostMapping
-    public ResponseEntity<BaseApiResponse<TourResponse>> createTour(@RequestBody TourRequest tourRequest) {
-        TourResponse tourResponse = tourService.saveTour(tourRequest);
+    @PostMapping(value = "", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<BaseApiResponse<TourResponse>> createTour(
+            @RequestPart(value = "tour") TourRequest tourRequest,
+            @RequestPart(value = "files", required = false) List<MultipartFile> fileList
+    ) {
+        TourResponse tourResponse = tourService.saveTour(tourRequest, fileList);
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.add(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE);
         BaseApiResponse<TourResponse> response = new BaseApiResponse<>(HttpStatus.CREATED.value(), tourResponse);
-        return ResponseEntity.status(HttpStatus.CREATED).body(response);
+        return ResponseEntity.status(HttpStatus.CREATED).headers(httpHeaders).body(response);
     }
 
     @GetMapping("/{id}")
@@ -38,7 +47,7 @@ public class TourController {
     @GetMapping
     public ResponseEntity<PagingApiResponse<List<TourResponse>>> getAllTours(
             @RequestParam(name = "page", defaultValue = "1") Integer page,
-            @RequestParam(name = "size", defaultValue = "10") Integer pageSize,
+            @RequestParam(name = "size", defaultValue = "25") Integer pageSize,
             @RequestParam(name = "sort", required = false) String sort
     ) {
         PagingApiResponse<List<TourResponse>> tourResponseList = tourService.getAllTours(page, pageSize, sort);
