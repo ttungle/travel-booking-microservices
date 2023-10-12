@@ -8,18 +8,21 @@ import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
+import org.springframework.web.multipart.MultipartFile;
 import site.thanhtungle.commons.exception.CustomNotFoundException;
+import site.thanhtungle.commons.model.dto.FileDto;
 import site.thanhtungle.commons.model.response.success.PageInfo;
 import site.thanhtungle.commons.model.response.success.PagingApiResponse;
 import site.thanhtungle.tourservice.mapper.TourMapper;
 import site.thanhtungle.tourservice.model.dto.TourRequest;
 import site.thanhtungle.tourservice.model.dto.TourResponse;
 import site.thanhtungle.tourservice.model.entity.Tour;
+import site.thanhtungle.tourservice.model.entity.TourImage;
 import site.thanhtungle.tourservice.repository.TourRepository;
 import site.thanhtungle.tourservice.service.TourService;
+import site.thanhtungle.tourservice.service.rest.StorageApiClient;
 
 import java.security.InvalidParameterException;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
@@ -31,9 +34,21 @@ public class TourServiceImpl implements TourService {
 
     private final TourRepository tourRepository;
     private final TourMapper tourMapper;
+    private final StorageApiClient storageApiClient;
 
     @Override
-    public TourResponse saveTour(TourRequest tourRequest) {
+    public TourResponse saveTour(TourRequest tourRequest, List<MultipartFile> fileList) {
+        if (!Objects.isNull(fileList)) {
+            List<String> filePathList = fileList.stream()
+                    .map(file -> String.format("tours/%s/%s", tourRequest.getSlug(), file.getOriginalFilename()))
+                    .toList();
+            List<FileDto> fileResponse  = storageApiClient.uploadFiles(fileList, filePathList);
+            List<TourImage> tourImageList = fileResponse.stream()
+                    .map(tourMapper::mapFileDtoToTourImage)
+                    .toList();
+            tourRequest.setImages(tourImageList);
+        }
+
         Tour tour = tourMapper.mapToTour(tourRequest);
         Tour savedTour =  tourRepository.save(tour);
         return tourMapper.mapToTourResponse(savedTour);
@@ -96,7 +111,7 @@ public class TourServiceImpl implements TourService {
         int sortParameterCount = StringUtils.countOccurrencesOf(sort, ",");
         if (sortParameterCount >= 2) throw new InvalidParameterException("Cannot sort more than 2 fields.");
 
-        List<Sort.Order> orderList = new ArrayList<>();
+        List<Sort.Order> orderList;
         if (!sort.contains(":")) {
             orderList = Arrays.stream(sort.split(","))
                     .map(field -> new Sort.Order(Sort.Direction.ASC, field))

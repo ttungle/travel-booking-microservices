@@ -64,6 +64,7 @@ public class Tour extends BaseEntity {
     @Temporal(TemporalType.TIMESTAMP)
     private Instant startDate;
 
+    @NotBlank(message = "Tour slug cannot be empty or null.")
     @Column(name = "slug")
     private String slug;
 
