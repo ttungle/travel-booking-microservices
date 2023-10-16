@@ -38,18 +38,19 @@ public class TourServiceImpl implements TourService {
 
     @Override
     public TourResponse saveTour(TourRequest tourRequest, List<MultipartFile> fileList) {
-        if (!Objects.isNull(fileList)) {
+        Tour tour = tourMapper.mapToTour(tourRequest);
+
+        if (Objects.nonNull(fileList)) {
             List<String> filePathList = fileList.stream()
                     .map(file -> String.format("tours/%s/%s", tourRequest.getSlug(), file.getOriginalFilename()))
                     .toList();
             List<FileDto> fileResponse  = storageApiClient.uploadFiles(fileList, filePathList);
             List<TourImage> tourImageList = fileResponse.stream()
-                    .map(tourMapper::mapFileDtoToTourImage)
-                    .toList();
-            tourRequest.setImages(tourImageList);
+                            .map(fileDto -> tourMapper.mapFileDtoToTourImage(tour, fileDto))
+                            .toList();
+            tour.setImages(tourImageList);
         }
 
-        Tour tour = tourMapper.mapToTour(tourRequest);
         Tour savedTour =  tourRepository.save(tour);
         return tourMapper.mapToTourResponse(savedTour);
     }

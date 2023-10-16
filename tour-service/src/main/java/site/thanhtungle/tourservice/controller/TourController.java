@@ -1,6 +1,5 @@
 package site.thanhtungle.tourservice.controller;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -41,9 +40,10 @@ public class TourController {
         return ResponseEntity.ok().body(response);
     }
 
-    /*
-    * http://localhost:9191/api/v1/tours?page=1&size=10&sort=name:asc
-    * */
+    /**
+     *
+     * @example http://localhost:9191/api/v1/tours?page=1&size=10&sort=name:asc
+     * */
     @GetMapping
     public ResponseEntity<PagingApiResponse<List<TourResponse>>> getAllTours(
             @RequestParam(name = "page", defaultValue = "1") Integer page,
