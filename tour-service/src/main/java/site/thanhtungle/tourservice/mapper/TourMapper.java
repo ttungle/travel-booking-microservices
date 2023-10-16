@@ -15,7 +15,8 @@ public interface TourMapper {
 
     TourResponse mapToTourResponse(Tour tour);
 
+    @Mapping(target = "tour", source = "tourEntity")
     @Mapping(target = "name", source = "fileDto.fileName")
-    @Mapping(target = "url", source = "url")
-    TourImage mapFileDtoToTourImage(FileDto fileDto);
+    @Mapping(target = "url", source = "fileDto.url")
+    TourImage mapFileDtoToTourImage(Tour tourEntity, FileDto fileDto);
 }

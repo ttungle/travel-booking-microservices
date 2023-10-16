@@ -1,5 +1,6 @@
 package site.thanhtungle.tourservice.model.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -20,6 +21,7 @@ public class TourImage extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY,
             cascade = {CascadeType.DETACH, CascadeType.MERGE,
                     CascadeType.PERSIST, CascadeType.REFRESH})
-    @JoinColumn(name = "tour_id")
+    @JoinColumn(name = "tour_id", referencedColumnName = "id")
+    @JsonIgnore
     private Tour tour;
 }

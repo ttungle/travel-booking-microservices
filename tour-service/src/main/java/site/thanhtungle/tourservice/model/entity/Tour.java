@@ -70,7 +70,7 @@ public class Tour extends BaseEntity {
 
     @OneToMany(
             mappedBy = "tour",
-            fetch = FetchType.EAGER,
+            fetch = FetchType.LAZY,
             cascade = {CascadeType.DETACH, CascadeType.MERGE,
                     CascadeType.PERSIST, CascadeType.REFRESH})
     private List<TourImage> images;
