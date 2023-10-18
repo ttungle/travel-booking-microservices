@@ -1,4 +1,4 @@
-package site.thanhtungle.tourservice.model.dto;
+package site.thanhtungle.tourservice.model.dto.request.tour;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -13,7 +13,7 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class TourRequest {
+public class TourRequestDTO {
 
     private Long id;
     private String name;

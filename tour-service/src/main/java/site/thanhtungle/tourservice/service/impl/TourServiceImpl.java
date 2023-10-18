@@ -14,8 +14,8 @@ import site.thanhtungle.commons.model.dto.FileDto;
 import site.thanhtungle.commons.model.response.success.PageInfo;
 import site.thanhtungle.commons.model.response.success.PagingApiResponse;
 import site.thanhtungle.tourservice.mapper.TourMapper;
-import site.thanhtungle.tourservice.model.dto.TourRequest;
-import site.thanhtungle.tourservice.model.dto.TourResponse;
+import site.thanhtungle.tourservice.model.dto.request.tour.TourRequestDTO;
+import site.thanhtungle.tourservice.model.dto.response.tour.TourResponseDTO;
 import site.thanhtungle.tourservice.model.entity.Tour;
 import site.thanhtungle.tourservice.model.entity.TourImage;
 import site.thanhtungle.tourservice.repository.TourRepository;
@@ -37,12 +37,12 @@ public class TourServiceImpl implements TourService {
     private final StorageApiClient storageApiClient;
 
     @Override
-    public TourResponse saveTour(TourRequest tourRequest, List<MultipartFile> fileList) {
-        Tour tour = tourMapper.mapToTour(tourRequest);
+    public TourResponseDTO saveTour(TourRequestDTO tourRequestDTO, List<MultipartFile> fileList) {
+        Tour tour = tourMapper.mapToTour(tourRequestDTO);
 
         if (Objects.nonNull(fileList)) {
             List<String> filePathList = fileList.stream()
-                    .map(file -> String.format("tours/%s/%s", tourRequest.getSlug(), file.getOriginalFilename()))
+                    .map(file -> String.format("tours/%s/%s", tourRequestDTO.getSlug(), file.getOriginalFilename()))
                     .toList();
             List<FileDto> fileResponse  = storageApiClient.uploadFiles(fileList, filePathList);
             List<TourImage> tourImageList = fileResponse.stream()
@@ -56,14 +56,14 @@ public class TourServiceImpl implements TourService {
     }
 
     @Override
-    public TourResponse getTour(Long tourId) {
+    public TourResponseDTO getTour(Long tourId) {
         Tour tour = tourRepository.findById(tourId).orElseThrow(
                 () -> new CustomNotFoundException("No tour found with that id."));
         return tourMapper.mapToTourResponse(tour);
     }
 
     @Override
-    public PagingApiResponse<List<TourResponse>> getAllTours(Integer page, Integer pageSize, String sort) {
+    public PagingApiResponse<List<TourResponseDTO>> getAllTours(Integer page, Integer pageSize, String sort) {
         if (Objects.isNull(page) || page < 1) throw new InvalidParameterException("Invalid page.");
         if (Objects.isNull(pageSize) || pageSize < 0) throw new InvalidParameterException("Invalid page size.");
 
@@ -78,22 +78,22 @@ public class TourServiceImpl implements TourService {
 
         Page<Tour> tourListPaging = tourRepository.findAll(pageRequest);
         List<Tour> tourList = tourListPaging.getContent();
-        List<TourResponse> tourResponseData = tourList.stream()
+        List<TourResponseDTO> tourResponseDTOData = tourList.stream()
                 .map(tourMapper::mapToTourResponse)
                 .toList();
         PageInfo pageInfo = new PageInfo(page, pageSize,
                 tourListPaging.getTotalElements(), tourListPaging.getTotalPages());
 
-        return new PagingApiResponse<>(HttpStatus.OK.value(), tourResponseData, pageInfo);
+        return new PagingApiResponse<>(HttpStatus.OK.value(), tourResponseDTOData, pageInfo);
     }
 
     @Override
-    public TourResponse updateTour(Long tourId, TourRequest tourRequest) {
+    public TourResponseDTO updateTour(Long tourId, TourRequestDTO tourRequestDTO) {
         if(Objects.isNull(tourId)) throw new InvalidParameterException("Tour id cannot be null.");
 
         Tour tour = tourRepository.findById(tourId).orElseThrow(
                 () -> new CustomNotFoundException("No tour found with that id."));
-        Tour tourBody = tourMapper.mapToTour(tourRequest);
+        Tour tourBody = tourMapper.mapToTour(tourRequestDTO);
         tourBody.setId(tour.getId());
         Tour updatedTour = tourRepository.save(tourBody);
 
