@@ -1,9 +1,13 @@
 package site.thanhtungle.tourservice.service.impl;
 
 import lombok.AllArgsConstructor;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import site.thanhtungle.commons.exception.CustomNotFoundException;
+import site.thanhtungle.commons.model.response.success.PageInfo;
+import site.thanhtungle.commons.model.response.success.PagingApiResponse;
 import site.thanhtungle.tourservice.mapper.TourCategoryMapper;
 import site.thanhtungle.tourservice.model.dto.request.tourcategory.TourCategoryRequestDTO;
 import site.thanhtungle.tourservice.model.dto.response.tourcategory.TourCategoryResponseDTO;
@@ -12,6 +16,7 @@ import site.thanhtungle.tourservice.model.entity.TourCategory;
 import site.thanhtungle.tourservice.repository.TourCategoryRepository;
 import site.thanhtungle.tourservice.repository.TourRepository;
 import site.thanhtungle.tourservice.service.TourCategoryService;
+import site.thanhtungle.tourservice.util.PageUtil;
 
 import java.security.InvalidParameterException;
 import java.util.List;
@@ -54,13 +59,27 @@ public class TourCategoryServiceImpl implements TourCategoryService {
     }
 
     @Override
-    public TourCategory getTourCategory(String categoryId) {
-        return null;
+    public TourCategoryResponseDTO getTourCategory(Long categoryId) {
+        if (categoryId == null) throw new InvalidParameterException("category id cannot be null.");
+
+        TourCategory tourCategory = tourCategoryRepository.findById(categoryId)
+                .orElseThrow(() -> new CustomNotFoundException("No tour category found with that id."));
+        return tourCategoryMapper.mapCategoryToCategoryResponse(tourCategory);
     }
 
     @Override
-    public List<TourCategory> getAllTourCategories(Pageable pageable) {
-        return null;
+    public PagingApiResponse<List<TourCategoryResponseDTO>> getAllTourCategories(Integer page, Integer pageSize, String sort) {
+        PageRequest pageRequest = PageUtil.getPageRequest(page, pageSize, sort);
+
+        Page<TourCategory> tourCategoryListPaging = tourCategoryRepository.findAll(pageRequest);
+        List<TourCategory> tourCategoryList = tourCategoryListPaging.getContent();
+        List<TourCategoryResponseDTO> tourCategoryResponseDTOData = tourCategoryList.stream()
+                .map(tourCategoryMapper::mapCategoryToCategoryResponse)
+                .toList();
+        PageInfo pageInfo = new PageInfo(page, pageSize,
+                tourCategoryListPaging.getTotalElements(), tourCategoryListPaging.getTotalPages());
+
+        return new PagingApiResponse<>(HttpStatus.OK.value(), tourCategoryResponseDTOData, pageInfo);
     }
 
     @Override
