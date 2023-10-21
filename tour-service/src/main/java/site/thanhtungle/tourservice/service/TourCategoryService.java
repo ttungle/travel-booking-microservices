@@ -1,10 +1,9 @@
 package site.thanhtungle.tourservice.service;
 
-import org.springframework.data.domain.Pageable;
 import org.springframework.transaction.annotation.Transactional;
+import site.thanhtungle.commons.model.response.success.PagingApiResponse;
 import site.thanhtungle.tourservice.model.dto.request.tourcategory.TourCategoryRequestDTO;
 import site.thanhtungle.tourservice.model.dto.response.tourcategory.TourCategoryResponseDTO;
-import site.thanhtungle.tourservice.model.entity.TourCategory;
 
 import java.util.List;
 
@@ -15,9 +14,9 @@ public interface TourCategoryService {
 
     TourCategoryResponseDTO updateTourCategory(Long tourCategoryId, TourCategoryRequestDTO tourCategoryRequestDTO);
 
-    TourCategory getTourCategory(String categoryId);
+    TourCategoryResponseDTO getTourCategory(Long categoryId);
 
-    List<TourCategory> getAllTourCategories(Pageable pageable);
+    PagingApiResponse<List<TourCategoryResponseDTO>> getAllTourCategories(Integer page, Integer pageSize, String sort);
 
     void deleteTourCategory(String categoryId);
 }

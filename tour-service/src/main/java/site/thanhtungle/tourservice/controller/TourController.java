@@ -42,12 +42,12 @@ public class TourController {
 
     /**
      *
-     * @example http://localhost:9191/api/v1/tours?page=1&size=10&sort=name:asc
+     * @example http://localhost:9191/api/v1/tours?page=1&pageSize=10&sort=name:asc
      * */
     @GetMapping
     public ResponseEntity<PagingApiResponse<List<TourResponseDTO>>> getAllTours(
             @RequestParam(name = "page", defaultValue = "1") Integer page,
-            @RequestParam(name = "size", defaultValue = "25") Integer pageSize,
+            @RequestParam(name = "pageSize", defaultValue = "25") Integer pageSize,
             @RequestParam(name = "sort", required = false) String sort
     ) {
         PagingApiResponse<List<TourResponseDTO>> tourResponseList = tourService.getAllTours(page, pageSize, sort);
