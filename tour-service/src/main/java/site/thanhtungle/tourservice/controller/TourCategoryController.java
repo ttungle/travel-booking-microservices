@@ -49,4 +49,10 @@ public class TourCategoryController {
         TourCategoryResponseDTO response = tourCategoryService.getTourCategory(categoryId);
         return ResponseEntity.ok().body(response);
     }
+
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteTourCategory(@PathVariable("id") Long categoryId) {
+        tourCategoryService.deleteTourCategory(categoryId);
+    }
 }

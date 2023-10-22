@@ -23,7 +23,6 @@ import site.thanhtungle.tourservice.util.PageUtil;
 
 import java.security.InvalidParameterException;
 import java.util.List;
-import java.util.Objects;
 
 @Service
 @AllArgsConstructor
@@ -38,7 +37,7 @@ public class TourServiceImpl implements TourService {
     public TourResponseDTO saveTour(TourRequestDTO tourRequestDTO, List<MultipartFile> fileList) {
         Tour tour = tourMapper.mapToTour(tourRequestDTO);
 
-        if (Objects.nonNull(fileList)) {
+        if (fileList != null) {
             List<String> filePathList = fileList.stream()
                     .map(file -> String.format("tours/%s/%s", tourRequestDTO.getSlug(), file.getOriginalFilename()))
                     .toList();
@@ -77,7 +76,7 @@ public class TourServiceImpl implements TourService {
 
     @Override
     public TourResponseDTO updateTour(Long tourId, TourRequestDTO tourRequestDTO) {
-        if(Objects.isNull(tourId)) throw new InvalidParameterException("Tour id cannot be null.");
+        if(tourId == null) throw new InvalidParameterException("Tour id cannot be null.");
 
         Tour tour = tourRepository.findById(tourId).orElseThrow(
                 () -> new CustomNotFoundException("No tour found with that id."));
@@ -90,7 +89,7 @@ public class TourServiceImpl implements TourService {
 
     @Override
     public void deleteTour(Long tourId) {
-        if(Objects.isNull(tourId)) throw new InvalidParameterException("Tour id cannot be null.");
+        if(tourId == null) throw new InvalidParameterException("Tour id cannot be null.");
         Tour tour = tourRepository.findById(tourId).orElseThrow(
                 () -> new CustomNotFoundException("No tour found with that id."));
         tourRepository.deleteById(tour.getId());

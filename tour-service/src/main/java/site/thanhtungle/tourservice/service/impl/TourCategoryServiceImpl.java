@@ -83,13 +83,13 @@ public class TourCategoryServiceImpl implements TourCategoryService {
     }
 
     @Override
-    public void deleteTourCategory(String categoryId) {
-
+    public void deleteTourCategory(Long categoryId) {
+        tourCategoryRepository.deleteById(categoryId);
     }
 
     private void findTourAndSetRelationship(TourCategoryRequestDTO tourCategoryRequestDTO, TourCategory tourCategory) {
         List<Tour> foundedTourList = tourRepository.findTourByIdIn(tourCategoryRequestDTO.getTourIdList());
-        if (Objects.nonNull(foundedTourList) || !foundedTourList.isEmpty()) {
+        if (foundedTourList != null || !foundedTourList.isEmpty()) {
             tourCategory.setTours(foundedTourList);
             foundedTourList.forEach(tour -> tour.setCategory(tourCategory));
         };

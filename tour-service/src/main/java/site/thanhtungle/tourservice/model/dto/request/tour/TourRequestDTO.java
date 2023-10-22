@@ -30,7 +30,7 @@ public class TourRequestDTO {
     private Instant startDate;
     private String slug;
     private List<TourImage> images;
-    private TourCategory category;
+    private Long categoryId;
     private List<TourItinerary> tourItinerary;
     private List<TourInclude> tourIncludes;
     private List<TourExclude> tourExcludes;
