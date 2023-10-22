@@ -18,5 +18,5 @@ public interface TourCategoryService {
 
     PagingApiResponse<List<TourCategoryResponseDTO>> getAllTourCategories(Integer page, Integer pageSize, String sort);
 
-    void deleteTourCategory(String categoryId);
+    void deleteTourCategory(Long categoryId);
 }
