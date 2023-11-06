@@ -12,6 +12,13 @@
 #      show-sql: always
 #  application:
 #    name: TOUR-SERVICE
+#  jackson:
+#    time-zone: Asia/Ho_Chi_Minh
+#  servlet:
+#    multipart:
+#      enabled: true
+#      max-file-size: 100MB
+#      max-request-size: 100MB
 #
 #eureka:
 #  client:
@@ -36,8 +43,3 @@ spring:
     name: TOUR-SERVICE
   config:
     import: optional:configserver:http://localhost:8888
-  jackson:
-    time-zone: Asia/Ho_Chi_Minh
-  servlet:
-    multipart:
-      enabled: true

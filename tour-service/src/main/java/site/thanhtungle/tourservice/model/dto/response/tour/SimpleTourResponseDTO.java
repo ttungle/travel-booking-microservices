@@ -9,7 +9,7 @@ import java.time.Instant;
 @Getter
 @Setter
 @NoArgsConstructor
-public class BaseTourResponseDto {
+public class SimpleTourResponseDTO {
 
     private Long id;
     private String name;

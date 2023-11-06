@@ -14,8 +14,10 @@ public interface TourCategoryService {
 
     TourCategoryResponseDTO updateTourCategory(Long tourCategoryId, TourCategoryRequestDTO tourCategoryRequestDTO);
 
+    @Transactional(readOnly = true)
     TourCategoryResponseDTO getTourCategory(Long categoryId);
 
+    @Transactional(readOnly = true)
     PagingApiResponse<List<TourCategoryResponseDTO>> getAllTourCategories(Integer page, Integer pageSize, String sort);
 
     void deleteTourCategory(Long categoryId);

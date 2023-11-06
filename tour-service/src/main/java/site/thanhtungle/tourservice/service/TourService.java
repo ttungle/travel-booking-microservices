@@ -12,15 +12,15 @@ import java.util.List;
 @Transactional
 public interface TourService {
 
-    public TourResponseDTO saveTour(TourRequestDTO tourRequestDTO, List<MultipartFile> fileList);
+    TourResponseDTO saveTour(TourRequestDTO tourRequestDTO, List<MultipartFile> fileList);
 
     @Transactional(readOnly = true)
-    public TourResponseDTO getTour(Long tourId);
+    TourResponseDTO getTour(Long tourId);
 
     @Transactional(readOnly = true)
-    public PagingApiResponse<List<TourResponseDTO>> getAllTours(Integer page, Integer pageSize, String sort);
+    PagingApiResponse<List<TourResponseDTO>> getAllTours(Integer page, Integer pageSize, String sort);
 
-    public TourResponseDTO updateTour(Long tourId, TourRequestDTO tourRequestDTO);
+    TourResponseDTO updateTour(Long tourId, TourRequestDTO tourRequestDTO, List<MultipartFile> fileList);
 
     void deleteTour(Long tourId);
 }

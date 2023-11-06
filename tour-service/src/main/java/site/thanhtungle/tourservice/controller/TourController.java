@@ -55,9 +55,12 @@ public class TourController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<BaseApiResponse<TourResponseDTO>> updateTour(@PathVariable("id") Long tourId,
-                                                                       @RequestBody TourRequestDTO tourRequestDTO) {
-        TourResponseDTO tourResponseDTO = tourService.updateTour(tourId, tourRequestDTO);
+    public ResponseEntity<BaseApiResponse<TourResponseDTO>> updateTour(
+            @PathVariable("id") Long tourId,
+            @RequestPart(value = "tour", required = false) TourRequestDTO tourRequestDTO,
+            @RequestPart(value = "files", required = false) List<MultipartFile> fileList
+    ) {
+        TourResponseDTO tourResponseDTO = tourService.updateTour(tourId, tourRequestDTO, fileList);
         BaseApiResponse<TourResponseDTO> response = new BaseApiResponse<>(HttpStatus.OK.value(), tourResponseDTO);
         return ResponseEntity.ok().body(response);
     }
