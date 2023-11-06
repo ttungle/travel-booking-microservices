@@ -35,12 +35,12 @@ public class TourCategoryServiceImpl implements TourCategoryService {
         if (Objects.isNull(tourCategoryRequestDTO))
             throw new InvalidParameterException("Tour category body cannot be null.");
 
-        TourCategory tourCategoryBody = tourCategoryMapper.mapCategoryDtoToCategory(tourCategoryRequestDTO);
+        TourCategory tourCategoryBody = tourCategoryMapper.toTourCategory(tourCategoryRequestDTO);
         if (Objects.nonNull(tourCategoryRequestDTO.getTourIdList()))
             findTourAndSetRelationship(tourCategoryRequestDTO, tourCategoryBody);
 
         TourCategory savedTourCategory = tourCategoryRepository.save(tourCategoryBody);
-        return tourCategoryMapper.mapCategoryToCategoryResponse(savedTourCategory);
+        return tourCategoryMapper.toCategoryResponseDTO(savedTourCategory);
     }
 
     @Override
@@ -48,14 +48,14 @@ public class TourCategoryServiceImpl implements TourCategoryService {
         tourCategoryRepository.findById(tourCategoryId)
                 .orElseThrow(() -> new CustomNotFoundException("No tour category found with that id."));
 
-        TourCategory tourCategoryBody = tourCategoryMapper.mapCategoryDtoToCategory(tourCategoryRequestDTO);
+        TourCategory tourCategoryBody = tourCategoryMapper.toTourCategory(tourCategoryRequestDTO);
         tourCategoryBody.setId(tourCategoryId);
 
         if (Objects.nonNull(tourCategoryRequestDTO.getTourIdList()))
             findTourAndSetRelationship(tourCategoryRequestDTO, tourCategoryBody);
 
         TourCategory updatedTourCategory = tourCategoryRepository.save(tourCategoryBody);
-        return tourCategoryMapper.mapCategoryToCategoryResponse(updatedTourCategory);
+        return tourCategoryMapper.toCategoryResponseDTO(updatedTourCategory);
     }
 
     @Override
@@ -64,7 +64,7 @@ public class TourCategoryServiceImpl implements TourCategoryService {
 
         TourCategory tourCategory = tourCategoryRepository.findById(categoryId)
                 .orElseThrow(() -> new CustomNotFoundException("No tour category found with that id."));
-        return tourCategoryMapper.mapCategoryToCategoryResponse(tourCategory);
+        return tourCategoryMapper.toCategoryResponseDTO(tourCategory);
     }
 
     @Override
@@ -74,7 +74,7 @@ public class TourCategoryServiceImpl implements TourCategoryService {
         Page<TourCategory> tourCategoryListPaging = tourCategoryRepository.findAll(pageRequest);
         List<TourCategory> tourCategoryList = tourCategoryListPaging.getContent();
         List<TourCategoryResponseDTO> tourCategoryResponseDTOData = tourCategoryList.stream()
-                .map(tourCategoryMapper::mapCategoryToCategoryResponse)
+                .map(tourCategoryMapper::toCategoryResponseDTO)
                 .toList();
         PageInfo pageInfo = new PageInfo(page, pageSize,
                 tourCategoryListPaging.getTotalElements(), tourCategoryListPaging.getTotalPages());

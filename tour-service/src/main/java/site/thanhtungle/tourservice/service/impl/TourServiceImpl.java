@@ -6,6 +6,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import site.thanhtungle.commons.exception.CustomNotFoundException;
 import site.thanhtungle.commons.model.dto.FileDto;
@@ -23,6 +24,7 @@ import site.thanhtungle.tourservice.util.PageUtil;
 
 import java.security.InvalidParameterException;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -35,28 +37,20 @@ public class TourServiceImpl implements TourService {
 
     @Override
     public TourResponseDTO saveTour(TourRequestDTO tourRequestDTO, List<MultipartFile> fileList) {
-        Tour tour = tourMapper.mapToTour(tourRequestDTO);
+        if (tourRequestDTO == null) throw new InvalidParameterException("The request body should not be empty.");
+        Tour tour = tourMapper.toTour(tourRequestDTO);
 
-        if (fileList != null) {
-            List<String> filePathList = fileList.stream()
-                    .map(file -> String.format("tours/%s/%s", tourRequestDTO.getSlug(), file.getOriginalFilename()))
-                    .toList();
-            List<FileDto> fileResponse  = storageApiClient.uploadFiles(fileList, filePathList);
-            List<TourImage> tourImageList = fileResponse.stream()
-                            .map(fileDto -> tourMapper.mapFileDtoToTourImage(tour, fileDto))
-                            .toList();
-            tour.setImages(tourImageList);
-        }
+        if (fileList != null) uploadTourImage(tour, fileList);
 
         Tour savedTour =  tourRepository.save(tour);
-        return tourMapper.mapToTourResponse(savedTour);
+        return tourMapper.toTourResponseDTO(savedTour);
     }
 
     @Override
     public TourResponseDTO getTour(Long tourId) {
         Tour tour = tourRepository.findById(tourId).orElseThrow(
                 () -> new CustomNotFoundException("No tour found with that id."));
-        return tourMapper.mapToTourResponse(tour);
+        return tourMapper.toTourResponseDTO(tour);
     }
 
     @Override
@@ -66,7 +60,7 @@ public class TourServiceImpl implements TourService {
         Page<Tour> tourListPaging = tourRepository.findAll(pageRequest);
         List<Tour> tourList = tourListPaging.getContent();
         List<TourResponseDTO> tourResponseDTOData = tourList.stream()
-                .map(tourMapper::mapToTourResponse)
+                .map(tourMapper::toTourResponseDTO)
                 .toList();
         PageInfo pageInfo = new PageInfo(page, pageSize,
                 tourListPaging.getTotalElements(), tourListPaging.getTotalPages());
@@ -75,23 +69,40 @@ public class TourServiceImpl implements TourService {
     }
 
     @Override
-    public TourResponseDTO updateTour(Long tourId, TourRequestDTO tourRequestDTO) {
-        if(tourId == null) throw new InvalidParameterException("Tour id cannot be null.");
+    @Transactional(noRollbackFor = Exception.class)
+    public TourResponseDTO updateTour(Long tourId, TourRequestDTO tourRequestDTO, List<MultipartFile> fileList) {
+        if (tourId == null) throw new InvalidParameterException("Tour id cannot be null.");
 
         Tour tour = tourRepository.findById(tourId).orElseThrow(
                 () -> new CustomNotFoundException("No tour found with that id."));
-        Tour tourBody = tourMapper.mapToTour(tourRequestDTO);
-        tourBody.setId(tour.getId());
-        Tour updatedTour = tourRepository.save(tourBody);
+        tourMapper.updateTour(tourRequestDTO, tour);
 
-        return tourMapper.mapToTourResponse(updatedTour);
+        if (fileList != null) uploadTourImage(tour, fileList);
+
+        Tour updatedTour = tourRepository.save(tour);
+        return tourMapper.toTourResponseDTO(updatedTour);
     }
-
+    
     @Override
     public void deleteTour(Long tourId) {
         if(tourId == null) throw new InvalidParameterException("Tour id cannot be null.");
         Tour tour = tourRepository.findById(tourId).orElseThrow(
                 () -> new CustomNotFoundException("No tour found with that id."));
         tourRepository.deleteById(tour.getId());
+    }
+
+    private void uploadTourImage(Tour tour, List<MultipartFile> fileList) {
+       try {
+           List<String> filePathList = fileList.stream()
+                   .map(file -> String.format("tours/%s/%s", tour.getSlug(), file.getOriginalFilename()))
+                   .toList();
+           List<FileDto> fileResponse  = storageApiClient.uploadFiles(fileList, filePathList);
+
+           List<TourImage> tourImageList = fileResponse.stream()
+                   .map(fileDto -> tourMapper.toEntityTourImage(tour, fileDto)).collect(Collectors.toList());
+           tour.setImages(tourImageList);
+       } catch (Exception e) {
+            log.info(String.valueOf(e));
+       }
     }
 }
