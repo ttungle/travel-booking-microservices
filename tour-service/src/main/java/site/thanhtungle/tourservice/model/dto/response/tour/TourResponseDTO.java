@@ -6,7 +6,10 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import site.thanhtungle.tourservice.model.dto.response.tourcategory.SimpleTourCategoryResponseDTO;
 import site.thanhtungle.tourservice.model.dto.response.tourimage.SimpleTourImageResponseDTO;
-import site.thanhtungle.tourservice.model.entity.*;
+import site.thanhtungle.tourservice.model.dto.response.touritinerary.SimpleTourItineraryResponseDTO;
+import site.thanhtungle.tourservice.model.entity.TourExclude;
+import site.thanhtungle.tourservice.model.entity.TourFAQ;
+import site.thanhtungle.tourservice.model.entity.TourInclude;
 
 import java.time.Instant;
 import java.util.List;
@@ -36,7 +39,7 @@ public class TourResponseDTO {
     private String slug;
     private List<SimpleTourImageResponseDTO> images;
     private SimpleTourCategoryResponseDTO category;
-    private List<TourItinerary> tourItinerary;
+    private List<SimpleTourItineraryResponseDTO> tourItineraries;
     private List<TourInclude> tourIncludes;
     private List<TourExclude> tourExcludes;
     private List<TourFAQ> tourFAQs;
