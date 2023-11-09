@@ -85,7 +85,7 @@ public class Tour extends BaseEntity {
             fetch = FetchType.LAZY,
             cascade = {CascadeType.DETACH, CascadeType.MERGE,
             CascadeType.PERSIST, CascadeType.REFRESH})
-    private List<TourItinerary> tourItinerary;
+    private List<TourItinerary> tourItineraries;
 
     @ManyToMany(fetch = FetchType.LAZY,
             cascade = {CascadeType.DETACH, CascadeType.MERGE,
