@@ -31,7 +31,6 @@ public abstract class TourItineraryMapper {
     @Named("toEntityTourFromId")
     protected Tour toEntityTourFromId(Long tourId) {
         if (tourId == null) return null;
-
         return tourRepository.findById(tourId)
                 .orElseThrow(() -> new CustomNotFoundException("No tour found with that id."));
     }
