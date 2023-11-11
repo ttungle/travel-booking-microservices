@@ -38,8 +38,11 @@ public class TourServiceImpl implements TourService {
     @Override
     public TourResponseDTO saveTour(TourRequestDTO tourRequestDTO, List<MultipartFile> fileList) {
         if (tourRequestDTO == null) throw new InvalidParameterException("The request body should not be empty.");
-        Tour tour = tourMapper.toTour(tourRequestDTO);
 
+        Tour tour = tourMapper.toTour(tourRequestDTO);
+        if (!tour.getTourItineraries().isEmpty()) {
+            tour.getTourItineraries().forEach(itinerary -> itinerary.setTour(tour));
+        }
         if (fileList != null) uploadTourImage(tour, fileList);
 
         Tour savedTour =  tourRepository.save(tour);
@@ -76,7 +79,9 @@ public class TourServiceImpl implements TourService {
         Tour tour = tourRepository.findById(tourId).orElseThrow(
                 () -> new CustomNotFoundException("No tour found with that id."));
         tourMapper.updateTour(tourRequestDTO, tour);
-
+        if (!tour.getTourItineraries().isEmpty()) {
+            tour.getTourItineraries().forEach(itinerary -> itinerary.setTour(tour));
+        }
         if (fileList != null) uploadTourImage(tour, fileList);
 
         Tour updatedTour = tourRepository.save(tour);

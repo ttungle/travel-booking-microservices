@@ -31,7 +31,7 @@ public class TourRequestDTO {
     private String slug;
     private List<TourImage> images;
     private Long categoryId;
-    private List<TourItinerary> tourItineraries;
+    private List<Long> tourItineraryIds;
     private List<TourInclude> tourIncludes;
     private List<TourExclude> tourExcludes;
     private List<TourFAQ> tourFAQs;
