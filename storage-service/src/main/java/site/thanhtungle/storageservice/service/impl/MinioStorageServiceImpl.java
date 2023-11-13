@@ -3,6 +3,7 @@ package site.thanhtungle.storageservice.service.impl;
 import io.minio.*;
 import io.minio.messages.DeleteError;
 import io.minio.messages.DeleteObject;
+import io.minio.messages.Item;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -86,5 +87,31 @@ public class MinioStorageServiceImpl implements MinioStorageService {
            log.error(e.getMessage());
            throw new RuntimeException(e.getMessage());
        }
+    }
+
+    @Override
+    public void removeFolder(String folderPath) {
+        if(folderPath == null) return;
+
+        Iterable<Result<Item>> objectList = minioClient.listObjects(ListObjectsArgs
+                .builder()
+                .bucket(bucketName)
+                .prefix(folderPath)
+                .recursive(true)
+                .build()
+        );
+
+        objectList.forEach(object -> {
+            try {
+                minioClient.removeObject(RemoveObjectArgs.builder()
+                        .bucket(bucketName)
+                        .object(object.get().objectName())
+                        .build()
+                );
+            } catch (Exception e) {
+                log.error(e.getMessage());
+                throw new RuntimeException(e.getMessage());
+            }
+        });
     }
 }

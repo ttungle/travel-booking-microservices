@@ -71,8 +71,7 @@ public class Tour extends BaseEntity {
     @OneToMany(
             mappedBy = "tour",
             fetch = FetchType.LAZY,
-            cascade = {CascadeType.DETACH, CascadeType.MERGE,
-                    CascadeType.PERSIST, CascadeType.REFRESH})
+            cascade = {CascadeType.ALL})
     private List<TourImage> images;
 
     @ManyToOne(cascade = {CascadeType.DETACH, CascadeType.MERGE,

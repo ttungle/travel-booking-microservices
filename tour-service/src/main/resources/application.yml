@@ -43,3 +43,6 @@ spring:
     name: TOUR-SERVICE
   config:
     import: optional:configserver:http://localhost:8888
+minio:
+  bucket:
+    name: travel-booking-storage
