@@ -12,7 +12,7 @@ import java.util.List;
 @Transactional
 public interface TourService {
 
-    TourResponseDTO saveTour(TourRequestDTO tourRequestDTO, List<MultipartFile> fileList);
+    TourResponseDTO saveTour(TourRequestDTO tourRequestDTO, List<MultipartFile> fileList, MultipartFile coverImage);
 
     @Transactional(readOnly = true)
     TourResponseDTO getTour(Long tourId);
@@ -20,7 +20,8 @@ public interface TourService {
     @Transactional(readOnly = true)
     PagingApiResponse<List<TourResponseDTO>> getAllTours(Integer page, Integer pageSize, String sort);
 
-    TourResponseDTO updateTour(Long tourId, TourRequestDTO tourRequestDTO, List<MultipartFile> fileList);
+    TourResponseDTO updateTour(Long tourId, TourRequestDTO tourRequestDTO,
+                               List<MultipartFile> fileList, MultipartFile coverImage);
 
     void deleteTour(Long tourId);
 }

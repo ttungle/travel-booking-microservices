@@ -49,6 +49,13 @@ public interface StorageService {
     void deleteFiles(List<String> filePathList);
 
     /**
+     * Delete nearest folder of objects
+     *
+     * @param folderPath Path to folder
+    * */
+    void deleteFolder(String folderPath);
+
+    /**
      * Get a public file url
      *
      * @param filePath

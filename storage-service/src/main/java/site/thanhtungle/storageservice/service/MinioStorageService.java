@@ -14,4 +14,6 @@ public interface MinioStorageService {
     void removeObject(String filePath);
 
     void removeObjects(List<String> filePathList);
+
+    void removeFolder(String folderPath);
 }

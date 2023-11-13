@@ -18,9 +18,9 @@ public class FileController {
 
     private final StorageService storageService;
 
-    @PostMapping("/single")
-    public FileDto uploadFile(@RequestPart("file") MultipartFile file,
-                                                   @RequestPart("filePath") String filePath) {
+    @PostMapping(value = "/single", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public FileDto uploadFile(@RequestParam("file") MultipartFile file,
+                                                   @RequestParam("filePath") String filePath) {
         return storageService.uploadFile(file, filePath);
     }
 
@@ -35,9 +35,23 @@ public class FileController {
         return storageService.getFile(filePath);
     }
 
+    /**
+     *
+     * @param filePathList List of path to objects.
+    * */
     @DeleteMapping
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteFiles(@RequestParam("filePath") List<String> filePathList) {
+    public void deleteFiles(@RequestParam("filePaths") List<String> filePathList) {
         storageService.deleteFiles(filePathList);
+    }
+
+    /**
+     *
+     * @param folderPath The folder which contains objects
+    * */
+    @DeleteMapping("/folder")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteFolder(@RequestParam("folderPath") String folderPath) {
+        storageService.deleteFolder(folderPath);
     }
 }

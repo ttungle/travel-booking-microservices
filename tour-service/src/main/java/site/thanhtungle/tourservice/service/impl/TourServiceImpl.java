@@ -6,7 +6,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import site.thanhtungle.commons.exception.CustomNotFoundException;
 import site.thanhtungle.commons.model.dto.FileDto;
@@ -36,13 +35,16 @@ public class TourServiceImpl implements TourService {
     private final StorageApiClient storageApiClient;
 
     @Override
-    public TourResponseDTO saveTour(TourRequestDTO tourRequestDTO, List<MultipartFile> fileList) {
+    public TourResponseDTO saveTour(TourRequestDTO tourRequestDTO,
+                                    List<MultipartFile> fileList, MultipartFile coverImage
+    ) {
         if (tourRequestDTO == null) throw new InvalidParameterException("The request body should not be empty.");
 
         Tour tour = tourMapper.toTour(tourRequestDTO);
-        if (!tour.getTourItineraries().isEmpty()) {
+        if (tour.getTourItineraries() != null && !tour.getTourItineraries().isEmpty()) {
             tour.getTourItineraries().forEach(itinerary -> itinerary.setTour(tour));
         }
+        if (coverImage != null) uploadCoverImage(tour, coverImage);
         if (fileList != null) uploadTourImage(tour, fileList);
 
         Tour savedTour =  tourRepository.save(tour);
@@ -72,16 +74,18 @@ public class TourServiceImpl implements TourService {
     }
 
     @Override
-    @Transactional(noRollbackFor = Exception.class)
-    public TourResponseDTO updateTour(Long tourId, TourRequestDTO tourRequestDTO, List<MultipartFile> fileList) {
+    public TourResponseDTO updateTour(Long tourId, TourRequestDTO tourRequestDTO,
+            List<MultipartFile> fileList, MultipartFile coverImage
+    ) {
         if (tourId == null) throw new InvalidParameterException("Tour id cannot be null.");
 
         Tour tour = tourRepository.findById(tourId).orElseThrow(
                 () -> new CustomNotFoundException("No tour found with that id."));
         tourMapper.updateTour(tourRequestDTO, tour);
-        if (!tour.getTourItineraries().isEmpty()) {
+        if (tour.getTourItineraries() != null && !tour.getTourItineraries().isEmpty()) {
             tour.getTourItineraries().forEach(itinerary -> itinerary.setTour(tour));
         }
+        if (coverImage != null) uploadCoverImage(tour, coverImage);
         if (fileList != null) uploadTourImage(tour, fileList);
 
         Tour updatedTour = tourRepository.save(tour);
@@ -93,13 +97,16 @@ public class TourServiceImpl implements TourService {
         if(tourId == null) throw new InvalidParameterException("Tour id cannot be null.");
         Tour tour = tourRepository.findById(tourId).orElseThrow(
                 () -> new CustomNotFoundException("No tour found with that id."));
+
+        // delete tour files or images folder
+        storageApiClient.deleteFolder("tours/" + tour.getSlug());
         tourRepository.deleteById(tour.getId());
     }
 
     private void uploadTourImage(Tour tour, List<MultipartFile> fileList) {
        try {
            List<String> filePathList = fileList.stream()
-                   .map(file -> String.format("tours/%s/%s", tour.getSlug(), file.getOriginalFilename()))
+                   .map(file -> String.format("tours/%s/%s", tour.getSlug(), "tourImage_" + file.getOriginalFilename()))
                    .toList();
            List<FileDto> fileResponse  = storageApiClient.uploadFiles(fileList, filePathList);
 
@@ -109,5 +116,11 @@ public class TourServiceImpl implements TourService {
        } catch (Exception e) {
             log.info(String.valueOf(e));
        }
+    }
+
+    private void uploadCoverImage(Tour tour, MultipartFile coverImage) {
+        String filePath = String.format("tours/%s/%s", tour.getSlug(), "coverImage_" + coverImage.getOriginalFilename());
+        FileDto fileResponse = storageApiClient.uploadFile(coverImage, filePath);
+        tour.setCoverImage(fileResponse.getUrl());
     }
 }
