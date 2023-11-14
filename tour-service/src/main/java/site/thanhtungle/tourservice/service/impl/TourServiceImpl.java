@@ -44,10 +44,13 @@ public class TourServiceImpl implements TourService {
         if (tour.getTourItineraries() != null && !tour.getTourItineraries().isEmpty()) {
             tour.getTourItineraries().forEach(itinerary -> itinerary.setTour(tour));
         }
-        if (coverImage != null) uploadCoverImage(tour, coverImage);
-        if (fileList != null) uploadTourImage(tour, fileList);
 
-        Tour savedTour =  tourRepository.save(tour);
+        Tour firstSavedTour = tour;
+        if (coverImage != null || fileList != null) firstSavedTour = tourRepository.save(tour);
+        if (coverImage != null) uploadCoverImage(firstSavedTour, coverImage);
+        if (fileList != null) uploadTourImage(firstSavedTour, fileList);
+
+        Tour savedTour =  tourRepository.save(firstSavedTour);
         return tourMapper.toTourResponseDTO(savedTour);
     }
 
@@ -99,14 +102,14 @@ public class TourServiceImpl implements TourService {
                 () -> new CustomNotFoundException("No tour found with that id."));
 
         // delete tour files or images folder
-        storageApiClient.deleteFolder("tours/" + tour.getSlug());
+        storageApiClient.deleteFolder("tours/" + tour.getId());
         tourRepository.deleteById(tour.getId());
     }
 
     private void uploadTourImage(Tour tour, List<MultipartFile> fileList) {
        try {
            List<String> filePathList = fileList.stream()
-                   .map(file -> String.format("tours/%s/%s", tour.getSlug(), "tourImage_" + file.getOriginalFilename()))
+                   .map(file -> String.format("tours/%s/%s", tour.getId(), "tourImage_" + file.getOriginalFilename()))
                    .toList();
            List<FileDto> fileResponse  = storageApiClient.uploadFiles(fileList, filePathList);
 
@@ -119,7 +122,7 @@ public class TourServiceImpl implements TourService {
     }
 
     private void uploadCoverImage(Tour tour, MultipartFile coverImage) {
-        String filePath = String.format("tours/%s/%s", tour.getSlug(), "coverImage_" + coverImage.getOriginalFilename());
+        String filePath = String.format("tours/%s/%s", tour.getId(), "coverImage_" + coverImage.getOriginalFilename());
         FileDto fileResponse = storageApiClient.uploadFile(coverImage, filePath);
         tour.setCoverImage(fileResponse.getUrl());
     }
