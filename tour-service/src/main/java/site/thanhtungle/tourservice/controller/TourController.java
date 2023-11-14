@@ -42,10 +42,6 @@ public class TourController {
         return ResponseEntity.ok().body(response);
     }
 
-    /**
-     *
-     * @example http://localhost:9191/api/v1/tours?page=1&pageSize=10&sort=name:asc
-     * */
     @GetMapping
     public ResponseEntity<PagingApiResponse<List<TourResponseDTO>>> getAllTours(
             @RequestParam(name = "page", defaultValue = "1") Integer page,
