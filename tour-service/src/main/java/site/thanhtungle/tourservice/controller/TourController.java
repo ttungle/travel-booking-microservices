@@ -26,13 +26,28 @@ public class TourController {
     public ResponseEntity<BaseApiResponse<TourResponseDTO>> createTour(
             @RequestPart(value = "tour") TourRequestDTO tourRequestDTO,
             @RequestPart(value = "images", required = false) List<MultipartFile> tourImageList,
-            @RequestPart(value = "coverImage", required = false) MultipartFile coverImage
+            @RequestPart(value = "coverImage", required = false) MultipartFile coverImage,
+            @RequestPart(value = "video", required = false) MultipartFile video
     ) {
-        TourResponseDTO tourResponseDTO = tourService.saveTour(tourRequestDTO, tourImageList, coverImage);
+        TourResponseDTO tourResponseDTO = tourService.saveTour(tourRequestDTO, tourImageList, coverImage, video);
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.add(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE);
         BaseApiResponse<TourResponseDTO> response = new BaseApiResponse<>(HttpStatus.CREATED.value(), tourResponseDTO);
         return ResponseEntity.status(HttpStatus.CREATED).headers(httpHeaders).body(response);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<BaseApiResponse<TourResponseDTO>> updateTour(
+            @PathVariable("id") Long tourId,
+            @RequestPart(value = "tour", required = false) TourRequestDTO tourRequestDTO,
+            @RequestPart(value = "images", required = false) List<MultipartFile> tourImageList,
+            @RequestPart(value = "coverImage", required = false) MultipartFile coverImage,
+            @RequestPart(value = "video", required = false) MultipartFile video
+    ) {
+        TourResponseDTO tourResponseDTO = tourService.updateTour(tourId, tourRequestDTO,
+                tourImageList, coverImage, video);
+        BaseApiResponse<TourResponseDTO> response = new BaseApiResponse<>(HttpStatus.OK.value(), tourResponseDTO);
+        return ResponseEntity.ok().body(response);
     }
 
     @GetMapping("/{id}")
@@ -50,18 +65,6 @@ public class TourController {
     ) {
         PagingApiResponse<List<TourResponseDTO>> tourResponseList = tourService.getAllTours(page, pageSize, sort);
         return ResponseEntity.ok().body(tourResponseList);
-    }
-
-    @PutMapping("/{id}")
-    public ResponseEntity<BaseApiResponse<TourResponseDTO>> updateTour(
-            @PathVariable("id") Long tourId,
-            @RequestPart(value = "tour", required = false) TourRequestDTO tourRequestDTO,
-            @RequestPart(value = "images", required = false) List<MultipartFile> tourImageList,
-            @RequestPart(value = "coverImage", required = false) MultipartFile coverImage
-    ) {
-        TourResponseDTO tourResponseDTO = tourService.updateTour(tourId, tourRequestDTO, tourImageList, coverImage);
-        BaseApiResponse<TourResponseDTO> response = new BaseApiResponse<>(HttpStatus.OK.value(), tourResponseDTO);
-        return ResponseEntity.ok().body(response);
     }
 
     @DeleteMapping("/{id}")
