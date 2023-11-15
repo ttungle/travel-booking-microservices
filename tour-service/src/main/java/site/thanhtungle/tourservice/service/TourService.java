@@ -17,9 +17,23 @@ public interface TourService {
      * @param tourRequestDTO request body in json
      * @param fileList list of tour images
      * @param coverImage cover image
+     * @param video tour video
      * @return {TourResponseDTO}
      * */
-    TourResponseDTO saveTour(TourRequestDTO tourRequestDTO, List<MultipartFile> fileList, MultipartFile coverImage);
+    TourResponseDTO saveTour(TourRequestDTO tourRequestDTO, List<MultipartFile> fileList,
+                             MultipartFile coverImage, MultipartFile video);
+
+    /**
+     * Update a tour
+     * @param tourId tour id
+     * @param tourRequestDTO request body in json
+     * @param fileList list of tour images
+     * @param coverImage cover image
+     * @param video tour video
+     * @return {TourResponseDTO}
+     * */
+    TourResponseDTO updateTour(Long tourId, TourRequestDTO tourRequestDTO, List<MultipartFile> fileList,
+                               MultipartFile coverImage, MultipartFile video);
 
     /**
      * Get tour by id
@@ -39,17 +53,6 @@ public interface TourService {
      * */
     @Transactional(readOnly = true)
     PagingApiResponse<List<TourResponseDTO>> getAllTours(Integer page, Integer pageSize, String sort);
-
-    /**
-     * Update a tour
-     * @param tourId tour id
-     * @param tourRequestDTO request body in json
-     * @param fileList list of tour images
-     * @param coverImage cover image
-     * @return {TourResponseDTO}
-     * */
-    TourResponseDTO updateTour(Long tourId, TourRequestDTO tourRequestDTO,
-                               List<MultipartFile> fileList, MultipartFile coverImage);
 
     /**
      * Delete a tour

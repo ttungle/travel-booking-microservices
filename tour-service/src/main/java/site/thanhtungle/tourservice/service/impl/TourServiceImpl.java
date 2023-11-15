@@ -35,8 +35,8 @@ public class TourServiceImpl implements TourService {
     private final StorageApiClient storageApiClient;
 
     @Override
-    public TourResponseDTO saveTour(TourRequestDTO tourRequestDTO,
-                                    List<MultipartFile> fileList, MultipartFile coverImage
+    public TourResponseDTO saveTour(TourRequestDTO tourRequestDTO, List<MultipartFile> fileList,
+                                    MultipartFile coverImage, MultipartFile video
     ) {
         if (tourRequestDTO == null) throw new InvalidParameterException("The request body should not be empty.");
 
@@ -47,11 +47,32 @@ public class TourServiceImpl implements TourService {
 
         Tour firstSavedTour = tour;
         if (coverImage != null || fileList != null) firstSavedTour = tourRepository.save(tour);
-        if (coverImage != null) uploadCoverImage(firstSavedTour, coverImage);
+        if (coverImage != null) uploadSingleFile(firstSavedTour, coverImage, "coverImage_");
+        if (video != null) uploadSingleFile(firstSavedTour, video, "video_");
         if (fileList != null) uploadTourImage(firstSavedTour, fileList);
 
         Tour savedTour =  tourRepository.save(firstSavedTour);
         return tourMapper.toTourResponseDTO(savedTour);
+    }
+
+    @Override
+    public TourResponseDTO updateTour(Long tourId, TourRequestDTO tourRequestDTO, List<MultipartFile> fileList,
+                                      MultipartFile coverImage, MultipartFile video
+    ) {
+        if (tourId == null) throw new InvalidParameterException("Tour id cannot be null.");
+
+        Tour tour = tourRepository.findById(tourId).orElseThrow(
+                () -> new CustomNotFoundException("No tour found with that id."));
+        tourMapper.updateTour(tourRequestDTO, tour);
+        if (tour.getTourItineraries() != null && !tour.getTourItineraries().isEmpty()) {
+            tour.getTourItineraries().forEach(itinerary -> itinerary.setTour(tour));
+        }
+        if (coverImage != null) uploadSingleFile(tour, coverImage, "coverImage_");
+        if (video != null) uploadSingleFile(tour, video, "video_");
+        if (fileList != null) uploadTourImage(tour, fileList);
+
+        Tour updatedTour = tourRepository.save(tour);
+        return tourMapper.toTourResponseDTO(updatedTour);
     }
 
     @Override
@@ -74,25 +95,6 @@ public class TourServiceImpl implements TourService {
                 tourListPaging.getTotalElements(), tourListPaging.getTotalPages());
 
         return new PagingApiResponse<>(HttpStatus.OK.value(), tourResponseDTOData, pageInfo);
-    }
-
-    @Override
-    public TourResponseDTO updateTour(Long tourId, TourRequestDTO tourRequestDTO,
-            List<MultipartFile> fileList, MultipartFile coverImage
-    ) {
-        if (tourId == null) throw new InvalidParameterException("Tour id cannot be null.");
-
-        Tour tour = tourRepository.findById(tourId).orElseThrow(
-                () -> new CustomNotFoundException("No tour found with that id."));
-        tourMapper.updateTour(tourRequestDTO, tour);
-        if (tour.getTourItineraries() != null && !tour.getTourItineraries().isEmpty()) {
-            tour.getTourItineraries().forEach(itinerary -> itinerary.setTour(tour));
-        }
-        if (coverImage != null) uploadCoverImage(tour, coverImage);
-        if (fileList != null) uploadTourImage(tour, fileList);
-
-        Tour updatedTour = tourRepository.save(tour);
-        return tourMapper.toTourResponseDTO(updatedTour);
     }
     
     @Override
@@ -121,9 +123,9 @@ public class TourServiceImpl implements TourService {
        }
     }
 
-    private void uploadCoverImage(Tour tour, MultipartFile coverImage) {
-        String filePath = String.format("tours/%s/%s", tour.getId(), "coverImage_" + coverImage.getOriginalFilename());
-        FileDto fileResponse = storageApiClient.uploadFile(coverImage, filePath);
+    private void uploadSingleFile(Tour tour, MultipartFile file, String prefix) {
+        String filePath = String.format("tours/%s/%s", tour.getId(), prefix + file.getOriginalFilename());
+        FileDto fileResponse = storageApiClient.uploadFile(file, filePath);
         tour.setCoverImage(fileResponse.getUrl());
     }
 }
