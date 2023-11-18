@@ -1,5 +1,6 @@
 package site.thanhtungle.tourservice.model.entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
@@ -86,6 +87,7 @@ public class Tour extends BaseEntity {
             CascadeType.PERSIST, CascadeType.REFRESH})
     private List<TourItinerary> tourItineraries;
 
+    @JsonManagedReference
     @ManyToMany(fetch = FetchType.LAZY,
             cascade = {CascadeType.DETACH, CascadeType.MERGE,
                     CascadeType.PERSIST, CascadeType.REFRESH})
