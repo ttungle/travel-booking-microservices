@@ -98,6 +98,7 @@ public class Tour extends BaseEntity {
     )
     private List<TourInclude> tourIncludes;
 
+    @JsonManagedReference
     @ManyToMany(fetch = FetchType.LAZY,
             cascade = {CascadeType.DETACH, CascadeType.MERGE,
                     CascadeType.PERSIST, CascadeType.REFRESH})

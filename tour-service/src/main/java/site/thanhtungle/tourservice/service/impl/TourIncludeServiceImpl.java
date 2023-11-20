@@ -43,7 +43,6 @@ public class TourIncludeServiceImpl implements TourIncludeService {
                 new CustomNotFoundException("Tour include cannot be found with that id."));
         tourIncludeMapper.updateTourInclude(tourInclude, tourIncludeRequestDTO);
         TourInclude savedTourInclude = tourIncludeRepository.save(tourInclude);
-
         return tourIncludeMapper.toTourIncludeResponseDTO(savedTourInclude);
     }
 
