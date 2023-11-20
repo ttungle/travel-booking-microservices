@@ -2,10 +2,10 @@ package site.thanhtungle.tourservice.mapper;
 
 import org.mapstruct.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import site.thanhtungle.tourservice.model.dto.request.tourinclude.TourIncludeRequestDTO;
-import site.thanhtungle.tourservice.model.dto.response.tourinclude.TourIncludeResponseDTO;
+import site.thanhtungle.tourservice.model.dto.request.tourexclude.TourExcludeRequestDTO;
+import site.thanhtungle.tourservice.model.dto.response.tourexclude.TourExcludeResponseDTO;
 import site.thanhtungle.tourservice.model.entity.Tour;
-import site.thanhtungle.tourservice.model.entity.TourInclude;
+import site.thanhtungle.tourservice.model.entity.TourExclude;
 import site.thanhtungle.tourservice.repository.TourRepository;
 
 import java.util.HashSet;
@@ -17,35 +17,35 @@ import java.util.Set;
         nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE,
         injectionStrategy = InjectionStrategy.FIELD
 )
-public abstract class TourIncludeMapper {
+public abstract class TourExcludeMapper {
 
     @Autowired
     private TourRepository tourRepository;
 
     @Mapping(target = "tours", source = "tourIds", qualifiedByName = "toEntityTourListFromId")
-    public abstract TourInclude toEntityTourInclude(TourIncludeRequestDTO tourIncludeRequestDTO);
+    public abstract TourExclude toEntityTourExclude(TourExcludeRequestDTO tourExcludeRequestDTO);
 
-    public abstract TourIncludeResponseDTO toTourIncludeResponseDTO(TourInclude tourInclude);
+    public abstract TourExcludeResponseDTO toTourExcludeResponseDTO(TourExclude tourExclude);
 
-    public void updateTourInclude(TourInclude tourInclude, TourIncludeRequestDTO tourIncludeRequestDTO) {
-        if ( tourIncludeRequestDTO == null ) {
+    public void updateTourExclude(TourExclude tourExclude, TourExcludeRequestDTO tourExcludeRequestDTO) {
+        if ( tourExcludeRequestDTO == null ) {
             return;
         }
 
-        if ( tourInclude.getTours() != null ) {
-            Set<Tour> set = toEntityTourListFromId( tourIncludeRequestDTO.getTourIds() );
+        if ( tourExclude.getTours() != null ) {
+            Set<Tour> set = toEntityTourListFromId( tourExcludeRequestDTO.getTourIds() );
             if ( set != null ) {
-                tourInclude.getTours().addAll( set );
+                tourExclude.getTours().addAll( set );
             }
         }
         else {
-            Set<Tour> set = toEntityTourListFromId( tourIncludeRequestDTO.getTourIds() );
+            Set<Tour> set = toEntityTourListFromId( tourExcludeRequestDTO.getTourIds() );
             if ( set != null ) {
-                tourInclude.setTours( set );
+                tourExclude.setTours( set );
             }
         }
-        if ( tourIncludeRequestDTO.getContent() != null ) {
-            tourInclude.setContent( tourIncludeRequestDTO.getContent() );
+        if ( tourExcludeRequestDTO.getContent() != null ) {
+            tourExclude.setContent( tourExcludeRequestDTO.getContent() );
         }
     }
 

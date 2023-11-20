@@ -1,4 +1,4 @@
-package site.thanhtungle.tourservice.model.dto.response.tourinclude;
+package site.thanhtungle.tourservice.model.dto.response.tourexclude;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -13,7 +13,7 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class TourIncludeResponseDTO {
+public class TourExcludeResponseDTO {
 
     private Long id;
     private String content;

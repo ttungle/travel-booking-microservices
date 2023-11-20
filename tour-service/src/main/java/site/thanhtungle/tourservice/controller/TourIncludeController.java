@@ -41,7 +41,7 @@ public class TourIncludeController {
     public ResponseEntity<PagingApiResponse<List<TourIncludeResponseDTO>>> getAllTourInclude(
             @RequestParam(name = "page", defaultValue = "1") Integer page,
             @RequestParam(name = "pageSize", defaultValue = "25") Integer pageSize,
-            @RequestParam(value = " sort", required = false) String sort
+            @RequestParam(name = "sort", required = false) String sort
     ) {
         PagingApiResponse<List<TourIncludeResponseDTO>> response = tourIncludeService.getAlTourInclude(page, pageSize, sort);
         return ResponseEntity.ok().body(response);
