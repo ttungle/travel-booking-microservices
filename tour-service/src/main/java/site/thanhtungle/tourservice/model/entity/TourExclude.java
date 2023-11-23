@@ -1,6 +1,6 @@
 package site.thanhtungle.tourservice.model.entity;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.*;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -15,12 +15,15 @@ import java.util.Set;
 @AllArgsConstructor
 @Entity
 @Table(name = "tour_exclude")
+@JsonIdentityInfo(
+        generator = ObjectIdGenerators.PropertyGenerator.class,
+        property = "id")
 public class TourExclude extends BaseEntity {
 
     @Column(name = "content")
     private String content;
 
-    @JsonBackReference
+    @JsonIgnore
     @ManyToMany(fetch = FetchType.LAZY,
             cascade = {CascadeType.DETACH, CascadeType.MERGE,
                     CascadeType.PERSIST, CascadeType.REFRESH})

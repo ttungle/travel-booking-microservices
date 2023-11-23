@@ -1,6 +1,8 @@
 package site.thanhtungle.tourservice.model.entity;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
@@ -18,6 +20,9 @@ import java.util.List;
 @AllArgsConstructor
 @Entity
 @Table(name = "tour")
+@JsonIdentityInfo(
+        generator = ObjectIdGenerators.PropertyGenerator.class,
+        property = "id")
 public class Tour extends BaseEntity {
 
     @NotBlank(message = "Tour name cannot be empty or null.")
@@ -69,6 +74,7 @@ public class Tour extends BaseEntity {
     @Column(name = "slug")
     private String slug;
 
+    @JsonManagedReference
     @OneToMany(
             mappedBy = "tour",
             fetch = FetchType.LAZY,
@@ -80,6 +86,7 @@ public class Tour extends BaseEntity {
     @JoinColumn(name = "category_id")
     private TourCategory category;
 
+    @JsonManagedReference
     @OneToMany(
             mappedBy = "tour",
             fetch = FetchType.LAZY,
@@ -87,7 +94,6 @@ public class Tour extends BaseEntity {
             CascadeType.PERSIST, CascadeType.REFRESH})
     private List<TourItinerary> tourItineraries;
 
-    @JsonManagedReference
     @ManyToMany(fetch = FetchType.LAZY,
             cascade = {CascadeType.DETACH, CascadeType.MERGE,
                     CascadeType.PERSIST, CascadeType.REFRESH})
@@ -98,7 +104,6 @@ public class Tour extends BaseEntity {
     )
     private List<TourInclude> tourIncludes;
 
-    @JsonManagedReference
     @ManyToMany(fetch = FetchType.LAZY,
             cascade = {CascadeType.DETACH, CascadeType.MERGE,
                     CascadeType.PERSIST, CascadeType.REFRESH})
@@ -119,5 +124,4 @@ public class Tour extends BaseEntity {
 
     )
     private List<TourFAQ> tourFAQs;
-
 }

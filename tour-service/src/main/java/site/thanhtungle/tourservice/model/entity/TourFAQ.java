@@ -1,5 +1,6 @@
 package site.thanhtungle.tourservice.model.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -19,6 +20,7 @@ public class TourFAQ extends BaseEntity {
     @Column(name = "answer")
     private String answer;
 
+    @JsonBackReference
     @ManyToMany(fetch = FetchType.LAZY,
             cascade = {CascadeType.DETACH, CascadeType.MERGE,
                     CascadeType.PERSIST, CascadeType.REFRESH})

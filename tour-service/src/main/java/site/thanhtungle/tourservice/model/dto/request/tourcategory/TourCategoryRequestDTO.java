@@ -15,5 +15,5 @@ public class TourCategoryRequestDTO {
 
     private String name;
     private String description;
-    private List<Long> tourIdList;
+    private List<Long> tourIds;
 }

@@ -24,15 +24,12 @@ public class TourRequestDTO {
     private Integer groupSize;
     private String summary;
     private String description;
-    private String coverImage;
-    private String video;
     private String startLocation;
     private Instant startDate;
     private String slug;
-    private List<TourImage> images;
     private Long categoryId;
     private List<Long> tourItineraryIds;
-    private List<TourInclude> tourIncludes;
-    private List<TourExclude> tourExcludes;
+    private List<Long> tourIncludeIds;
+    private List<Long> tourExcludeIs;
     private List<TourFAQ> tourFAQs;
 }
