@@ -1,31 +1,33 @@
 package site.thanhtungle.tourservice.mapper;
 
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
-import org.mapstruct.Named;
-import org.mapstruct.NullValuePropertyMappingStrategy;
+import org.mapstruct.*;
+import org.springframework.beans.factory.annotation.Autowired;
 import site.thanhtungle.tourservice.model.dto.request.tourcategory.TourCategoryRequestDTO;
-import site.thanhtungle.tourservice.model.dto.response.tour.SimpleTourResponseDTO;
-import site.thanhtungle.tourservice.model.dto.response.tourcategory.SimpleTourCategoryResponseDTO;
 import site.thanhtungle.tourservice.model.dto.response.tourcategory.TourCategoryResponseDTO;
 import site.thanhtungle.tourservice.model.entity.Tour;
 import site.thanhtungle.tourservice.model.entity.TourCategory;
+import site.thanhtungle.tourservice.repository.TourRepository;
 
 import java.util.List;
 
 @Mapper(
         componentModel = "spring",
-        nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE
+        nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE,
+        injectionStrategy = InjectionStrategy.FIELD
 )
-public interface TourCategoryMapper {
+public abstract class TourCategoryMapper {
 
-    TourCategory toTourCategory(TourCategoryRequestDTO tourCategoryRequestDTO);
+    @Autowired
+    private TourRepository tourRepository;
 
-    @Mapping(target = "tours", source = "tourCategory.tours", qualifiedByName = "toSimpleTourResponseDTO")
-    TourCategoryResponseDTO toCategoryResponseDTO(TourCategory tourCategory);
+    @Mapping(target = "tours", source = "tourIds", qualifiedByName = "toSimpleTourListFromId")
+    public abstract TourCategory toTourCategory(TourCategoryRequestDTO tourCategoryRequestDTO);
 
-    SimpleTourCategoryResponseDTO toBaseTourCategoryResponseDTO(TourCategory tourCategory);
+    public abstract TourCategoryResponseDTO toCategoryResponseDTO(TourCategory tourCategory);
 
-    @Named("toSimpleTourResponseDTO")
-    List<SimpleTourResponseDTO> toSimpleTourResponseDTO(List<Tour> tourList);
+    @Named("toSimpleTourListFromId")
+    protected List<Tour> toSimpleTourListFromId(List<Long> tourIdList) {
+        if (tourIdList == null) return null;
+        return tourRepository.findTourByIdIn(tourIdList);
+    }
 }

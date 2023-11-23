@@ -36,7 +36,7 @@ public class TourCategoryServiceImpl implements TourCategoryService {
             throw new InvalidParameterException("Tour category body cannot be null.");
 
         TourCategory tourCategoryBody = tourCategoryMapper.toTourCategory(tourCategoryRequestDTO);
-        if (Objects.nonNull(tourCategoryRequestDTO.getTourIdList()))
+        if (Objects.nonNull(tourCategoryRequestDTO.getTourIds()))
             findTourAndSetRelationship(tourCategoryRequestDTO, tourCategoryBody);
 
         TourCategory savedTourCategory = tourCategoryRepository.save(tourCategoryBody);
@@ -51,7 +51,7 @@ public class TourCategoryServiceImpl implements TourCategoryService {
         TourCategory tourCategoryBody = tourCategoryMapper.toTourCategory(tourCategoryRequestDTO);
         tourCategoryBody.setId(tourCategoryId);
 
-        if (Objects.nonNull(tourCategoryRequestDTO.getTourIdList()))
+        if (Objects.nonNull(tourCategoryRequestDTO.getTourIds()))
             findTourAndSetRelationship(tourCategoryRequestDTO, tourCategoryBody);
 
         TourCategory updatedTourCategory = tourCategoryRepository.save(tourCategoryBody);
@@ -88,7 +88,7 @@ public class TourCategoryServiceImpl implements TourCategoryService {
     }
 
     private void findTourAndSetRelationship(TourCategoryRequestDTO tourCategoryRequestDTO, TourCategory tourCategory) {
-        List<Tour> foundedTourList = tourRepository.findTourByIdIn(tourCategoryRequestDTO.getTourIdList());
+        List<Tour> foundedTourList = tourRepository.findTourByIdIn(tourCategoryRequestDTO.getTourIds());
         if (foundedTourList != null || !foundedTourList.isEmpty()) {
             tourCategory.setTours(foundedTourList);
             foundedTourList.forEach(tour -> tour.setCategory(tourCategory));

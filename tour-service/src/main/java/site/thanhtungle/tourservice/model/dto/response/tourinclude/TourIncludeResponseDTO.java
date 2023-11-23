@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import site.thanhtungle.tourservice.model.dto.response.tour.TourResponseDTO;
+import site.thanhtungle.tourservice.model.dto.response.tour.SimpleTourResponseDTO;
 
 import java.time.Instant;
 import java.util.List;
@@ -19,5 +19,5 @@ public class TourIncludeResponseDTO {
     private String content;
     private Instant createdAt;
     private Instant updatedAt;
-    private List<TourResponseDTO> tours;
+    private List<SimpleTourResponseDTO> tours;
 }

@@ -1,4 +1,4 @@
-package site.thanhtungle.tourservice.model.dto.response.tourcategory;
+package site.thanhtungle.tourservice.model.dto.response.tourexclude;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -11,11 +11,10 @@ import java.time.Instant;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class SimpleTourCategoryResponseDTO {
+public class SimpleTourExcludeResponseDTO {
 
     private Long id;
-    private String name;
-    private String description;
+    private String content;
     private Instant createdAt;
     private Instant updatedAt;
 }

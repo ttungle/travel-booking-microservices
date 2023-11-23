@@ -1,5 +1,6 @@
 package site.thanhtungle.tourservice.model.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -25,6 +26,7 @@ public class TourItinerary extends BaseEntity {
     @Column(name = "location")
     private String location;
 
+    @JsonBackReference
     @ManyToOne(fetch = FetchType.LAZY,
             cascade = {CascadeType.DETACH, CascadeType.MERGE,
                     CascadeType.PERSIST, CascadeType.REFRESH})

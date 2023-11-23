@@ -1,6 +1,5 @@
 package site.thanhtungle.tourservice.model.entity;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -20,7 +19,6 @@ public class TourInclude extends BaseEntity {
     @Column(name = "content")
     private String content;
 
-    @JsonBackReference
     @ManyToMany(fetch = FetchType.LAZY,
             cascade = {CascadeType.DETACH, CascadeType.MERGE,
                     CascadeType.PERSIST, CascadeType.REFRESH})
