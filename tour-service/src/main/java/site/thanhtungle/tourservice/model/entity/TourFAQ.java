@@ -2,9 +2,12 @@ package site.thanhtungle.tourservice.model.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-import java.util.List;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -17,7 +20,7 @@ public class TourFAQ extends BaseEntity {
     @Column(name = "question")
     private String question;
 
-    @Column(name = "answer")
+    @Column(name = "answer", columnDefinition = "VARCHAR(4000)")
     private String answer;
 
     @JsonBackReference
@@ -29,5 +32,5 @@ public class TourFAQ extends BaseEntity {
             joinColumns = @JoinColumn(name = "tour_faq_id"),
             inverseJoinColumns = @JoinColumn(name = "tour_id")
     )
-    private List<Tour> tours;
+    private Set<Tour> tours;
 }

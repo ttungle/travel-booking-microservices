@@ -6,8 +6,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import site.thanhtungle.tourservice.model.dto.response.tourcategory.SimpleTourCategoryResponseDTO;
 import site.thanhtungle.tourservice.model.dto.response.tourexclude.SimpleTourExcludeResponseDTO;
+import site.thanhtungle.tourservice.model.dto.response.tourfaq.SimpleTourFAQResponseDTO;
 import site.thanhtungle.tourservice.model.dto.response.tourinclude.SimpleTourIncludeResponseDTO;
-import site.thanhtungle.tourservice.model.entity.TourFAQ;
 import site.thanhtungle.tourservice.model.entity.TourImage;
 import site.thanhtungle.tourservice.model.entity.TourItinerary;
 
@@ -42,5 +42,5 @@ public class TourResponseDTO {
     private List<TourItinerary> tourItineraries;
     private List<SimpleTourIncludeResponseDTO> tourIncludes;
     private List<SimpleTourExcludeResponseDTO> tourExcludes;
-    private List<TourFAQ> tourFAQs;
+    private List<SimpleTourFAQResponseDTO> tourFAQs;
 }
