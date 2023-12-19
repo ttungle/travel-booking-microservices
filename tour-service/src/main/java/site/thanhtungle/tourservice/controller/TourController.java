@@ -1,5 +1,6 @@
 package site.thanhtungle.tourservice.controller;
 
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -9,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import site.thanhtungle.commons.model.response.success.BaseApiResponse;
 import site.thanhtungle.commons.model.response.success.PagingApiResponse;
+import site.thanhtungle.tourservice.model.criteria.TourCriteria;
 import site.thanhtungle.tourservice.model.dto.request.tour.TourRequestDTO;
 import site.thanhtungle.tourservice.model.dto.response.tour.TourResponseDTO;
 import site.thanhtungle.tourservice.service.TourService;
@@ -58,12 +60,8 @@ public class TourController {
     }
 
     @GetMapping
-    public ResponseEntity<PagingApiResponse<List<TourResponseDTO>>> getAllTours(
-            @RequestParam(name = "page", defaultValue = "1") Integer page,
-            @RequestParam(name = "pageSize", defaultValue = "25") Integer pageSize,
-            @RequestParam(name = "sort", required = false) String sort
-    ) {
-        PagingApiResponse<List<TourResponseDTO>> tourResponseList = tourService.getAllTours(page, pageSize, sort);
+    public ResponseEntity<PagingApiResponse<List<TourResponseDTO>>> getAllTours(@Valid TourCriteria tourCriteria) {
+        PagingApiResponse<List<TourResponseDTO>> tourResponseList = tourService.getAllTours(tourCriteria);
         return ResponseEntity.ok().body(tourResponseList);
     }
 
