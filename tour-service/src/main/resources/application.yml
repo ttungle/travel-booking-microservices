@@ -46,3 +46,6 @@ spring:
 minio:
   bucket:
     name: travel-booking-storage
+server:
+  tomcat:
+    relaxed-query-chars: '|,{,},[,]'

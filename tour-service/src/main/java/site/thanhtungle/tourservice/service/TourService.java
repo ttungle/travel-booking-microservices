@@ -4,6 +4,7 @@ package site.thanhtungle.tourservice.service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import site.thanhtungle.commons.model.response.success.PagingApiResponse;
+import site.thanhtungle.tourservice.model.criteria.TourCriteria;
 import site.thanhtungle.tourservice.model.dto.request.tour.TourRequestDTO;
 import site.thanhtungle.tourservice.model.dto.response.tour.TourResponseDTO;
 
@@ -45,14 +46,17 @@ public interface TourService {
 
     /**
      * Get all tours with pagination, sort
-     * @param page current page
-     * @param pageSize number of item per page
-     * @param sort sort param - example: name:asc
+     *
+     * @param tourCriteria contains page, pageSize, sort, filter fields,...
+     *  page: current page
+     *  pageSize: number of item per page
+     *  sort: sort param - example: name:asc
+     *  price: range of price to filter - example: price[between]=0,10000
      * @return {PagingApiResponse<List<TourResponseDTO>>} list of TourResponseDTO and page information
-     * @example http://localhost:9191/api/v1/tours?page=1&pageSize=10&sort=name:asc
+     * @example /api/v1/tours?page=1&pageSize=10&sort=name:asc&filters[categoryId][eq]=1&filters[price][between]=0,10000
      * */
     @Transactional(readOnly = true)
-    PagingApiResponse<List<TourResponseDTO>> getAllTours(Integer page, Integer pageSize, String sort);
+    PagingApiResponse<List<TourResponseDTO>> getAllTours(TourCriteria tourCriteria);
 
     /**
      * Delete a tour
