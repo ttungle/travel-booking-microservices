@@ -3,9 +3,12 @@ package site.thanhtungle.tourservice.util;
 import lombok.experimental.UtilityClass;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.util.StringUtils;
 import site.thanhtungle.commons.util.CommonPageUtil;
 
 import java.security.InvalidParameterException;
+import java.util.Arrays;
+import java.util.List;
 
 @UtilityClass
 public class PageUtil {
@@ -24,5 +27,23 @@ public class PageUtil {
         }
 
         return pageRequest;
+    }
+
+    public List<String> getStringSort(String sort) {
+        if (sort == null) return null;
+        int sortParameterCount = StringUtils.countOccurrencesOf(sort, ",");
+        if (sortParameterCount > 1) throw new InvalidParameterException("Cannot sort more than 1 field.");
+
+        if (!sort.contains(":")) {
+            return Arrays.asList(sort, "asc");
+        }
+
+        String[] splitFields = sort.split(":");
+        return switch (splitFields[1]) {
+            case "asc" -> Arrays.asList(splitFields[0], "asc");
+            case "desc" -> Arrays.asList(splitFields[0], "desc");
+            default -> throw new InvalidParameterException(
+                    "Invalid sort direction. Sorting direction should be 'asc' or 'desc'.");
+        };
     }
 }

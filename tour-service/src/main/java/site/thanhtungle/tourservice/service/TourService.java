@@ -4,6 +4,7 @@ package site.thanhtungle.tourservice.service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import site.thanhtungle.commons.model.response.success.PagingApiResponse;
+import site.thanhtungle.tourservice.model.criteria.SearchTourCriteria;
 import site.thanhtungle.tourservice.model.criteria.TourCriteria;
 import site.thanhtungle.tourservice.model.dto.request.tour.TourRequestDTO;
 import site.thanhtungle.tourservice.model.dto.response.tour.TourResponseDTO;
@@ -63,4 +64,6 @@ public interface TourService {
      * @param tourId tour id
      * */
     void deleteTour(Long tourId);
+
+    PagingApiResponse<List<TourResponseDTO>> searchTours(SearchTourCriteria searchTourCriteria);
 }

@@ -9,6 +9,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.search.engine.backend.types.Sortable;
+import org.hibernate.search.mapper.pojo.mapping.definition.annotation.*;
 import org.springframework.lang.Nullable;
 
 import java.time.Instant;
@@ -20,6 +22,7 @@ import java.util.List;
 @AllArgsConstructor
 @Entity
 @Table(name = "tour")
+@Indexed
 @JsonIdentityInfo(
         generator = ObjectIdGenerators.PropertyGenerator.class,
         property = "id")
@@ -27,21 +30,26 @@ public class Tour extends BaseEntity {
 
     @NotBlank(message = "Tour name cannot be empty or null.")
     @Column(name = "name")
+    @FullTextField
+    @KeywordField(name = "name_sort", sortable = Sortable.YES)
     private String name;
 
     @Column(name = "duration")
     private String duration;
 
     @Column(name = "rating_average")
+    @GenericField(sortable = Sortable.YES)
     private Float ratingAverage;
 
     @Column(name = "rating_quantity")
     private Integer ratingQuantity;
 
     @Column(name = "price")
+    @GenericField(sortable = Sortable.YES)
     private Float price;
 
     @Column(name = "price_discount")
+    @GenericField(sortable = Sortable.YES)
     private Float priceDiscount;
 
     @Column(name = "tour_type")
@@ -64,10 +72,12 @@ public class Tour extends BaseEntity {
     private String video;
 
     @Column(name = "start_location")
+    @FullTextField
     private String startLocation;
 
     @Column(name = "start_date")
     @Temporal(TemporalType.TIMESTAMP)
+    @GenericField(sortable = Sortable.YES)
     private Instant startDate;
 
     @NotBlank(message = "Tour slug cannot be empty or null.")
@@ -84,6 +94,7 @@ public class Tour extends BaseEntity {
     @ManyToOne(cascade = {CascadeType.DETACH, CascadeType.MERGE,
                     CascadeType.PERSIST, CascadeType.REFRESH})
     @JoinColumn(name = "category_id")
+    @IndexedEmbedded
     private TourCategory category;
 
     @JsonManagedReference
