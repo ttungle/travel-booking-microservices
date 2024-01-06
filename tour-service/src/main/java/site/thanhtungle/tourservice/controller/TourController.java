@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import site.thanhtungle.commons.model.response.success.BaseApiResponse;
 import site.thanhtungle.commons.model.response.success.PagingApiResponse;
+import site.thanhtungle.tourservice.model.criteria.SearchTourCriteria;
 import site.thanhtungle.tourservice.model.criteria.TourCriteria;
 import site.thanhtungle.tourservice.model.dto.request.tour.TourRequestDTO;
 import site.thanhtungle.tourservice.model.dto.response.tour.TourResponseDTO;
@@ -69,5 +70,11 @@ public class TourController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteTour(@PathVariable("id") Long tourId) {
         tourService.deleteTour(tourId);
+    }
+
+    @GetMapping("/search")
+    public ResponseEntity<PagingApiResponse<List<TourResponseDTO>>> searchTour(@Valid SearchTourCriteria searchTourCriteria) {
+        PagingApiResponse<List<TourResponseDTO>> tourList = tourService.searchTours(searchTourCriteria);
+        return ResponseEntity.ok().body(tourList);
     }
 }

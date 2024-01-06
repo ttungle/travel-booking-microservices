@@ -1,6 +1,5 @@
 package site.thanhtungle.tourservice.repository;
 
-import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -11,7 +10,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface TourRepository extends JpaRepository<Tour, Long>, JpaSpecificationExecutor<Tour> {
+public interface TourRepository extends SearchRepository<Tour, Long>, JpaSpecificationExecutor<Tour> {
 
     @Query("SELECT t FROM Tour t LEFT JOIN FETCH t.images WHERE t.id = :tourId")
     Optional<Tour> findByIdWithLazyImages(@Param("tourId") Long tourId);

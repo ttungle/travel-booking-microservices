@@ -10,9 +10,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import site.thanhtungle.commons.exception.CustomNotFoundException;
 import site.thanhtungle.commons.model.dto.FileDto;
+import site.thanhtungle.commons.model.dto.PagingDTO;
 import site.thanhtungle.commons.model.response.success.PageInfo;
 import site.thanhtungle.commons.model.response.success.PagingApiResponse;
 import site.thanhtungle.tourservice.mapper.TourMapper;
+import site.thanhtungle.tourservice.model.criteria.SearchTourCriteria;
 import site.thanhtungle.tourservice.model.criteria.TourCriteria;
 import site.thanhtungle.tourservice.model.dto.request.tour.TourRequestDTO;
 import site.thanhtungle.tourservice.model.dto.response.tour.TourResponseDTO;
@@ -119,6 +121,13 @@ public class TourServiceImpl implements TourService {
         // delete tour files or images folder
         storageApiClient.deleteFolder("tours/" + tour.getId());
         tourRepository.deleteById(tour.getId());
+    }
+
+    @Override
+    public PagingApiResponse<List<TourResponseDTO>> searchTours(SearchTourCriteria searchTourCriteria) {
+        PagingDTO<Tour> tourPaging = tourRepository.searchBy(searchTourCriteria);
+        List<TourResponseDTO> tourList = tourPaging.getData().stream().map(tourMapper::toTourResponseDTO).toList();
+        return new PagingApiResponse<>(HttpStatus.OK.value(), tourList, tourPaging.getPagination());
     }
 
     private void uploadTourImage(Tour tour, List<MultipartFile> fileList) {
