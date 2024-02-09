@@ -7,6 +7,12 @@
 #    properties:
 #      hibernate:
 #        dialect: org.hibernate.dialect.PostgreSQLDialect
+#        search:
+#          schema_management:
+#            strategy:
+#          backend:
+#            type: elasticsearch
+#            uris: http://localhost:9200
 #    hibernate:
 #      ddl-auto: update
 #      show-sql: always
@@ -23,7 +29,7 @@
 #eureka:
 #  client:
 #    serviceUrl:
-#      defaultZone: http://localhost:8761/eureka/
+#      defaultZone: http://admin:admin@localhost:8761/eureka/
 #
 #management:
 #  tracing:
@@ -37,28 +43,29 @@
 #    org:
 #      springframework:
 #        web: DEBUG
+#
+#minio:
+#  bucket:
+#    name: travel-booking-storage
+#
+#server:
+#  tomcat:
+#    relaxed-query-chars: '|,{,},[,]'
 
 spring:
   application:
     name: TOUR-SERVICE
   config:
     import: optional:configserver:http://localhost:8888
-  jpa:
-    properties:
-      hibernate:
-        dialect: org.hibernate.dialect.PostgreSQLDialect
-        search:
-          schema_management:
-            strategy:
-          backend:
-            type: elasticsearch
-            uris: http://localhost:9200
-    hibernate:
-      ddl-auto: update
-      show-sql: always
-minio:
-  bucket:
-    name: travel-booking-storage
-server:
-  tomcat:
-    relaxed-query-chars: '|,{,},[,]'
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: http://localhost:8181/realms/travel-booking
+          jwk-set-uri: ${spring.security.oauth2.resourceserver.jwt.issuer-uri}/protocol/openid-connect/certs
+
+jwt:
+  auth:
+    converter:
+      resource-id: travel-booking-client
+      principle-attribute: preferred_username

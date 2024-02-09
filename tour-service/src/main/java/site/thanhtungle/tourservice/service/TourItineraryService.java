@@ -12,6 +12,7 @@ public interface TourItineraryService {
 
     /**
      * Create tour itinerary
+     *
      * @param tourItineraryRequestDTO request body in json
      * @return {TourItineraryResponseDTO}
      * */
@@ -19,6 +20,7 @@ public interface TourItineraryService {
 
     /**
      * Update tour itinerary
+     *
      * @param tourItineraryId tour itinerary id
      * @param tourItineraryRequestDTO request body in json
      * @return {TourItineraryResponseDTO}
@@ -27,6 +29,7 @@ public interface TourItineraryService {
 
     /**
      * Get tour itinerary by id
+     *
      * @param tourItineraryId tour itinerary id
      * @return {TourItineraryResponseDTO}
      * */
@@ -35,6 +38,7 @@ public interface TourItineraryService {
 
     /**
      * Get all tour itinerary
+     *
      * @param page current page
      * @param pageSize number of item per page
      * @param sort sort param - example: name:asc
@@ -45,6 +49,7 @@ public interface TourItineraryService {
 
     /**
      * Delete a tour itinerary
+     *
      * @param tourItineraryId tour id
      * */
     void deleteTourItinerary(Long tourItineraryId);

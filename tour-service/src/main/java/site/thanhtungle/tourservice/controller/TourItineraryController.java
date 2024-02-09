@@ -3,6 +3,7 @@ package site.thanhtungle.tourservice.controller;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import site.thanhtungle.commons.model.response.success.BaseApiResponse;
 import site.thanhtungle.commons.model.response.success.PagingApiResponse;
@@ -20,6 +21,7 @@ public class TourItineraryController {
     private final TourItineraryService tourItineraryService;
 
     @PostMapping
+    @PreAuthorize("hasRole('admin')")
     public ResponseEntity<BaseApiResponse<TourItineraryResponseDTO>> createTourItinerary(
             @RequestBody TourItineraryRequestDTO tourItineraryRequestDTO) {
         TourItineraryResponseDTO responseDTO = tourItineraryService.createTourItinerary(tourItineraryRequestDTO);
@@ -29,6 +31,7 @@ public class TourItineraryController {
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("hasRole('admin')")
     public ResponseEntity<BaseApiResponse<TourItineraryResponseDTO>> updateTourItinerary(
             @PathVariable("id") Long tourItineraryId,
             @RequestBody TourItineraryRequestDTO tourItineraryRequestDTO) {
@@ -58,6 +61,7 @@ public class TourItineraryController {
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
+    @PreAuthorize("hasRole('admin')")
     public void deleteTourItinerary(@PathVariable("id") Long tourItineraryId) {
         tourItineraryService.deleteTourItinerary(tourItineraryId);
     }
