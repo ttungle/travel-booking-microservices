@@ -6,6 +6,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import site.thanhtungle.commons.model.response.success.BaseApiResponse;
@@ -26,6 +27,7 @@ public class TourController {
     private final TourService tourService;
 
     @PostMapping(value = "", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PreAuthorize("hasRole('admin')")
     public ResponseEntity<BaseApiResponse<TourResponseDTO>> createTour(
             @RequestPart(value = "tour") TourRequestDTO tourRequestDTO,
             @RequestPart(value = "images", required = false) List<MultipartFile> tourImageList,
@@ -40,6 +42,7 @@ public class TourController {
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("hasRole('admin')")
     public ResponseEntity<BaseApiResponse<TourResponseDTO>> updateTour(
             @PathVariable("id") Long tourId,
             @RequestPart(value = "tour", required = false) TourRequestDTO tourRequestDTO,
@@ -68,6 +71,7 @@ public class TourController {
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
+    @PreAuthorize("hasRole('admin')")
     public void deleteTour(@PathVariable("id") Long tourId) {
         tourService.deleteTour(tourId);
     }

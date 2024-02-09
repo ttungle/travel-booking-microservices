@@ -3,6 +3,7 @@ package site.thanhtungle.tourservice.controller;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import site.thanhtungle.commons.model.response.success.BaseApiResponse;
 import site.thanhtungle.commons.model.response.success.PagingApiResponse;
@@ -20,6 +21,7 @@ public class TourExcludeController {
     private final TourExcludeService tourExcludeService;
 
     @PostMapping
+    @PreAuthorize("hasRole('admin')")
     public ResponseEntity<BaseApiResponse<TourExcludeResponseDTO>> createTourExclude(
             @RequestBody TourExcludeRequestDTO tourExcludeRequestDTO) {
         TourExcludeResponseDTO tourExcludeResponse = tourExcludeService.createTourExclude(tourExcludeRequestDTO);
@@ -29,6 +31,7 @@ public class TourExcludeController {
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("hasRole('admin')")
     public ResponseEntity<BaseApiResponse<TourExcludeResponseDTO>> updateTourExclude(
             @PathVariable("id") Long tourExcludeId, @RequestBody TourExcludeRequestDTO tourExcludeRequestDTO) {
         TourExcludeResponseDTO tourExcludeResponse = tourExcludeService.updateTourExclude(tourExcludeId, tourExcludeRequestDTO);
@@ -58,6 +61,7 @@ public class TourExcludeController {
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
+    @PreAuthorize("hasRole('admin')")
     public void deleteTourExclude(@PathVariable("id") Long tourExcludeId) {
         tourExcludeService.deleteTourExclude(tourExcludeId);
     }

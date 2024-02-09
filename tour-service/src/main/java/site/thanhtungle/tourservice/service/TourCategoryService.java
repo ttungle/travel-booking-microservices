@@ -12,6 +12,7 @@ public interface TourCategoryService {
 
     /**
      * Create tour category
+     *
      * @param tourCategoryRequestDTO request body in json
      * @return {TourCategoryResponseDTO}
      * */
@@ -19,6 +20,7 @@ public interface TourCategoryService {
 
     /**
      * Update tour category
+     *
      * @param tourCategoryId tour category id
      * @param tourCategoryRequestDTO request body in json
      * @return {TourCategoryResponseDTO}
@@ -27,6 +29,7 @@ public interface TourCategoryService {
 
     /**
      * Get tour category by id
+     *
      * @param categoryId tour itinerary id
      * @return {TourCategoryResponseDTO}
      * */
@@ -35,6 +38,7 @@ public interface TourCategoryService {
 
     /**
      * Get all tour category
+     *
      * @param page current page
      * @param pageSize number of item per page
      * @param sort sort param - example: name:asc
@@ -45,6 +49,7 @@ public interface TourCategoryService {
 
     /**
      * Delete a tour category
+     *
      * @param categoryId tour id
      * */
     void deleteTourCategory(Long categoryId);

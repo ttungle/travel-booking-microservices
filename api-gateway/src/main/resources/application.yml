@@ -1,6 +1,13 @@
 spring:
   application:
     name: API-GATEWAY
+  main:
+    allow-bean-definition-overriding: true
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: http://localhost:8181/realms/travel-booking
   cloud:
     gateway:
       routes:
@@ -16,6 +23,17 @@ spring:
           uri: lb://INVENTORY-SERVICE
           predicates:
             - Path=/api/v1/inventories/**
+          # discovery server route
+        - id: DISCOVERY-SERVER
+          uri: http://localhost:8761
+          predicates:
+            - Path=/eureka/dashboard
+          filters:
+            - SetPath=/
+        - id: DISCOVERY-SERVER-STATIC
+          uri: http://localhost:8761
+          predicates:
+            - Path=/eureka/**
 
 server:
   port: 9191
@@ -23,7 +41,7 @@ server:
 eureka:
   client:
     serviceUrl:
-      defaultZone: http://localhost:8761/eureka/
+      defaultZone: http://admin:admin@localhost:8761/eureka/
 
 management:
   tracing:
@@ -37,3 +55,9 @@ logging:
     org:
       springframework:
         web: DEBUG
+
+jwt:
+  auth:
+    converter:
+      resource-id: keycloak-tutorial
+      principle-attribute: preferred_username

@@ -12,6 +12,8 @@
 #      show-sql: always
 #  application:
 #    name: BOOKING-SERVICE
+#  config:
+#    import: optional:configserver:http://localhost:8888
 #
 #server:
 #  port: 8081
@@ -19,7 +21,7 @@
 #eureka:
 #  client:
 #    serviceUrl:
-#      defaultZone: http://localhost:8761/eureka/
+#      defaultZone: http://admin:admin@localhost:8761/eureka/
 #
 #management:
 #  tracing:

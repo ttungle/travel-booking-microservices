@@ -1,4 +1,4 @@
-package site.thanhtungle.tourservice.converter;
+package site.thanhtungle.tourservice.util.converter;
 
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;

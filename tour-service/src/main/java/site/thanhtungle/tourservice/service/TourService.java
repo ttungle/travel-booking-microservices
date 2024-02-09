@@ -16,6 +16,7 @@ public interface TourService {
 
     /**
      * Create new tour
+     *
      * @param tourRequestDTO request body in json
      * @param fileList list of tour images
      * @param coverImage cover image
@@ -27,6 +28,7 @@ public interface TourService {
 
     /**
      * Update a tour
+     *
      * @param tourId tour id
      * @param tourRequestDTO request body in json
      * @param fileList list of tour images
@@ -39,6 +41,7 @@ public interface TourService {
 
     /**
      * Get tour by id
+     *
      * @param tourId tour id
      * @return {TourResponseDTO}
      * */
@@ -61,6 +64,7 @@ public interface TourService {
 
     /**
      * Delete a tour
+     *
      * @param tourId tour id
      * */
     void deleteTour(Long tourId);
