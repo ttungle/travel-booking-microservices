@@ -8,6 +8,7 @@ spring:
       resourceserver:
         jwt:
           issuer-uri: http://localhost:8181/realms/travel-booking
+          jwk-set-uri: ${spring.security.oauth2.resourceserver.jwt.issuer-uri}/protocol/openid-connect/certs
   cloud:
     gateway:
       routes:
@@ -23,6 +24,10 @@ spring:
           uri: lb://INVENTORY-SERVICE
           predicates:
             - Path=/api/v1/inventories/**
+        - id: ACCOUNT-SERVICE
+          uri: lb://ACCOUNT-SERVICE
+          predicates:
+            - Path=/api/v1/auth/**
           # discovery server route
         - id: DISCOVERY-SERVER
           uri: http://localhost:8761
@@ -59,5 +64,5 @@ logging:
 jwt:
   auth:
     converter:
-      resource-id: keycloak-tutorial
+      resource-id: travel-booking-client
       principle-attribute: preferred_username
