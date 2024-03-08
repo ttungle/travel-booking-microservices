@@ -14,20 +14,15 @@ import org.springframework.security.web.server.SecurityWebFilterChain;
 @Configuration
 @EnableWebFluxSecurity
 public class SecurityConfiguration {
-
     @Bean
     public SecurityWebFilterChain securityWebFilterChain(ServerHttpSecurity http) {
         http.csrf(ServerHttpSecurity.CsrfSpec::disable)
                 .authorizeExchange(exchange -> exchange
-                        .pathMatchers(HttpMethod.GET, "/api/v1/tours/**")
-                        .permitAll()
-                        .pathMatchers("/eureka/**")
-                        .permitAll()
-                        .anyExchange()
-                        .authenticated()
+                        .pathMatchers(HttpMethod.GET, "/api/v1/tours/**").permitAll()
+                        .pathMatchers("/eureka/**", "/api/v1/auth/**").permitAll()
+                        .anyExchange().authenticated()
                 )
-                .oauth2ResourceServer((oauth2) -> oauth2
-                .jwt(Customizer.withDefaults()));
+                .oauth2ResourceServer((oauth2) -> oauth2.jwt(Customizer.withDefaults()));
         return http.build();
     }
 }
