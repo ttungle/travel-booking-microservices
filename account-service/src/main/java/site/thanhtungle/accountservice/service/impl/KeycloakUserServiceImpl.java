@@ -25,12 +25,9 @@ import java.util.*;
 public class KeycloakUserServiceImpl implements KeycloakUserService {
 
     private final Keycloak keycloak;
-
     private final UserMapper userMapper;
-
     @Value("${keycloak.realm}")
     private String realm;
-
     @Value("${keycloak.client-id}")
     private String clientId;
 

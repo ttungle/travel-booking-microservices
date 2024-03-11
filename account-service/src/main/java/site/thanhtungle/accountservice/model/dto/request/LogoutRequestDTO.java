@@ -7,12 +7,9 @@ import lombok.Setter;
 
 @Getter
 @Setter
-@AllArgsConstructor
 @NoArgsConstructor
-public class UserRequestDTO {
-    private String firstName;
-    private String lastName;
-    private String email;
-    private String password;
-    private String role;
+@AllArgsConstructor
+public class LogoutRequestDTO {
+    private String client_id;
+    private String refresh_token;
 }
