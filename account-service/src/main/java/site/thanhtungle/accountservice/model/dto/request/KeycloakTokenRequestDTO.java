@@ -7,12 +7,12 @@ import lombok.Setter;
 
 @Getter
 @Setter
-@AllArgsConstructor
 @NoArgsConstructor
-public class UserRequestDTO {
-    private String firstName;
-    private String lastName;
-    private String email;
+@AllArgsConstructor
+public class KeycloakTokenRequestDTO {
+
+    private String grant_type;
+    private String client_id;
+    private String username;
     private String password;
-    private String role;
 }
