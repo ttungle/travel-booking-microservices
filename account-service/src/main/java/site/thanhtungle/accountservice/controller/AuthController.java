@@ -1,7 +1,6 @@
 package site.thanhtungle.accountservice.controller;
 
 import lombok.AllArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.keycloak.representations.AccessTokenResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,7 +15,6 @@ import site.thanhtungle.commons.model.response.success.BaseApiResponse;
 @RestController
 @RequestMapping("${api.url.auth}")
 @AllArgsConstructor
-@Slf4j
 public class AuthController {
 
     private final AuthService authService;
