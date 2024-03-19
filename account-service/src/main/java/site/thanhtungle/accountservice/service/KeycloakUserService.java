@@ -1,7 +1,8 @@
 package site.thanhtungle.accountservice.service;
 
-import jakarta.transaction.Transactional;
+
 import jakarta.ws.rs.core.Response;
+import org.springframework.transaction.annotation.Transactional;
 import site.thanhtungle.accountservice.model.dto.request.UserRequestDTO;
 import site.thanhtungle.accountservice.model.dto.request.UserUpdateRequestDTO;
 import site.thanhtungle.accountservice.model.dto.response.UserResponseDTO;
@@ -34,6 +35,7 @@ public interface KeycloakUserService {
      * @param userId
      * @return UserResponseDTO
      * */
+    @Transactional(readOnly = true)
     UserResponseDTO getUser(String userId);
 
     /**
@@ -44,6 +46,7 @@ public interface KeycloakUserService {
      * @param pageSize
      * @return PagingApiResponse<List<UserResponseDTO>>
      * */
+    @Transactional(readOnly = true)
     PagingApiResponse<List<UserResponseDTO>> getAllUsers(String search, Integer page, Integer pageSize);
 
     /**
