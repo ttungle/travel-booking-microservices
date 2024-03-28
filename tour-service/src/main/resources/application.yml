@@ -14,10 +14,16 @@
 #            type: elasticsearch
 #            uris: http://localhost:9200
 #    hibernate:
-#      ddl-auto: update
+#      ddl-auto: validate
 #      show-sql: always
 #  application:
 #    name: TOUR-SERVICE
+#  security:
+#    oauth2:
+#      resourceserver:
+#        jwt:
+#          issuer-uri: http://localhost:8181/realms/travel-booking
+#          jwk-set-uri: ${spring.security.oauth2.resourceserver.jwt.issuer-uri}/protocol/openid-connect/certs
 #  jackson:
 #    time-zone: Asia/Ho_Chi_Minh
 #  servlet:
@@ -25,6 +31,15 @@
 #      enabled: true
 #      max-file-size: 100MB
 #      max-request-size: 100MB
+#  flyway:
+#    baseline-on-migrate: true
+#    enabled: true
+#    url: ${DB_URL}/travel-tour-service
+#    user: ${DB_USERNAME}
+#    password: ${DB_PASSWORD}
+#    baseline-version: 0
+#    baseline-description: init
+#    locations: classpath:db/migration
 #
 #eureka:
 #  client:
@@ -51,21 +66,15 @@
 #server:
 #  tomcat:
 #    relaxed-query-chars: '|,{,},[,]'
+#
+#jwt:
+#  auth:
+#    converter:
+#      resource-id: travel-booking-client
+#      principle-attribute: preferred_username
 
 spring:
   application:
     name: TOUR-SERVICE
   config:
     import: optional:configserver:http://localhost:8888
-  security:
-    oauth2:
-      resourceserver:
-        jwt:
-          issuer-uri: http://localhost:8181/realms/travel-booking
-          jwk-set-uri: ${spring.security.oauth2.resourceserver.jwt.issuer-uri}/protocol/openid-connect/certs
-
-jwt:
-  auth:
-    converter:
-      resource-id: travel-booking-client
-      principle-attribute: preferred_username

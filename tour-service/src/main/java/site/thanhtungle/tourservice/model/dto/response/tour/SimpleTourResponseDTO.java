@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.math.BigDecimal;
 import java.time.Instant;
 
 @Getter
@@ -16,8 +17,8 @@ public class SimpleTourResponseDTO {
     private String duration;
     private Float ratingAverage;
     private Integer ratingQuantity;
-    private Float price;
-    private Float priceDiscount;
+    private BigDecimal price;
+    private BigDecimal priceDiscount;
     private String tourType;
     private Integer groupSize;
     private String summary;

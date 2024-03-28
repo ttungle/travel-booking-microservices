@@ -4,8 +4,9 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import site.thanhtungle.tourservice.model.entity.*;
+import site.thanhtungle.tourservice.model.entity.TourFAQ;
 
+import java.math.BigDecimal;
 import java.time.Instant;
 import java.util.List;
 
@@ -18,8 +19,8 @@ public class TourRequestDTO {
     private Long id;
     private String name;
     private String duration;
-    private Float price;
-    private Float priceDiscount;
+    private BigDecimal price;
+    private BigDecimal priceDiscount;
     private String tourType;
     private Integer groupSize;
     private String summary;
