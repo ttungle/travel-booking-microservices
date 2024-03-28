@@ -13,6 +13,7 @@ import site.thanhtungle.tourservice.model.criteria.SearchTourCriteria;
 import site.thanhtungle.tourservice.repository.SearchRepository;
 import site.thanhtungle.tourservice.util.PageUtil;
 
+import java.math.BigDecimal;
 import java.time.Instant;
 import java.util.List;
 
@@ -65,13 +66,13 @@ public class SearchRepositoryImpl<T, ID> extends SimpleJpaRepository<T, ID> impl
                         if (searchTourCriteria.getPriceDiscount() != null) {
                             String[] splitValue= searchTourCriteria.getPriceDiscount().split(",");
                             b.filter(f.range().field("priceDiscount")
-                                    .between(Float.parseFloat(splitValue[0]), Float.parseFloat(splitValue[1])));
+                                    .between(new BigDecimal(splitValue[0]), new BigDecimal(splitValue[1])));
                         }
 
                         if (searchTourCriteria.getRatingAverage() != null) {
                             String[] splitValue= searchTourCriteria.getRatingAverage().split(",");
                             b.filter(f.range().field("ratingAverage")
-                                    .between(Float.parseFloat(splitValue[0]), Float.parseFloat(splitValue[1])));
+                                    .between(new BigDecimal(splitValue[0]), new BigDecimal(splitValue[1])));
                         }
 
                         if (searchTourCriteria.getStartDate() != null) {

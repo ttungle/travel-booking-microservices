@@ -13,6 +13,7 @@ import org.hibernate.search.engine.backend.types.Sortable;
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.*;
 import org.springframework.lang.Nullable;
 
+import java.math.BigDecimal;
 import java.time.Instant;
 import java.util.List;
 
@@ -46,11 +47,11 @@ public class Tour extends BaseEntity {
 
     @Column(name = "price")
     @GenericField(sortable = Sortable.YES)
-    private Float price;
+    private BigDecimal price;
 
     @Column(name = "price_discount")
     @GenericField(sortable = Sortable.YES)
-    private Float priceDiscount;
+    private BigDecimal priceDiscount;
 
     @Column(name = "tour_type")
     private String tourType;
