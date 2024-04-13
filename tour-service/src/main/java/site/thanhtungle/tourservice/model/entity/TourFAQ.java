@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.io.Serializable;
 import java.util.Set;
 
 @Getter
@@ -15,7 +16,7 @@ import java.util.Set;
 @AllArgsConstructor
 @Entity
 @Table(name = "tour_faq")
-public class TourFAQ extends BaseEntity {
+public class TourFAQ extends BaseEntity implements Serializable {
 
     @Column(name = "question")
     private String question;

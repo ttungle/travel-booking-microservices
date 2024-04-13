@@ -11,6 +11,7 @@ import site.thanhtungle.tourservice.model.dto.response.tourinclude.SimpleTourInc
 import site.thanhtungle.tourservice.model.entity.TourImage;
 import site.thanhtungle.tourservice.model.entity.TourItinerary;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.Instant;
 import java.util.List;
@@ -19,7 +20,7 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class TourResponseDTO {
+public class TourResponseDTO implements Serializable {
     private Long id;
     private String name;
     private String duration;

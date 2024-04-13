@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.io.Serializable;
 import java.util.List;
 
 @Getter
@@ -15,7 +16,7 @@ import java.util.List;
 @AllArgsConstructor
 @Entity
 @Table(name = "tour_category")
-public class TourCategory extends BaseEntity {
+public class TourCategory extends BaseEntity implements Serializable {
 
     @NotBlank(message = "Tour category name cannot be empty or null.")
     @Column(name = "name")

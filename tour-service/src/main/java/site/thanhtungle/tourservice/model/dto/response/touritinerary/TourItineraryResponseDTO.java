@@ -6,13 +6,14 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import site.thanhtungle.tourservice.model.dto.response.tour.TourResponseDTO;
 
+import java.io.Serializable;
 import java.time.Instant;
 
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class TourItineraryResponseDTO {
+public class TourItineraryResponseDTO implements Serializable {
 
     private Long id;
     private String title;

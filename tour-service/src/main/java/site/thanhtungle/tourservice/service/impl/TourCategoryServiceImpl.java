@@ -1,6 +1,9 @@
 package site.thanhtungle.tourservice.service.impl;
 
 import lombok.AllArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
@@ -21,6 +24,8 @@ import site.thanhtungle.tourservice.util.PageUtil;
 import java.security.InvalidParameterException;
 import java.util.List;
 import java.util.Objects;
+
+import static site.thanhtungle.tourservice.constant.CacheConstants.TOUR_CATEGORY_CACHE;
 
 @Service
 @AllArgsConstructor
@@ -44,6 +49,7 @@ public class TourCategoryServiceImpl implements TourCategoryService {
     }
 
     @Override
+    @CachePut(value = TOUR_CATEGORY_CACHE, key = "#tourCategoryId")
     public TourCategoryResponseDTO updateTourCategory(Long tourCategoryId, TourCategoryRequestDTO tourCategoryRequestDTO) {
         tourCategoryRepository.findById(tourCategoryId)
                 .orElseThrow(() -> new CustomNotFoundException("No tour category found with that id."));
@@ -59,6 +65,7 @@ public class TourCategoryServiceImpl implements TourCategoryService {
     }
 
     @Override
+    @Cacheable(value = TOUR_CATEGORY_CACHE, key = "#categoryId")
     public TourCategoryResponseDTO getTourCategory(Long categoryId) {
         if (categoryId == null) throw new InvalidParameterException("category id cannot be null.");
 
@@ -68,6 +75,7 @@ public class TourCategoryServiceImpl implements TourCategoryService {
     }
 
     @Override
+    @Cacheable(value = TOUR_CATEGORY_CACHE, key = "{#page, #pageSize, #sort}")
     public PagingApiResponse<List<TourCategoryResponseDTO>> getAllTourCategories(Integer page, Integer pageSize, String sort) {
         PageRequest pageRequest = PageUtil.getPageRequest(page, pageSize, sort);
 
@@ -83,6 +91,7 @@ public class TourCategoryServiceImpl implements TourCategoryService {
     }
 
     @Override
+    @CacheEvict(value = TOUR_CATEGORY_CACHE, key = "#categoryId")
     public void deleteTourCategory(Long categoryId) {
         tourCategoryRepository.deleteById(categoryId);
     }

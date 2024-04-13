@@ -2,6 +2,9 @@ package site.thanhtungle.tourservice.service.impl;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.domain.Specification;
@@ -30,6 +33,8 @@ import java.security.InvalidParameterException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static site.thanhtungle.tourservice.constant.CacheConstants.TOUR_CACHE;
 
 @Service
 @AllArgsConstructor
@@ -63,6 +68,7 @@ public class TourServiceImpl implements TourService {
     }
 
     @Override
+    @CachePut(value = TOUR_CACHE, key = "#tourId")
     public TourResponseDTO updateTour(Long tourId, TourRequestDTO tourRequestDTO, List<MultipartFile> fileList,
                                       MultipartFile coverImage, MultipartFile video
     ) {
@@ -83,6 +89,7 @@ public class TourServiceImpl implements TourService {
     }
 
     @Override
+    @Cacheable(value = TOUR_CACHE, key = "#tourId")
     public TourResponseDTO getTour(Long tourId) {
         Tour tour = tourRepository.findById(tourId).orElseThrow(
                 () -> new CustomNotFoundException("No tour found with that id."));
@@ -90,6 +97,8 @@ public class TourServiceImpl implements TourService {
     }
 
     @Override
+    @Cacheable(value = TOUR_CACHE,
+            key = "{#tourCriteria.page, #tourCriteria.pageSize, #tourCriteria.sort, #tourCriteria.filters}")
     public PagingApiResponse<List<TourResponseDTO>> getAllTours(TourCriteria tourCriteria) {
         PageRequest pageRequest = PageUtil.getPageRequest(
                 tourCriteria.getPage(),
@@ -113,6 +122,7 @@ public class TourServiceImpl implements TourService {
     }
 
     @Override
+    @CacheEvict(value = TOUR_CACHE, key = "#tourId")
     public void deleteTour(Long tourId) {
         if (tourId == null) throw new InvalidParameterException("Tour id cannot be null.");
         Tour tour = tourRepository.findById(tourId).orElseThrow(

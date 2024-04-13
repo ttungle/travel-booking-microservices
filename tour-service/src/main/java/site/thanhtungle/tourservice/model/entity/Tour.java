@@ -13,6 +13,7 @@ import org.hibernate.search.engine.backend.types.Sortable;
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.*;
 import org.springframework.lang.Nullable;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.Instant;
 import java.util.List;
@@ -27,7 +28,7 @@ import java.util.List;
 @JsonIdentityInfo(
         generator = ObjectIdGenerators.PropertyGenerator.class,
         property = "id")
-public class Tour extends BaseEntity {
+public class Tour extends BaseEntity implements Serializable {
 
     @NotBlank(message = "Tour name cannot be empty or null.")
     @Column(name = "name")
