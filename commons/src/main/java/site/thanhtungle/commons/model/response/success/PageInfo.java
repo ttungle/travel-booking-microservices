@@ -4,12 +4,10 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.io.Serializable;
-
 @Getter
 @Setter
 @AllArgsConstructor
-public class PageInfo implements Serializable {
+public class PageInfo {
 
     private Integer page;
     private Integer pageSize;
