@@ -1,6 +1,9 @@
 package site.thanhtungle.tourservice.service.impl;
 
 import lombok.AllArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
@@ -19,6 +22,8 @@ import site.thanhtungle.tourservice.util.PageUtil;
 import java.security.InvalidParameterException;
 import java.util.List;
 
+import static site.thanhtungle.tourservice.constant.CacheConstants.TOUR_FAQ_CACHE;
+
 @Service
 @AllArgsConstructor
 public class TourFAQServiceImpl implements TourFAQService {
@@ -35,6 +40,7 @@ public class TourFAQServiceImpl implements TourFAQService {
     }
 
     @Override
+    @CachePut(value = TOUR_FAQ_CACHE, key = "#tourFAQId")
     public TourFAQResponseDTO updateTourFAQ(Long tourFAQId, TourFAQRequestDTO tourFAQRequestDTO) {
         if (tourFAQId == null) throw new InvalidParameterException("Tour FAQ id cannot be null.");
         if (tourFAQRequestDTO == null) throw new InvalidParameterException("Tour FAQ body cannot be null.");
@@ -47,6 +53,7 @@ public class TourFAQServiceImpl implements TourFAQService {
     }
 
     @Override
+    @Cacheable(value = TOUR_FAQ_CACHE, key = "#tourFAQId")
     public TourFAQResponseDTO getTourFAQ(Long tourFAQId) {
         if (tourFAQId == null) throw new InvalidParameterException("Tour FAQ id cannot be null.");
         TourFAQ tourFAQ = tourFAQRepository.findById(tourFAQId).orElseThrow(
@@ -55,6 +62,7 @@ public class TourFAQServiceImpl implements TourFAQService {
     }
 
     @Override
+    @Cacheable(value = TOUR_FAQ_CACHE, key = "{#page, #pageSize, #sort}")
     public PagingApiResponse<List<TourFAQResponseDTO>> getAllTourFAQs(Integer page, Integer pageSize, String sort) {
         PageRequest pageRequest = PageUtil.getPageRequest(page, pageSize, sort);
 
@@ -68,6 +76,7 @@ public class TourFAQServiceImpl implements TourFAQService {
     }
 
     @Override
+    @CacheEvict(value = TOUR_FAQ_CACHE, key = "#tourFAQId")
     public void deleteTourFAQ(Long tourFAQId) {
         TourFAQ tourFAQ = tourFAQRepository.findById(tourFAQId).orElseThrow(
                 () -> new CustomNotFoundException("No tour FAQ found with that id."));

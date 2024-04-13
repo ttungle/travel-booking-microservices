@@ -1,6 +1,9 @@
 package site.thanhtungle.tourservice.service.impl;
 
 import lombok.AllArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
@@ -19,6 +22,8 @@ import site.thanhtungle.tourservice.util.PageUtil;
 import java.security.InvalidParameterException;
 import java.util.List;
 
+import static site.thanhtungle.tourservice.constant.CacheConstants.TOUR_INCLUDE_CACHE;
+
 @Service
 @AllArgsConstructor
 public class TourIncludeServiceImpl implements TourIncludeService {
@@ -35,6 +40,7 @@ public class TourIncludeServiceImpl implements TourIncludeService {
     }
 
     @Override
+    @CachePut(value = TOUR_INCLUDE_CACHE, key = "#tourIncludeId")
     public TourIncludeResponseDTO updateTourInclude(Long tourIncludeId, TourIncludeRequestDTO tourIncludeRequestDTO) {
         if (tourIncludeId == null) throw new InvalidParameterException("Tour include id cannot be null.");
         if (tourIncludeRequestDTO == null) throw new InvalidParameterException("Tour include body cannot be null.");
@@ -47,6 +53,7 @@ public class TourIncludeServiceImpl implements TourIncludeService {
     }
 
     @Override
+    @Cacheable(value = TOUR_INCLUDE_CACHE, key = "{#page, #pageSize, #sort}")
     public PagingApiResponse<List<TourIncludeResponseDTO>> getAlTourInclude(Integer page, Integer pageSize, String sort) {
         PageRequest pageRequest = PageUtil.getPageRequest(page, pageSize, sort);
 
@@ -62,6 +69,7 @@ public class TourIncludeServiceImpl implements TourIncludeService {
     }
 
     @Override
+    @Cacheable(value = TOUR_INCLUDE_CACHE, key = "#tourIncludeId")
     public TourIncludeResponseDTO getTourInclude(Long tourIncludeId) {
         if (tourIncludeId == null) throw new InvalidParameterException("Tour include id cannot be null.");
         TourInclude tourInclude = tourIncludeRepository.findById(tourIncludeId).orElseThrow(() ->
@@ -70,6 +78,7 @@ public class TourIncludeServiceImpl implements TourIncludeService {
     }
 
     @Override
+    @CacheEvict(value = TOUR_INCLUDE_CACHE, key = "#tourIncludeId")
     public void deleteTourInclude(Long tourIncludeId) {
         TourInclude tourInclude = tourIncludeRepository.findById(tourIncludeId).orElseThrow(() ->
                 new CustomNotFoundException("No tour include found with that id."));

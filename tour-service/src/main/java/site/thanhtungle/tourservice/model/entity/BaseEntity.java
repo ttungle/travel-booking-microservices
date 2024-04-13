@@ -8,12 +8,13 @@ import org.hibernate.annotations.UpdateTimestamp;
 import org.hibernate.search.engine.backend.types.Sortable;
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.GenericField;
 
+import java.io.Serializable;
 import java.time.Instant;
 
 @Getter
 @Setter
 @MappedSuperclass
-public class BaseEntity {
+public class BaseEntity implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -1,6 +1,8 @@
 package site.thanhtungle.tourservice.service.impl;
 
 import lombok.AllArgsConstructor;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
@@ -19,6 +21,8 @@ import site.thanhtungle.tourservice.util.PageUtil;
 import java.security.InvalidParameterException;
 import java.util.List;
 
+import static site.thanhtungle.tourservice.constant.CacheConstants.TOUR_EXCLUDE_CACHE;
+
 @Service
 @AllArgsConstructor
 public class TourExcludeServiceImpl implements TourExcludeService {
@@ -35,6 +39,7 @@ public class TourExcludeServiceImpl implements TourExcludeService {
     }
 
     @Override
+    @CachePut(value = TOUR_EXCLUDE_CACHE, key = "#tourExcludeId")
     public TourExcludeResponseDTO updateTourExclude(Long tourExcludeId, TourExcludeRequestDTO tourExcludeRequestDTO) {
         if (tourExcludeId == null) throw new InvalidParameterException("Tour exclude id cannot be null");
         if (tourExcludeRequestDTO == null) throw new InvalidParameterException("Tour exclude body cannot be null.");
@@ -47,6 +52,7 @@ public class TourExcludeServiceImpl implements TourExcludeService {
     }
 
     @Override
+    @Cacheable(value = TOUR_EXCLUDE_CACHE, key = "{#page, #pageSize, #sort}")
     public PagingApiResponse<List<TourExcludeResponseDTO>> getAllTourExclude(Integer page, Integer pageSize, String sort) {
         PageRequest pageRequest = PageUtil.getPageRequest(page, pageSize, sort);
 
@@ -61,6 +67,7 @@ public class TourExcludeServiceImpl implements TourExcludeService {
     }
 
     @Override
+    @Cacheable(value = TOUR_EXCLUDE_CACHE, key = "#tourExcludeId")
     public TourExcludeResponseDTO getTour(Long tourExcludeId) {
         if (tourExcludeId == null) throw new InvalidParameterException("Tour exclude id cannot be null.");
         TourExclude tourExclude = tourExcludeRepository.findById(tourExcludeId).orElseThrow(

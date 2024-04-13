@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.io.Serializable;
 import java.time.Instant;
 
 @Getter
@@ -12,7 +13,7 @@ import java.time.Instant;
 @AllArgsConstructor
 @Entity
 @Table(name = "tour_itinerary")
-public class TourItinerary extends BaseEntity {
+public class TourItinerary extends BaseEntity implements Serializable {
 
     @Column(name = "title")
     private String title;

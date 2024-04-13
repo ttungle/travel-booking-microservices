@@ -7,13 +7,15 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.io.Serializable;
+
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
 @Table(name = "tour_image")
-public class TourImage extends BaseEntity {
+public class TourImage extends BaseEntity implements Serializable {
 
     @Column(name = "name")
     private String name;

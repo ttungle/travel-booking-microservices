@@ -1,6 +1,9 @@
 package site.thanhtungle.tourservice.service.impl;
 
 import lombok.AllArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
@@ -20,6 +23,8 @@ import site.thanhtungle.tourservice.util.PageUtil;
 
 import java.security.InvalidParameterException;
 import java.util.List;
+
+import static site.thanhtungle.tourservice.constant.CacheConstants.TOUR_ITINERARY_CACHE;
 
 @Service
 @AllArgsConstructor
@@ -43,6 +48,7 @@ public class TourItineraryServiceImpl implements TourItineraryService {
     }
 
     @Override
+    @CachePut(value = TOUR_ITINERARY_CACHE, key = "#tourItineraryId")
     public TourItineraryResponseDTO updateTourItinerary(Long tourItineraryId, TourItineraryRequestDTO tourItineraryRequestDTO) {
         if (tourItineraryRequestDTO == null) throw new InvalidParameterException("Tour itinerary body cannot be null");
 
@@ -55,6 +61,7 @@ public class TourItineraryServiceImpl implements TourItineraryService {
     }
 
     @Override
+    @Cacheable(value = TOUR_ITINERARY_CACHE, key = "#tourItineraryId")
     public TourItineraryResponseDTO getTourItinerary(Long tourItineraryId) {
         if (tourItineraryId == null) throw new InvalidParameterException("Tour itinerary id should not be null.");
 
@@ -64,6 +71,7 @@ public class TourItineraryServiceImpl implements TourItineraryService {
     }
 
     @Override
+    @Cacheable(value = TOUR_ITINERARY_CACHE, key = "{#page, #pageSize, #sort}")
     public PagingApiResponse<List<TourItineraryResponseDTO>> getAllTourItinerary(Integer page, Integer pageSize, String sort) {
         PageRequest pageRequest = PageUtil.getPageRequest(page, pageSize, sort);
 
@@ -78,6 +86,7 @@ public class TourItineraryServiceImpl implements TourItineraryService {
     }
 
     @Override
+    @CacheEvict(value = TOUR_ITINERARY_CACHE, key = "#tourItineraryId")
     public void deleteTourItinerary(Long tourItineraryId) {
         if (tourItineraryId == null) throw new InvalidParameterException("Tour itinerary id cannot be null.");
         tourItineraryRepository.findById(tourItineraryId).orElseThrow(

@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.io.Serializable;
 import java.util.Set;
 
 @Getter
@@ -14,7 +15,7 @@ import java.util.Set;
 @AllArgsConstructor
 @Entity
 @Table(name = "tour_include")
-public class TourInclude extends BaseEntity {
+public class TourInclude extends BaseEntity implements Serializable {
 
     @Column(name = "content")
     private String content;
