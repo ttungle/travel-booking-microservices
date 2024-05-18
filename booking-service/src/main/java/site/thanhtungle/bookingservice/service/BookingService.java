@@ -1,0 +1,24 @@
+package site.thanhtungle.bookingservice.service;
+
+import org.springframework.transaction.annotation.Transactional;
+import site.thanhtungle.bookingservice.model.criteria.BaseCriteria;
+import site.thanhtungle.bookingservice.model.dto.request.BookingRequestDTO;
+import site.thanhtungle.bookingservice.model.entity.Booking;
+import site.thanhtungle.commons.model.response.success.PagingApiResponse;
+
+import java.util.List;
+
+@Transactional
+public interface BookingService {
+
+    Booking createBooking(BookingRequestDTO bookingRequestDTO);
+
+    Booking updateBooking(Long bookingId);
+
+    Booking getBooking(Long bookingId);
+
+    PagingApiResponse<List<Booking>> getAllBookings(BaseCriteria bookingCriteria);
+
+    void deleteBooking(Long bookingId);
+
+}

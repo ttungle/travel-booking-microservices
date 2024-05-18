@@ -12,8 +12,6 @@
 #      show-sql: always
 #  application:
 #    name: BOOKING-SERVICE
-#  config:
-#    import: optional:configserver:http://localhost:8888
 #
 #server:
 #  port: 8081
