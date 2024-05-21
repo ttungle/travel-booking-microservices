@@ -12,6 +12,8 @@
 #      show-sql: always
 #  application:
 #    name: BOOKING-SERVICE
+#  jackson:
+#    time-zone: Asia/Ho_Chi_Minh
 #
 #server:
 #  port: 8081

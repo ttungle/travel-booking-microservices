@@ -13,10 +13,12 @@ public interface BookingService {
 
     Booking createBooking(BookingRequestDTO bookingRequestDTO);
 
-    Booking updateBooking(Long bookingId);
+    Booking updateBooking(Long bookingId, BookingRequestDTO bookingRequestDTO);
 
+    @Transactional(readOnly = true)
     Booking getBooking(Long bookingId);
 
+    @Transactional(readOnly = true)
     PagingApiResponse<List<Booking>> getAllBookings(BaseCriteria bookingCriteria);
 
     void deleteBooking(Long bookingId);

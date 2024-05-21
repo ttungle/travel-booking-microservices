@@ -5,8 +5,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import site.thanhtungle.bookingservice.constant.enums.EBookingStatus;
-import site.thanhtungle.bookingservice.model.entity.BookingItem;
-import site.thanhtungle.bookingservice.model.entity.Customer;
 
 import java.math.BigDecimal;
 import java.util.Set;
@@ -24,6 +22,6 @@ public class BookingRequestDTO {
     private String note;
     private EBookingStatus status;
     private Long userId;
-    private Set<BookingItem> bookingItemIds;
-    private Set<Customer> customer;
+    private Set<Long> bookingItemIds;
+    private Set<Long> customerIds;
 }

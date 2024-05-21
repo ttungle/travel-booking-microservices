@@ -1,5 +1,6 @@
 package site.thanhtungle.bookingservice.model.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -35,6 +36,7 @@ public class Customer extends BaseEntity {
     @Column(name = "country")
     private String country;
 
+    @JsonBackReference
     @ManyToOne(
             fetch = FetchType.LAZY,
             cascade = {CascadeType.DETACH, CascadeType.MERGE,
