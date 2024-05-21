@@ -1,5 +1,6 @@
 package site.thanhtungle.bookingservice.model.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -38,6 +39,7 @@ public class BookingItem extends BaseEntity {
     @Column(name = "tour_id")
     private Long tourId;
 
+    @JsonBackReference
     @ManyToOne(fetch = FetchType.LAZY,
             cascade = {CascadeType.DETACH, CascadeType.MERGE,
                     CascadeType.REFRESH, CascadeType.PERSIST})

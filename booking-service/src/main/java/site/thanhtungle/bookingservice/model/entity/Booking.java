@@ -1,5 +1,6 @@
 package site.thanhtungle.bookingservice.model.entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -39,6 +40,7 @@ public class Booking extends BaseEntity {
     @Column(name = "user_id")
     private Long userId;
 
+    @JsonManagedReference
     @OneToMany(
             mappedBy = "booking",
             fetch = FetchType.LAZY,
@@ -46,7 +48,7 @@ public class Booking extends BaseEntity {
                     CascadeType.PERSIST, CascadeType.REFRESH})
     private Set<BookingItem> bookingItems;
 
-
+    @JsonManagedReference
     @OneToMany(
             mappedBy = "booking",
             fetch = FetchType.LAZY,
@@ -54,5 +56,5 @@ public class Booking extends BaseEntity {
                     CascadeType.PERSIST, CascadeType.REFRESH
             }
     )
-    private Set<Customer> customer;
+    private Set<Customer> customers;
 }

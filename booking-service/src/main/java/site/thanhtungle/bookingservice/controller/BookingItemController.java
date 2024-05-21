@@ -10,9 +10,12 @@ import site.thanhtungle.bookingservice.model.dto.request.BookingItemRequestDTO;
 import site.thanhtungle.bookingservice.model.entity.BookingItem;
 import site.thanhtungle.bookingservice.service.BookingItemService;
 import site.thanhtungle.commons.model.response.success.BaseApiResponse;
+import site.thanhtungle.commons.model.response.success.PagingApiResponse;
+
+import java.util.List;
 
 @RestController
-@RequestMapping("/api/v1/bookingItems")
+@RequestMapping("${api.url.bookingItems}")
 @AllArgsConstructor
 public class BookingItemController {
 
@@ -21,26 +24,35 @@ public class BookingItemController {
     @PostMapping
     public ResponseEntity<BaseApiResponse<BookingItem>> createBookingItem(
             @RequestBody BookingItemRequestDTO bookingItemRequestDTO) {
-        return null;
+        BookingItem bookingItem = bookingItemService.createBookingItem(bookingItemRequestDTO);
+        BaseApiResponse<BookingItem> response = new BaseApiResponse<>(HttpStatus.CREATED.value(), bookingItem);
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
     @PutMapping("/{id}")
-    public BaseApiResponse<ResponseEntity<BookingItem>> updateBookingItem(@PathVariable("id") Long bookingItemId) {
-        return null;
+    public ResponseEntity<BaseApiResponse<BookingItem>> updateBookingItem(
+            @PathVariable("id") Long bookingItemId, @RequestBody BookingItemRequestDTO bookingItemRequestDTO) {
+        BookingItem bookingItem = bookingItemService.updateBookingItem(bookingItemId, bookingItemRequestDTO);
+        BaseApiResponse<BookingItem> response = new BaseApiResponse<>(HttpStatus.OK.value(), bookingItem);
+        return ResponseEntity.ok().body(response);
     }
 
     @GetMapping("/{id}")
-    public BaseApiResponse<ResponseEntity<BookingItem>> getBookingItem(@PathVariable("id") Long bookingItemId) {
-        return null;
+    public ResponseEntity<BaseApiResponse<BookingItem>> getBookingItem(@PathVariable("id") Long bookingItemId) {
+        BookingItem bookingItem = bookingItemService.getBookingItem(bookingItemId);
+        BaseApiResponse<BookingItem> response = new BaseApiResponse<>(HttpStatus.OK.value(), bookingItem);
+        return ResponseEntity.ok().body(response);
     }
 
     @GetMapping
-    public BaseApiResponse<ResponseEntity<BookingItem>> getAllBookingItems(@Valid BaseCriteria bookingItemCriteria) {
-        return null;
+    public ResponseEntity<PagingApiResponse<List<BookingItem>>> getAllBookingItems(@Valid BaseCriteria bookingItemCriteria) {
+        PagingApiResponse<List<BookingItem>> response = bookingItemService.getAllBookingItems(bookingItemCriteria);
+        return ResponseEntity.ok().body(response);
     }
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteBookingItem(@PathVariable("id") Long bookingItemId) {
+        bookingItemService.deleteBookingItem(bookingItemId);
     }
 }
