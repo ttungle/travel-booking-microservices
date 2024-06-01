@@ -39,6 +39,9 @@ public class BookingItem extends BaseEntity {
     @Column(name = "tour_id")
     private Long tourId;
 
+    @Column(name = "inventory_id")
+    private Long inventoryId;
+
     @JsonBackReference
     @ManyToOne(fetch = FetchType.LAZY,
             cascade = {CascadeType.DETACH, CascadeType.MERGE,
