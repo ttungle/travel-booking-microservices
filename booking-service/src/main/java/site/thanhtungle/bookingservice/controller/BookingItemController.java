@@ -23,7 +23,7 @@ public class BookingItemController {
 
     @PostMapping
     public ResponseEntity<BaseApiResponse<BookingItem>> createBookingItem(
-            @RequestBody BookingItemRequestDTO bookingItemRequestDTO) {
+            @Valid @RequestBody BookingItemRequestDTO bookingItemRequestDTO) {
         BookingItem bookingItem = bookingItemService.createBookingItem(bookingItemRequestDTO);
         BaseApiResponse<BookingItem> response = new BaseApiResponse<>(HttpStatus.CREATED.value(), bookingItem);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
@@ -31,7 +31,7 @@ public class BookingItemController {
 
     @PutMapping("/{id}")
     public ResponseEntity<BaseApiResponse<BookingItem>> updateBookingItem(
-            @PathVariable("id") Long bookingItemId, @RequestBody BookingItemRequestDTO bookingItemRequestDTO) {
+            @PathVariable("id") Long bookingItemId, @Valid @RequestBody BookingItemRequestDTO bookingItemRequestDTO) {
         BookingItem bookingItem = bookingItemService.updateBookingItem(bookingItemId, bookingItemRequestDTO);
         BaseApiResponse<BookingItem> response = new BaseApiResponse<>(HttpStatus.OK.value(), bookingItem);
         return ResponseEntity.ok().body(response);

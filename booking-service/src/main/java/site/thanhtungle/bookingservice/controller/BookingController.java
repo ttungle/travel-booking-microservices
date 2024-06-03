@@ -26,7 +26,7 @@ public class BookingController {
     private CustomerService customerService;
 
     @PostMapping
-    public ResponseEntity<BaseApiResponse<Booking>> createBooking(@RequestBody BookingRequestDTO bookingRequestDTO) {
+    public ResponseEntity<BaseApiResponse<Booking>> createBooking(@Valid @RequestBody BookingRequestDTO bookingRequestDTO) {
         Booking booking = bookingService.createBooking(bookingRequestDTO);
         BaseApiResponse<Booking> response = new BaseApiResponse<>(HttpStatus.CREATED.value(), booking);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
