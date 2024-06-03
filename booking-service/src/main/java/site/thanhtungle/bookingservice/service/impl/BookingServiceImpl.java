@@ -16,7 +16,6 @@ import site.thanhtungle.commons.model.response.success.PageInfo;
 import site.thanhtungle.commons.model.response.success.PagingApiResponse;
 import site.thanhtungle.commons.util.CommonPageUtil;
 
-import java.security.InvalidParameterException;
 import java.util.List;
 
 @Service
@@ -24,21 +23,20 @@ import java.util.List;
 public class BookingServiceImpl implements BookingService {
 
     private BookingRepository bookingRepository;
-
     private BookingMapper bookingMapper;
 
     @Override
     public Booking createBooking(BookingRequestDTO bookingRequestDTO) {
-        if (bookingRequestDTO == null) throw new InvalidParameterException("The request body should not be empty.");
+        if (bookingRequestDTO == null) throw new IllegalArgumentException("The request body should not be empty.");
         if (bookingRequestDTO.getBookingItemIds().isEmpty())
-            throw new InvalidParameterException("Booking should contain at least one booking item.");
+            throw new IllegalArgumentException("Booking should contain at least one booking item.");
         Booking booking = bookingMapper.toEntityBooking(bookingRequestDTO);
         return bookingRepository.save(booking);
     }
 
     @Override
     public Booking updateBooking(Long bookingId, BookingRequestDTO bookingRequestDTO) {
-        if (bookingId == null) throw new InvalidParameterException("booking item id cannot be null.");
+        if (bookingId == null) throw new IllegalArgumentException("booking item id cannot be null.");
 
         Booking booking = bookingRepository.findById(bookingId)
                 .orElseThrow(() -> new CustomNotFoundException("No booking found with that id."));
@@ -48,7 +46,7 @@ public class BookingServiceImpl implements BookingService {
 
     @Override
     public Booking getBooking(Long bookingId) {
-        if (bookingId == null) throw new InvalidParameterException("booking item id cannot be null.");
+        if (bookingId == null) throw new IllegalArgumentException("booking item id cannot be null.");
         return bookingRepository.findById(bookingId)
                 .orElseThrow(() -> new CustomNotFoundException("No booking found with that id."));
     }
@@ -70,7 +68,7 @@ public class BookingServiceImpl implements BookingService {
 
     @Override
     public void deleteBooking(Long bookingId) {
-        if (bookingId == null) throw new InvalidParameterException("booking item id cannot be null.");
+        if (bookingId == null) throw new IllegalArgumentException("booking item id cannot be null.");
         Booking booking = bookingRepository.findById(bookingId)
                 .orElseThrow(() -> new CustomNotFoundException("No booking found with that id."));
         bookingRepository.deleteById(booking.getId());

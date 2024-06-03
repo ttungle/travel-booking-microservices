@@ -16,7 +16,6 @@ import site.thanhtungle.commons.model.response.success.PageInfo;
 import site.thanhtungle.commons.model.response.success.PagingApiResponse;
 import site.thanhtungle.commons.util.CommonPageUtil;
 
-import java.security.InvalidParameterException;
 import java.util.List;
 
 @Service
@@ -24,20 +23,19 @@ import java.util.List;
 public class CustomerServiceImpl implements CustomerService {
 
     private CustomerRepository customerRepository;
-
     private CustomerMapper customerMapper;
 
     @Override
     public Customer createCustomer(CustomerRequestDTO customerRequestDTO) {
-        if (customerRequestDTO == null) throw new InvalidParameterException("Request body cannot be null.");
+        if (customerRequestDTO == null) throw new IllegalArgumentException("Request body cannot be null.");
         Customer customer = customerMapper.toEntityCustomer(customerRequestDTO);
         return customerRepository.save(customer);
     }
 
     @Override
     public Customer updateCustomer(Long customerId, CustomerRequestDTO customerRequestDTO) {
-        if (customerId == null) throw new InvalidParameterException("Customer id cannot be null.");
-        if (customerRequestDTO == null) throw new InvalidParameterException("Request body cannot be null.");
+        if (customerId == null) throw new IllegalArgumentException("Customer id cannot be null.");
+        if (customerRequestDTO == null) throw new IllegalArgumentException("Request body cannot be null.");
 
         Customer customer = customerRepository.findById(customerId)
                 .orElseThrow(() -> new CustomNotFoundException("No customer found with that id."));
@@ -47,7 +45,7 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public Customer getCustomer(Long customerId) {
-        if (customerId == null) throw new InvalidParameterException("Customer id cannot be null.");
+        if (customerId == null) throw new IllegalArgumentException("Customer id cannot be null.");
         return customerRepository.findById(customerId)
                 .orElseThrow(() -> new CustomNotFoundException("No customer found with that id."));
     }
@@ -69,7 +67,7 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public void deleteCustomer(Long customerId) {
-        if (customerId == null) throw new InvalidParameterException("Customer id cannot be null.");
+        if (customerId == null) throw new IllegalArgumentException("Customer id cannot be null.");
         Customer customer = customerRepository.findById(customerId)
                 .orElseThrow(() -> new CustomNotFoundException("No customer found with that id."));
         customerRepository.deleteById(customer.getId());

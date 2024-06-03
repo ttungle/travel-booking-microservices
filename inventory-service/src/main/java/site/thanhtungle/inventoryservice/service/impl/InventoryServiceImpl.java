@@ -1,6 +1,5 @@
 package site.thanhtungle.inventoryservice.service.impl;
 
-import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -13,6 +12,8 @@ import site.thanhtungle.commons.model.response.success.PagingApiResponse;
 import site.thanhtungle.commons.util.CommonPageUtil;
 import site.thanhtungle.inventoryservice.mapper.InventoryMapper;
 import site.thanhtungle.inventoryservice.model.criteria.InventoryCriteria;
+import site.thanhtungle.inventoryservice.model.dto.InventoryRequestDTO;
+import site.thanhtungle.inventoryservice.model.dto.InventoryUpdateRequestDTO;
 import site.thanhtungle.inventoryservice.model.entity.Inventory;
 import site.thanhtungle.inventoryservice.repository.InventoryRepository;
 import site.thanhtungle.inventoryservice.service.InventoryService;
@@ -31,16 +32,17 @@ public class InventoryServiceImpl implements InventoryService {
     private AndFilterSpecification<Inventory> andFilterSpecification;
 
     @Override
-    public Inventory createInventory(@Valid Inventory inventory) {
+    public Inventory createInventory(InventoryRequestDTO inventoryRequestDTO) {
+        Inventory inventory = inventoryMapper.toEntityInventory(inventoryRequestDTO);
         return inventoryRepository.save(inventory);
     }
 
     @Override
-    public Inventory updateInventory(Long inventoryId, @Valid Inventory inventory) {
-        Inventory inventoryUpdate = inventoryRepository.findById(inventoryId)
+    public Inventory updateInventory(Long inventoryId, InventoryUpdateRequestDTO inventoryRequestDTO) {
+        Inventory inventory = inventoryRepository.findById(inventoryId)
                 .orElseThrow(() -> new CustomNotFoundException("No inventory found with that id."));
-        inventoryMapper.updateInventory(inventory, inventoryUpdate);
-        return inventoryRepository.save(inventoryUpdate);
+        inventoryMapper.updateInventory(inventoryRequestDTO, inventory);
+        return inventoryRepository.save(inventory);
     }
 
     @Override
