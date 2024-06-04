@@ -3,6 +3,7 @@ package site.thanhtungle.inventoryservice.service;
 import org.springframework.transaction.annotation.Transactional;
 import site.thanhtungle.commons.model.response.success.PagingApiResponse;
 import site.thanhtungle.inventoryservice.model.criteria.InventoryCriteria;
+import site.thanhtungle.inventoryservice.model.dto.BookedQuantityRequestDTO;
 import site.thanhtungle.inventoryservice.model.dto.InventoryRequestDTO;
 import site.thanhtungle.inventoryservice.model.dto.InventoryUpdateRequestDTO;
 import site.thanhtungle.inventoryservice.model.entity.Inventory;
@@ -15,6 +16,10 @@ public interface InventoryService {
     Inventory createInventory(InventoryRequestDTO inventoryRequestDTO);
 
     Inventory updateInventory(Long inventoryId, InventoryUpdateRequestDTO inventoryUpdateRequestDTO);
+
+    Inventory increaseBookedQuantity(Long inventoryId, BookedQuantityRequestDTO requestDTO);
+
+    Inventory decreaseBookedQuantity(Long inventoryId, BookedQuantityRequestDTO requestDTO);
 
     @Transactional(readOnly = true)
     Inventory getInventory(Long inventoryId);

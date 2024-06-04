@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import site.thanhtungle.commons.model.response.success.BaseApiResponse;
 import site.thanhtungle.commons.model.response.success.PagingApiResponse;
 import site.thanhtungle.inventoryservice.model.criteria.InventoryCriteria;
+import site.thanhtungle.inventoryservice.model.dto.BookedQuantityRequestDTO;
 import site.thanhtungle.inventoryservice.model.dto.InventoryRequestDTO;
 import site.thanhtungle.inventoryservice.model.dto.InventoryUpdateRequestDTO;
 import site.thanhtungle.inventoryservice.model.entity.Inventory;
@@ -37,6 +38,22 @@ public class InventoryController {
             @RequestBody InventoryUpdateRequestDTO inventoryUpdateRequestDTO
     ) {
         Inventory inventory = inventoryService.updateInventory(inventoryId, inventoryUpdateRequestDTO);
+        BaseApiResponse<Inventory> response = new BaseApiResponse<>(HttpStatus.OK.value(), inventory);
+        return ResponseEntity.ok().body(response);
+    }
+
+    @PutMapping("/{id}/bookedQuantity/increase")
+    public ResponseEntity<BaseApiResponse<Inventory>> increaseBookedQuantity(
+            @PathVariable("id") Long inventoryId, @Valid @RequestBody BookedQuantityRequestDTO requestDTO) {
+        Inventory inventory = inventoryService.increaseBookedQuantity(inventoryId, requestDTO);
+        BaseApiResponse<Inventory> response = new BaseApiResponse<>(HttpStatus.OK.value(), inventory);
+        return ResponseEntity.ok().body(response);
+    }
+
+    @PutMapping("/{id}/bookedQuantity/decrease")
+    public ResponseEntity<BaseApiResponse<Inventory>> decreaseBookedQuantity(
+            @PathVariable("id") Long inventoryId, @Valid @RequestBody BookedQuantityRequestDTO requestDTO) {
+        Inventory inventory = inventoryService.decreaseBookedQuantity(inventoryId, requestDTO);
         BaseApiResponse<Inventory> response = new BaseApiResponse<>(HttpStatus.OK.value(), inventory);
         return ResponseEntity.ok().body(response);
     }
