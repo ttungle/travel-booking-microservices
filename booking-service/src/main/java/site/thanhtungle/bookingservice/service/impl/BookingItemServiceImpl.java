@@ -39,7 +39,6 @@ public class BookingItemServiceImpl implements BookingItemService {
         BookingItem bookingItem = bookingItemRepository.findById(bookingItemId)
                 .orElseThrow(() -> new CustomNotFoundException("No booking item found with that id."));
         bookingItemMapper.updateBookingItem(bookingItemRequestDTO, bookingItem);
-        // update inventory quantity
         return bookingItemRepository.save(bookingItem);
     }
 
