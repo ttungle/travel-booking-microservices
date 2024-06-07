@@ -1,7 +1,6 @@
 package site.thanhtungle.bookingservice.model.dto.request;
 
 import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -14,7 +13,7 @@ import java.time.Instant;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class BookingItemRequestDTO {
+public class BookingItemUpdateRequestDTO {
 
     @Min(value = 0, message = "adultQuantity should greater than or equal 0.")
     private Integer adultQuantity;
@@ -23,12 +22,8 @@ public class BookingItemRequestDTO {
     private BigDecimal price;
     private BigDecimal discountPrice;
     private String note;
-    @NotNull(message = "startDate cannot be null.")
     private Instant startDate;
-    @NotNull(message = "tourId cannot be null.")
     private Long tourId;
-    @NotNull(message = "inventoryId cannot be null.")
     private Long inventoryId;
-    @NotNull(message = "bookingId cannot be null.")
     private Long bookingId;
 }
