@@ -3,6 +3,7 @@ package site.thanhtungle.bookingservice.mapper;
 import org.mapstruct.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import site.thanhtungle.bookingservice.model.dto.request.BookingItemRequestDTO;
+import site.thanhtungle.bookingservice.model.dto.request.BookingItemUpdateRequestDTO;
 import site.thanhtungle.bookingservice.model.entity.Booking;
 import site.thanhtungle.bookingservice.model.entity.BookingItem;
 import site.thanhtungle.bookingservice.repository.BookingRepository;
@@ -23,7 +24,7 @@ public abstract class BookingItemMapper {
 
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "booking", source = "bookingId", qualifiedByName = "toEntityBookingFromId")
-    public abstract void updateBookingItem(BookingItemRequestDTO bookingItemRequestDTO,
+    public abstract void updateBookingItem(BookingItemUpdateRequestDTO bookingItemRequestDTO,
                                            @MappingTarget BookingItem bookingItem);
 
     @Named("toEntityBookingFromId")

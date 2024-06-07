@@ -3,6 +3,7 @@ package site.thanhtungle.bookingservice.service;
 import org.springframework.transaction.annotation.Transactional;
 import site.thanhtungle.bookingservice.model.criteria.BaseCriteria;
 import site.thanhtungle.bookingservice.model.dto.request.BookingItemRequestDTO;
+import site.thanhtungle.bookingservice.model.dto.request.BookingItemUpdateRequestDTO;
 import site.thanhtungle.bookingservice.model.entity.BookingItem;
 import site.thanhtungle.commons.model.response.success.PagingApiResponse;
 
@@ -14,7 +15,7 @@ public interface BookingItemService {
 
     BookingItem createBookingItem(BookingItemRequestDTO bookingItemRequestDTO);
 
-    BookingItem updateBookingItem(Long bookingItemId, BookingItemRequestDTO bookingItemRequestDTO);
+    BookingItem updateBookingItem(Long bookingItemId, BookingItemUpdateRequestDTO bookingItemRequestDTO);
 
     @Transactional(readOnly = true)
     BookingItem getBookingItem(Long bookingItemId);
