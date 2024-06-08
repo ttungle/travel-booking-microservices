@@ -102,7 +102,7 @@ public class BookingItemServiceImpl implements BookingItemService {
     }
 
     @NotNull
-    private static Integer getBookedQuantity(BookingItem bookingItem) {
+    public static Integer getBookedQuantity(BookingItem bookingItem) {
         if (bookingItem.getAdultQuantity() != null && bookingItem.getChildQuantity() != null) {
             return bookingItem.getAdultQuantity() + bookingItem.getChildQuantity();
         }
