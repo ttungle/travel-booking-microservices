@@ -12,6 +12,7 @@ import lombok.Setter;
 import org.hibernate.search.engine.backend.types.Sortable;
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.*;
 import org.springframework.lang.Nullable;
+import site.thanhtungle.tourservice.constant.enums.ETourStatus;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -81,6 +82,9 @@ public class Tour extends BaseEntity implements Serializable {
     @Temporal(TemporalType.TIMESTAMP)
     @GenericField(sortable = Sortable.YES)
     private Instant startDate;
+
+    @Column(name = "status")
+    private ETourStatus status;
 
     @NotBlank(message = "Tour slug cannot be empty or null.")
     @Column(name = "slug")
