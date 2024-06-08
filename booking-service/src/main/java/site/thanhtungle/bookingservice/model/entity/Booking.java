@@ -38,7 +38,7 @@ public class Booking extends BaseEntity {
     private EBookingStatus status;
 
     @Column(name = "user_id")
-    private Long userId;
+    private String userId;
 
     @JsonManagedReference
     @OneToMany(
