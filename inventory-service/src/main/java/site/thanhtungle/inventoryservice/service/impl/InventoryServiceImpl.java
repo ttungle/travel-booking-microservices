@@ -6,10 +6,13 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
+import site.thanhtungle.commons.constant.enums.ETourStatus;
 import site.thanhtungle.commons.exception.CustomBadRequestException;
 import site.thanhtungle.commons.exception.CustomNotFoundException;
+import site.thanhtungle.commons.model.response.success.BaseApiResponse;
 import site.thanhtungle.commons.model.response.success.PageInfo;
 import site.thanhtungle.commons.model.response.success.PagingApiResponse;
 import site.thanhtungle.commons.util.CommonPageUtil;
@@ -18,26 +21,40 @@ import site.thanhtungle.inventoryservice.model.criteria.InventoryCriteria;
 import site.thanhtungle.inventoryservice.model.dto.BookedQuantityRequestDTO;
 import site.thanhtungle.inventoryservice.model.dto.InventoryRequestDTO;
 import site.thanhtungle.inventoryservice.model.dto.InventoryUpdateRequestDTO;
+import site.thanhtungle.inventoryservice.model.dto.TourResponseDTO;
 import site.thanhtungle.inventoryservice.model.entity.Inventory;
 import site.thanhtungle.inventoryservice.repository.InventoryRepository;
 import site.thanhtungle.inventoryservice.service.InventoryService;
+import site.thanhtungle.inventoryservice.service.rest.TourApiClient;
 import site.thanhtungle.inventoryservice.service.specification.AndFilterSpecification;
 
 import java.lang.reflect.Field;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 @AllArgsConstructor
 @Slf4j
 public class InventoryServiceImpl implements InventoryService {
 
-    private InventoryRepository inventoryRepository;
-    private InventoryMapper inventoryMapper;
-    private AndFilterSpecification<Inventory> andFilterSpecification;
+    private final InventoryRepository inventoryRepository;
+    private final InventoryMapper inventoryMapper;
+    private final AndFilterSpecification<Inventory> andFilterSpecification;
+    private final TourApiClient tourApiClient;
 
     @Override
     public Inventory createInventory(InventoryRequestDTO inventoryRequestDTO) {
+        ResponseEntity<BaseApiResponse<TourResponseDTO>> response = tourApiClient.getTour(inventoryRequestDTO.getTourId());
+        if (Objects.isNull(response) || Objects.isNull(response.getBody().getData())) {
+            throw new CustomBadRequestException("Cannot create inventory because tour cannot be founded with id: " +
+                    inventoryRequestDTO.getTourId());
+        }
+        TourResponseDTO tourResponseDTO = response.getBody().getData();
+        if (tourResponseDTO.getStatus() != ETourStatus.ACTIVE) {
+            throw new CustomBadRequestException("Cannot create inventory because tour is inactive.");
+        }
+
         Inventory inventory = inventoryMapper.toEntityInventory(inventoryRequestDTO);
         return inventoryRepository.save(inventory);
     }

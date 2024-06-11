@@ -32,9 +32,9 @@ import static site.thanhtungle.bookingservice.service.impl.BookingItemServiceImp
 @AllArgsConstructor
 public class BookingServiceImpl implements BookingService {
 
-    private BookingRepository bookingRepository;
-    private BookingMapper bookingMapper;
-    private InventoryApiClient inventoryApiClient;
+    private final BookingRepository bookingRepository;
+    private final BookingMapper bookingMapper;
+    private final InventoryApiClient inventoryApiClient;
 
     @Override
     public Booking createBooking(BookingRequestDTO bookingRequestDTO) {
