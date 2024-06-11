@@ -36,10 +36,10 @@ import java.util.Objects;
 @AllArgsConstructor
 public class BookingItemServiceImpl implements BookingItemService {
 
-    private BookingItemMapper bookingItemMapper;
-    private BookingItemRepository bookingItemRepository;
-    private InventoryApiClient inventoryApiClient;
-    private TourApiClient tourApiClient;
+    private final BookingItemMapper bookingItemMapper;
+    private final BookingItemRepository bookingItemRepository;
+    private final InventoryApiClient inventoryApiClient;
+    private final TourApiClient tourApiClient;
 
     @Override
     public BookingItem createBookingItem(BookingItemRequestDTO bookingItemRequestDTO) {
