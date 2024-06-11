@@ -14,6 +14,7 @@ import site.thanhtungle.commons.model.response.success.PagingApiResponse;
 import site.thanhtungle.tourservice.model.criteria.SearchTourCriteria;
 import site.thanhtungle.tourservice.model.criteria.TourCriteria;
 import site.thanhtungle.tourservice.model.dto.request.tour.TourRequestDTO;
+import site.thanhtungle.tourservice.model.dto.request.tour.TourStatusRequestDTO;
 import site.thanhtungle.tourservice.model.dto.response.tour.TourResponseDTO;
 import site.thanhtungle.tourservice.service.TourService;
 
@@ -52,6 +53,15 @@ public class TourController {
     ) {
         TourResponseDTO tourResponseDTO = tourService.updateTour(tourId, tourRequestDTO,
                 tourImageList, coverImage, video);
+        BaseApiResponse<TourResponseDTO> response = new BaseApiResponse<>(HttpStatus.OK.value(), tourResponseDTO);
+        return ResponseEntity.ok().body(response);
+    }
+
+    @PutMapping("/{id}/status")
+    @PreAuthorize("hasRole('admin')")
+    public ResponseEntity<BaseApiResponse<TourResponseDTO>> updateTourStatus(
+            @PathVariable("id") Long tourId, @RequestBody TourStatusRequestDTO tourStatusRequestDTO) {
+        TourResponseDTO tourResponseDTO = tourService.updateTourStatus(tourId, tourStatusRequestDTO);
         BaseApiResponse<TourResponseDTO> response = new BaseApiResponse<>(HttpStatus.OK.value(), tourResponseDTO);
         return ResponseEntity.ok().body(response);
     }

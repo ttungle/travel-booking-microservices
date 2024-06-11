@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import site.thanhtungle.commons.constant.enums.ETourStatus;
 import site.thanhtungle.tourservice.model.dto.response.tourcategory.SimpleTourCategoryResponseDTO;
 import site.thanhtungle.tourservice.model.dto.response.tourexclude.SimpleTourExcludeResponseDTO;
 import site.thanhtungle.tourservice.model.dto.response.tourfaq.SimpleTourFAQResponseDTO;
@@ -38,6 +39,7 @@ public class TourResponseDTO implements Serializable {
     private Instant startDate;
     private Instant createdAt;
     private Instant updatedAt;
+    private ETourStatus status;
     private String slug;
     private List<TourImage> images;
     private SimpleTourCategoryResponseDTO category;

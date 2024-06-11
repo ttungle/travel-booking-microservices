@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import site.thanhtungle.bookingservice.model.criteria.BaseCriteria;
 import site.thanhtungle.bookingservice.model.dto.request.BookingItemRequestDTO;
+import site.thanhtungle.bookingservice.model.dto.request.BookingItemStatusRequestDTO;
 import site.thanhtungle.bookingservice.model.dto.request.BookingItemUpdateRequestDTO;
 import site.thanhtungle.bookingservice.model.entity.BookingItem;
 import site.thanhtungle.bookingservice.service.BookingItemService;
@@ -35,6 +36,14 @@ public class BookingItemController {
             @PathVariable("id") Long bookingItemId, @Valid @RequestBody BookingItemUpdateRequestDTO bookingItemRequestDTO) {
         BookingItem bookingItem = bookingItemService.updateBookingItem(bookingItemId, bookingItemRequestDTO);
         BaseApiResponse<BookingItem> response = new BaseApiResponse<>(HttpStatus.OK.value(), bookingItem);
+        return ResponseEntity.ok().body(response);
+    }
+
+    @PutMapping("/tours/{id}")
+    public ResponseEntity<BaseApiResponse<String>> batchUpdateBookingItemStatus(
+            @PathVariable("id") Long tourId, @Valid @RequestBody BookingItemStatusRequestDTO bookingItemStatusRequestDTO) {
+        String message = bookingItemService.batchUpdateBookingItemStatus(tourId, bookingItemStatusRequestDTO);
+        BaseApiResponse<String> response = new BaseApiResponse<>(HttpStatus.OK.value(), message);
         return ResponseEntity.ok().body(response);
     }
 

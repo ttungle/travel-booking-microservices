@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import site.thanhtungle.commons.constant.enums.EBookingItemStatus;
 
 import java.math.BigDecimal;
 import java.time.Instant;
@@ -29,6 +30,9 @@ public class BookingItem extends BaseEntity {
 
     @Column(name = "discount_price")
     private BigDecimal discountPrice;
+
+    @Column(name = "status")
+    private EBookingItemStatus status;
 
     @Column(name = "note")
     private String note;
