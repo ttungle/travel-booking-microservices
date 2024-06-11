@@ -10,7 +10,11 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.util.Assert;
 import org.springframework.web.multipart.MultipartFile;
+import site.thanhtungle.commons.constant.enums.EBookingItemStatus;
+import site.thanhtungle.commons.constant.enums.ETourStatus;
+import site.thanhtungle.commons.exception.CustomBadRequestException;
 import site.thanhtungle.commons.exception.CustomNotFoundException;
 import site.thanhtungle.commons.model.dto.FileDto;
 import site.thanhtungle.commons.model.dto.PagingDTO;
@@ -19,17 +23,19 @@ import site.thanhtungle.commons.model.response.success.PagingApiResponse;
 import site.thanhtungle.tourservice.mapper.TourMapper;
 import site.thanhtungle.tourservice.model.criteria.SearchTourCriteria;
 import site.thanhtungle.tourservice.model.criteria.TourCriteria;
+import site.thanhtungle.tourservice.model.dto.request.booking.BookingItemStatusRequestDTO;
 import site.thanhtungle.tourservice.model.dto.request.tour.TourRequestDTO;
+import site.thanhtungle.tourservice.model.dto.request.tour.TourStatusRequestDTO;
 import site.thanhtungle.tourservice.model.dto.response.tour.TourResponseDTO;
 import site.thanhtungle.tourservice.model.entity.Tour;
 import site.thanhtungle.tourservice.model.entity.TourImage;
 import site.thanhtungle.tourservice.repository.TourRepository;
 import site.thanhtungle.tourservice.service.TourService;
+import site.thanhtungle.tourservice.service.rest.BookingApiClient;
 import site.thanhtungle.tourservice.service.rest.StorageApiClient;
 import site.thanhtungle.tourservice.service.specification.AndFilterSpecification;
 import site.thanhtungle.tourservice.util.PageUtil;
 
-import java.security.InvalidParameterException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -45,12 +51,13 @@ public class TourServiceImpl implements TourService {
     private final TourMapper tourMapper;
     private final StorageApiClient storageApiClient;
     private final AndFilterSpecification<Tour> andFilterSpecification;
+    private final BookingApiClient bookingApiClient;
 
     @Override
     public TourResponseDTO saveTour(TourRequestDTO tourRequestDTO, List<MultipartFile> fileList,
                                     MultipartFile coverImage, MultipartFile video
     ) {
-        if (tourRequestDTO == null) throw new InvalidParameterException("The request body should not be empty.");
+        Assert.notNull(tourRequestDTO, "The request body should not be empty.");
 
         Tour tour = tourMapper.toTour(tourRequestDTO);
         if (tour.getTourItineraries() != null && !tour.getTourItineraries().isEmpty()) {
@@ -59,12 +66,7 @@ public class TourServiceImpl implements TourService {
 
         Tour firstSavedTour = tour;
         if (coverImage != null || fileList != null) firstSavedTour = tourRepository.save(tour);
-        if (coverImage != null) uploadSingleFile(firstSavedTour, coverImage, "coverImage_");
-        if (video != null) uploadSingleFile(firstSavedTour, video, "video_");
-        if (fileList != null) uploadTourImage(firstSavedTour, fileList);
-
-        Tour savedTour = tourRepository.save(firstSavedTour);
-        return tourMapper.toTourResponseDTO(savedTour);
+        return getTourResponseDTO(fileList, coverImage, video, firstSavedTour);
     }
 
     @Override
@@ -72,7 +74,7 @@ public class TourServiceImpl implements TourService {
     public TourResponseDTO updateTour(Long tourId, TourRequestDTO tourRequestDTO, List<MultipartFile> fileList,
                                       MultipartFile coverImage, MultipartFile video
     ) {
-        if (tourId == null) throw new InvalidParameterException("Tour id cannot be null.");
+        Assert.notNull(tourId, "tourId cannot be null.");
 
         Tour tour = tourRepository.findById(tourId).orElseThrow(
                 () -> new CustomNotFoundException("No tour found with that id."));
@@ -80,10 +82,26 @@ public class TourServiceImpl implements TourService {
         if (tour.getTourItineraries() != null && !tour.getTourItineraries().isEmpty()) {
             tour.getTourItineraries().forEach(itinerary -> itinerary.setTour(tour));
         }
-        if (coverImage != null) uploadSingleFile(tour, coverImage, "coverImage_");
-        if (video != null) uploadSingleFile(tour, video, "video_");
-        if (fileList != null) uploadTourImage(tour, fileList);
+        return getTourResponseDTO(fileList, coverImage, video, tour);
+    }
 
+    @Override
+    @CachePut(value = TOUR_CACHE, key = "#tourId")
+    public TourResponseDTO updateTourStatus(Long tourId, TourStatusRequestDTO tourRequestDTO) {
+        Assert.notNull(tourId, "tourId cannot be null.");
+        Assert.notNull(tourRequestDTO.getStatus(), "status cannot be null.");
+
+        Tour tour = tourRepository.findById(tourId)
+                .orElseThrow(() -> new CustomNotFoundException("No tour found with that id."));
+        if(tour.getStatus() == ETourStatus.CANCELLED && tourRequestDTO.getStatus() == ETourStatus.ACTIVE) {
+            throw new CustomBadRequestException("Cannot change status from CANCELLED to ACTIVE.");
+        }
+        // cancel all booking items related to this tour as this tour has been canceled.
+        if (tour.getStatus() == ETourStatus.ACTIVE && tourRequestDTO.getStatus() == ETourStatus.CANCELLED) {
+            BookingItemStatusRequestDTO body = new BookingItemStatusRequestDTO(EBookingItemStatus.CANCELLED);
+            bookingApiClient.batchUpdateBookingItemStatus(tourId, body);
+        }
+        tour.setStatus(tourRequestDTO.getStatus());
         Tour updatedTour = tourRepository.save(tour);
         return tourMapper.toTourResponseDTO(updatedTour);
     }
@@ -124,7 +142,7 @@ public class TourServiceImpl implements TourService {
     @Override
     @CacheEvict(value = TOUR_CACHE, key = "#tourId")
     public void deleteTour(Long tourId) {
-        if (tourId == null) throw new InvalidParameterException("Tour id cannot be null.");
+        Assert.notNull(tourId, "tourId cannot be null.");
         Tour tour = tourRepository.findById(tourId).orElseThrow(
                 () -> new CustomNotFoundException("No tour found with that id."));
 
@@ -159,5 +177,14 @@ public class TourServiceImpl implements TourService {
         String filePath = String.format("tours/%s/%s", tour.getId(), prefix + file.getOriginalFilename());
         FileDto fileResponse = storageApiClient.uploadFile(file, filePath);
         tour.setCoverImage(fileResponse.getUrl());
+    }
+
+    private TourResponseDTO getTourResponseDTO(List<MultipartFile> fileList, MultipartFile coverImage, MultipartFile video, Tour tour) {
+        if (coverImage != null) uploadSingleFile(tour, coverImage, "coverImage_");
+        if (video != null) uploadSingleFile(tour, video, "video_");
+        if (fileList != null) uploadTourImage(tour, fileList);
+
+        Tour updatedTour = tourRepository.save(tour);
+        return tourMapper.toTourResponseDTO(updatedTour);
     }
 }

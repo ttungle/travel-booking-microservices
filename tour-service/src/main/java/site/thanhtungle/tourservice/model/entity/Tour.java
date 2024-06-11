@@ -12,7 +12,7 @@ import lombok.Setter;
 import org.hibernate.search.engine.backend.types.Sortable;
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.*;
 import org.springframework.lang.Nullable;
-import site.thanhtungle.tourservice.constant.enums.ETourStatus;
+import site.thanhtungle.commons.constant.enums.ETourStatus;
 
 import java.io.Serializable;
 import java.math.BigDecimal;

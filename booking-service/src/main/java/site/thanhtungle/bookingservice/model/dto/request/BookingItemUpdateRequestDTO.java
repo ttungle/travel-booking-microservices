@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import site.thanhtungle.commons.constant.enums.EBookingItemStatus;
 
 import java.math.BigDecimal;
 import java.time.Instant;
@@ -21,6 +22,7 @@ public class BookingItemUpdateRequestDTO {
     private Integer childQuantity;
     private BigDecimal price;
     private BigDecimal discountPrice;
+    private EBookingItemStatus status;
     private String note;
     private Instant startDate;
     private Long tourId;

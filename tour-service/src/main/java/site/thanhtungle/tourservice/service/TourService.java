@@ -7,6 +7,7 @@ import site.thanhtungle.commons.model.response.success.PagingApiResponse;
 import site.thanhtungle.tourservice.model.criteria.SearchTourCriteria;
 import site.thanhtungle.tourservice.model.criteria.TourCriteria;
 import site.thanhtungle.tourservice.model.dto.request.tour.TourRequestDTO;
+import site.thanhtungle.tourservice.model.dto.request.tour.TourStatusRequestDTO;
 import site.thanhtungle.tourservice.model.dto.response.tour.TourResponseDTO;
 
 import java.util.List;
@@ -38,6 +39,8 @@ public interface TourService {
      * */
     TourResponseDTO updateTour(Long tourId, TourRequestDTO tourRequestDTO, List<MultipartFile> fileList,
                                MultipartFile coverImage, MultipartFile video);
+
+    TourResponseDTO updateTourStatus(Long tourId, TourStatusRequestDTO tourRequestDTO);
 
     /**
      * Get tour by id
