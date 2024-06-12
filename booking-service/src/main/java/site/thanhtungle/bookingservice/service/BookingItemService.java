@@ -26,5 +26,7 @@ public interface BookingItemService {
     @Transactional(readOnly = true)
     PagingApiResponse<List<BookingItem>> getAllBookingItems(BaseCriteria bookingItemCriteria);
 
+    boolean checkBookingItemExistByTourId(Long tourId);
+
     void deleteBookingItem(Long bookingItemId);
 }

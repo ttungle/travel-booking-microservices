@@ -60,6 +60,11 @@ public class BookingItemController {
         return ResponseEntity.ok().body(response);
     }
 
+    @GetMapping("/tours/{id}")
+    public boolean checkBookingItemExistByTourId(@PathVariable("id") Long tourId) {
+        return bookingItemService.checkBookingItemExistByTourId(tourId);
+    }
+
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteBookingItem(@PathVariable("id") Long bookingItemId) {

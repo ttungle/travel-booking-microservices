@@ -40,6 +40,13 @@ public interface TourService {
     TourResponseDTO updateTour(Long tourId, TourRequestDTO tourRequestDTO, List<MultipartFile> fileList,
                                MultipartFile coverImage, MultipartFile video);
 
+    /**
+     * Update tour status
+     *
+     * @param tourId tour id
+     * @param tourRequestDTO contains the tour status
+     * @return {TourResponseDTO}
+     * */
     TourResponseDTO updateTourStatus(Long tourId, TourStatusRequestDTO tourRequestDTO);
 
     /**
@@ -66,7 +73,7 @@ public interface TourService {
     PagingApiResponse<List<TourResponseDTO>> getAllTours(TourCriteria tourCriteria);
 
     /**
-     * Delete a tour
+     * Delete a tour, only delete the tour without booking
      *
      * @param tourId tour id
      * */
