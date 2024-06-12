@@ -93,7 +93,7 @@ public class TourServiceImpl implements TourService {
 
         Tour tour = tourRepository.findById(tourId)
                 .orElseThrow(() -> new CustomNotFoundException("No tour found with that id."));
-        if(tour.getStatus() == ETourStatus.CANCELLED && tourRequestDTO.getStatus() == ETourStatus.ACTIVE) {
+        if (tour.getStatus() == ETourStatus.CANCELLED && tourRequestDTO.getStatus() == ETourStatus.ACTIVE) {
             throw new CustomBadRequestException("Cannot change status from CANCELLED to ACTIVE.");
         }
         // cancel all booking items related to this tour as this tour has been canceled.
@@ -146,6 +146,10 @@ public class TourServiceImpl implements TourService {
         Tour tour = tourRepository.findById(tourId).orElseThrow(
                 () -> new CustomNotFoundException("No tour found with that id."));
 
+        boolean isBookingItemExist = bookingApiClient.checkBookingItemExistByTourId(tourId);
+        if (isBookingItemExist) {
+            throw new CustomBadRequestException("Cannot delete the tour because this tour already has reservation.");
+        }
         // delete tour files or images folder
         storageApiClient.deleteFolder("tours/" + tour.getId());
         tourRepository.deleteById(tour.getId());

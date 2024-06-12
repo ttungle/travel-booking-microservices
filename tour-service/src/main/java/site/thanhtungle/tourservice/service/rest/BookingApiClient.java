@@ -2,6 +2,7 @@ package site.thanhtungle.tourservice.service.rest;
 
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -14,4 +15,7 @@ public interface BookingApiClient {
     @PutMapping("/tours/{id}")
     ResponseEntity<BaseApiResponse<String>> batchUpdateBookingItemStatus(
             @PathVariable("id") Long tourId, @RequestBody BookingItemStatusRequestDTO bookingItemStatusRequestDTO);
+
+    @GetMapping("/tours/{id}")
+    boolean checkBookingItemExistByTourId(@PathVariable("id") Long tourId);
 }

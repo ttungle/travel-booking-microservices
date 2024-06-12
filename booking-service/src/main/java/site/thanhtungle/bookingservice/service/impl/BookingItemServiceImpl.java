@@ -128,6 +128,14 @@ public class BookingItemServiceImpl implements BookingItemService {
     }
 
     @Override
+    public boolean checkBookingItemExistByTourId(Long tourId) {
+        Assert.notNull(tourId, "tourId cannot be null.");
+        List<BookingItem> bookingItemList = bookingItemRepository.findByTourId(tourId);
+        if (Objects.isNull(bookingItemList)) return false;
+        return !bookingItemList.isEmpty();
+    }
+
+    @Override
     public void deleteBookingItem(Long bookingItemId) {
         Assert.notNull(bookingItemId, "Booking item id cannot be null.");
 
