@@ -6,7 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import site.thanhtungle.bookingservice.constant.enums.EBookingStatus;
+import site.thanhtungle.commons.constant.enums.EBookingStatus;
 
 import java.math.BigDecimal;
 import java.util.Set;

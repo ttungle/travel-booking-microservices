@@ -6,7 +6,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
-import site.thanhtungle.bookingservice.constant.enums.EBookingStatus;
+import site.thanhtungle.commons.constant.enums.EBookingStatus;
 import site.thanhtungle.bookingservice.mapper.BookingMapper;
 import site.thanhtungle.bookingservice.model.criteria.BaseCriteria;
 import site.thanhtungle.bookingservice.model.dto.request.booking.BookingRequestDTO;
