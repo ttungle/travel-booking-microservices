@@ -35,6 +35,14 @@
 #    org:
 #      springframework:
 #        web: DEBUG
+#
+#stripe:
+#  api:
+#    key: ${SECRET_KEY}
+#  public:
+#    key: ${PUBLIC_KEY}
+#  webhook:
+#    secret: ${WEBHOOK_SECRET}
 
 spring:
   application:
