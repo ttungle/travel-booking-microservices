@@ -1,0 +1,43 @@
+#spring:
+#  datasource:
+#    url: ${DB_URL}/travel-review-service
+#    username: ${DB_USERNAME}
+#    password: ${DB_PASSWORD}
+#  jpa:
+#    properties:
+#      hibernate:
+#        dialect: org.hibernate.dialect.PostgreSQLDialect
+#    hibernate:
+#      ddl-auto: update
+#      show-sql: always
+#  application:
+#    name: REVIEW-SERVICE
+#  jackson:
+#    time-zone: Asia/Ho_Chi_Minh
+#
+#server:
+#  port: 8092
+#
+#eureka:
+#  client:
+#    serviceUrl:
+#      defaultZone: http://admin:admin@localhost:8761/eureka/
+#
+#management:
+#  tracing:
+#    sampling:
+#      probability: 1.0
+#
+#logging:
+#  pattern:
+#    level: '%5p [${spring.application.name:},%X{traceId:-},%X{spanId:-}]'
+#  level:
+#    org:
+#      springframework:
+#        web: DEBUG
+
+spring:
+  application:
+    name: REVIEW-SERVICE
+  config:
+    import: optional:configserver:http://localhost:8888
