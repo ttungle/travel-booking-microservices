@@ -38,7 +38,7 @@ public class ReviewController {
     }
 
     @GetMapping
-    public ResponseEntity<PagingApiResponse<Map<String, Object>>> getAllReviews(@Valid @RequestBody ReviewCriteria reviewCriteria) {
+    public ResponseEntity<PagingApiResponse<Map<String, Object>>> getAllReviews(@Valid ReviewCriteria reviewCriteria) {
         PagingApiResponse<Map<String, Object>> response = reviewService.getAllReview(reviewCriteria);
         return ResponseEntity.ok().body(response);
     }

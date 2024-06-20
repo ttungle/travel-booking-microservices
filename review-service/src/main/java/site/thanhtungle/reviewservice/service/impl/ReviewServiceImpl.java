@@ -22,21 +22,20 @@ import site.thanhtungle.reviewservice.model.dto.response.TourResponseDTO;
 import site.thanhtungle.reviewservice.model.entity.Review;
 import site.thanhtungle.reviewservice.model.entity.ReviewSummary;
 import site.thanhtungle.reviewservice.repository.ReviewRepository;
+import site.thanhtungle.reviewservice.repository.ReviewSummaryRepository;
 import site.thanhtungle.reviewservice.service.ReviewService;
 import site.thanhtungle.reviewservice.service.ReviewSummaryService;
 import site.thanhtungle.reviewservice.service.rest.TourApiClient;
 import site.thanhtungle.reviewservice.service.specification.AndFilterSpecification;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 @Service
 @AllArgsConstructor
 public class ReviewServiceImpl implements ReviewService {
 
     private final ReviewRepository reviewRepository;
+    private final ReviewSummaryRepository reviewSummaryRepository;
     private final ReviewSummaryService reviewSummaryService;
     private final ReviewMapper reviewMapper;
     private final TourApiClient tourApiClient;
@@ -51,6 +50,12 @@ public class ReviewServiceImpl implements ReviewService {
         if (response.getBody().getData().getStatus() != ETourStatus.ACTIVE) {
             throw new CustomBadRequestException("Cannot create new review because tour is inactive.");
         }
+        // if no review summary found with tourId, then create a new one
+        Optional<ReviewSummary> reviewSummary = reviewSummaryRepository.findByTourId(reviewRequestDTO.getTourId());
+        if (Objects.isNull(reviewSummary) || reviewSummary.isEmpty()) {
+            reviewSummaryRepository.save(new ReviewSummary(0F, reviewRequestDTO.getTourId()));
+        }
+
         Review review = reviewMapper.toReview(reviewRequestDTO);
         Review createdReview = reviewRepository.save(review);
         // calculate & update the review summary
