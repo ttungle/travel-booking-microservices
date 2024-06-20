@@ -24,7 +24,7 @@ public class ReviewSummaryController {
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
-    @GetMapping("/{id}/calculate")
+    @GetMapping("/tours/{id}/calculate")
     public ResponseEntity<BaseApiResponse<ReviewSummary>> calculateReviewSummaryByTourId(@PathVariable("id") Long tourId) {
         ReviewSummary reviewSummary = reviewSummaryService.calculateReviewSummaryByTourId(tourId);
         BaseApiResponse<ReviewSummary> response = new BaseApiResponse<>(HttpStatus.OK.value(), reviewSummary);
