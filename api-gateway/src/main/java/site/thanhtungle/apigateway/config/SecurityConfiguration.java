@@ -19,7 +19,7 @@ public class SecurityConfiguration {
         http.csrf(ServerHttpSecurity.CsrfSpec::disable)
                 .authorizeExchange(exchange -> exchange
                         .pathMatchers(HttpMethod.GET, "/api/v1/tours/**").permitAll()
-                        .pathMatchers("/eureka/**", "/api/v1/auth/**").permitAll()
+                        .pathMatchers("/eureka/**", "/api/v1/auth/**", "/ws-notification/**").permitAll()
                         .anyExchange().authenticated()
                 )
                 .oauth2ResourceServer((oauth2) -> oauth2.jwt(Customizer.withDefaults()));
