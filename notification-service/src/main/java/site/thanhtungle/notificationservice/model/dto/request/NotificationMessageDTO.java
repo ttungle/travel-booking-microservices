@@ -1,4 +1,4 @@
-package site.thanhtungle.notificationservice.model.dto;
+package site.thanhtungle.notificationservice.model.dto.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -7,11 +7,10 @@ import lombok.Setter;
 
 @Getter
 @Setter
-@NoArgsConstructor
 @AllArgsConstructor
-public class NotificationResponseDTO {
+@NoArgsConstructor
+public class NotificationMessageDTO {
 
     private String title;
     private String content;
-    private String createdDate;
 }

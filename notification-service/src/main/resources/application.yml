@@ -1,0 +1,55 @@
+#spring:
+#  datasource:
+#    url: ${DB_URL}/travel-notification-service
+#    username: ${DB_USERNAME}
+#    password: ${DB_PASSWORD}
+#  jpa:
+#    properties:
+#      hibernate:
+#        dialect: org.hibernate.dialect.PostgreSQLDialect
+#    hibernate:
+#      ddl-auto: validate
+#      show-sql: always
+#  application:
+#    name: NOTIFICATION-SERVICE
+#  jackson:
+#    time-zone: Asia/Ho_Chi_Minh
+#
+#server:
+#  port: 8095
+#
+#eureka:
+#  client:
+#    serviceUrl:
+#      defaultZone: http://admin:admin@localhost:8761/eureka/
+#
+#management:
+#  tracing:
+#    sampling:
+#      probability: 1.0
+#
+#logging:
+#  pattern:
+#    level: '%5p [${spring.application.name:},%X{traceId:-},%X{spanId:-}]'
+#  level:
+#    org:
+#      springframework:
+#        web: DEBUG
+
+spring:
+  application:
+    name: NOTIFICATION-SERVICE
+  config:
+    import: optional:configserver:http://localhost:8888
+  kafka:
+    consumer:
+      bootstrap-servers: localhost:9092
+      group-id: ${spring.application.name}-kafka-consumer-group
+      auto-offset-reset: earliest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.ErrorHandlingDeserializer
+      properties:
+        spring:
+          deserializer.value.delegate.class: org.springframework.kafka.support.serializer.JsonDeserializer
+          json.trusted.packages: '*'
+          json.use.type.headers: false
