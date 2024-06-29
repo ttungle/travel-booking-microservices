@@ -5,7 +5,7 @@ import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.RestController;
-import site.thanhtungle.notificationservice.model.dto.NotificationResponseDTO;
+import site.thanhtungle.notificationservice.model.dto.response.NotificationResponseDTO;
 import site.thanhtungle.notificationservice.service.NotificationService;
 
 @RestController
