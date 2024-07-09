@@ -39,7 +39,7 @@ spring:
         - id: NOTIFICATION-SERVICE
           uri: lb://NOTIFICATION-SERVICE
           predicates:
-            - Path=/api/v1/notification/**
+            - Path=/api/v1/notifications/**
           # discovery server route
         - id: DISCOVERY-SERVER
           uri: http://localhost:8761

@@ -42,6 +42,9 @@ public class InventoryServiceImpl implements InventoryService {
     private final InventoryMapper inventoryMapper;
     private final AndFilterSpecification<Inventory> andFilterSpecification;
     private final TourApiClient tourApiClient;
+    private final List<String> allowedFilterFieldList = Arrays.stream(Inventory.class.getDeclaredFields())
+            .map(Field::getName)
+            .toList();
 
     @Override
     public Inventory createInventory(InventoryRequestDTO inventoryRequestDTO) {
@@ -114,9 +117,8 @@ public class InventoryServiceImpl implements InventoryService {
     public PagingApiResponse<List<Inventory>> getAllInventory(InventoryCriteria inventoryCriteria) {
         PageRequest pageRequest = CommonPageUtil
                 .getPageRequest(inventoryCriteria.getPage(), inventoryCriteria.getPageSize(), inventoryCriteria.getSort());
-        List<String> allowedFieldList = Arrays.stream(Inventory.class.getDeclaredFields()).map(Field::getName).toList();
         Specification<Inventory> filterBy = andFilterSpecification
-                .getAndFilterSpecification(inventoryCriteria.getFilters(), allowedFieldList);
+                .getAndFilterSpecification(inventoryCriteria.getFilters(), allowedFilterFieldList);
         Page<Inventory> inventoryPage = inventoryRepository.findAll(filterBy, pageRequest);
 
         List<Inventory> inventoryList = inventoryPage.getContent();

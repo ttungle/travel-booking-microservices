@@ -4,6 +4,9 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import site.thanhtungle.commons.constant.enums.ENotificationType;
+
+import java.time.Instant;
 
 @Getter
 @Setter
@@ -13,5 +16,10 @@ public class NotificationResponseDTO {
 
     private String title;
     private String content;
-    private String createdDate;
+    private String url;
+    private ENotificationType type;
+    private Boolean read;
+    private Boolean trash;
+    private Instant createdAt;
+    private Instant updatedAt;
 }

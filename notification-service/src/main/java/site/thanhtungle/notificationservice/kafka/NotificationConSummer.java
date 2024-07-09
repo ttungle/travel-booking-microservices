@@ -7,6 +7,7 @@ import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.stereotype.Service;
 import site.thanhtungle.notificationservice.model.dto.request.NotificationMessageDTO;
+import site.thanhtungle.notificationservice.service.NotificationService;
 
 @Service
 @Slf4j
@@ -14,6 +15,7 @@ import site.thanhtungle.notificationservice.model.dto.request.NotificationMessag
 public class NotificationConSummer {
 
     private final Environment environment;
+    private final NotificationService notificationService;
 
     @KafkaListener(
             topics = "${kafka.topic.notification-topic}",
@@ -25,5 +27,6 @@ public class NotificationConSummer {
                 environment.getProperty("spring.kafka.consumer.group-id"),
                 environment.getProperty("kafka.topic.notification-topic"),
                 notificationMessageDTO.toString());
+        notificationService.createNotification(notificationMessageDTO);
     }
 }

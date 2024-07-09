@@ -53,3 +53,7 @@ spring:
           deserializer.value.delegate.class: org.springframework.kafka.support.serializer.JsonDeserializer
           json.trusted.packages: '*'
           json.use.type.headers: false
+
+server:
+  tomcat:
+    relaxed-query-chars: '|,{,},[,]'
