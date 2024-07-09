@@ -1,9 +1,6 @@
 package site.thanhtungle.commons.predicate;
 
-import jakarta.persistence.criteria.CriteriaBuilder;
-import jakarta.persistence.criteria.Path;
-import jakarta.persistence.criteria.Predicate;
-import jakarta.persistence.criteria.Root;
+import jakarta.persistence.criteria.*;
 import lombok.extern.slf4j.Slf4j;
 import site.thanhtungle.commons.constant.enums.EFilterOperators;
 import site.thanhtungle.commons.validation.DateValidator;
@@ -60,7 +57,7 @@ public class FilterPredicate {
     }
 
     public List<Predicate> getPredicateList(Map<String, Map<EFilterOperators, String>> filters,
-                                            List<String> allowedFields, CriteriaBuilder cb, Root root) {
+                                            List<String> allowedFields, CriteriaBuilder cb, Root<?> root) {
         List<Predicate> predicateList = new ArrayList<>();
         filters.forEach((field, operatorValuePairs) -> {
             if (!allowedFields.contains(field))
