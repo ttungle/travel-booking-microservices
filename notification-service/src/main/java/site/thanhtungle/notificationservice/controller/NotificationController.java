@@ -3,6 +3,7 @@ package site.thanhtungle.notificationservice.controller;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import site.thanhtungle.commons.model.criteria.BaseCriteria;
@@ -24,17 +25,25 @@ public class NotificationController {
 
     @PutMapping("/read/all")
     public ResponseEntity<BaseApiResponse<String>> markAllNotificationAsRead(Principal principal) {
-        return null;
+        notificationService.markAllNotificationAsRead(principal.getName());
+        BaseApiResponse<String> response = new BaseApiResponse<>(HttpStatus.OK.value(),
+                "All notifications have been marked as read successfully.");
+        return ResponseEntity.ok().body(response);
     }
 
     @PutMapping("/read/{notificationId}")
     public ResponseEntity<BaseApiResponse<String>> toggleNotificationRead(Principal principal, @PathVariable("notificationId") Long notificationId) {
-        return null;
+        notificationService.toggleReadNotification(principal.getName(), notificationId);
+        BaseApiResponse<String> response = new BaseApiResponse<>(HttpStatus.OK.value(),
+                "Notification read status has been toggled successfully.");
+        return ResponseEntity.ok().body(response);
     }
 
     @GetMapping("/unread/count")
-    public ResponseEntity<BaseApiResponse<Long>> getUnreadNotificationCount() {
-        return null;
+    public ResponseEntity<BaseApiResponse<Long>> getUnreadNotificationCount(Principal principal) {
+        Long count = notificationService.countUnreadNotification(principal.getName());
+        BaseApiResponse<Long> response = new BaseApiResponse<>(HttpStatus.OK.value(), count);
+        return ResponseEntity.ok().body(response);
     }
 
     @GetMapping

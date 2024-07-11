@@ -13,26 +13,20 @@ import site.thanhtungle.notificationservice.model.entity.Notification;
 public interface NotificationRepository extends JpaRepository<Notification, Long> {
 
     @Query(""" 
-            SELECT new site.thanhtungle.notificationservice.model.dto.response.NotificationResponseDTO(n.title,
+            SELECT new site.thanhtungle.notificationservice.model.dto.response.NotificationResponseDTO(n.id, n.title,
             n.content, n.url, n.type, nr.read, nr.trash, n.createdAt, n.updatedAt)
             FROM Notification n
             LEFT JOIN NotificationRecipient nr ON nr.notification.id = n.id
-            WHERE
-                nr.userId = :userId
-                OR n.type = site.thanhtungle.commons.constant.enums.ENotificationType.ALL
+            WHERE nr.userId = :userId
     """)
     Page<NotificationResponseDTO> findAllNotificationByUserId(@Param("userId") String userId, Pageable pageable);
 
     @Query("""
-            SELECT new site.thanhtungle.notificationservice.model.dto.response.NotificationResponseDTO(n.title,
+            SELECT new site.thanhtungle.notificationservice.model.dto.response.NotificationResponseDTO(n.id, n.title,
             n.content, n.url, n.type, nr.read, nr.trash, n.createdAt, n.updatedAt)
             FROM Notification n
             LEFT JOIN NotificationRecipient nr ON nr.notification.id = n.id
-            WHERE
-                nr.read = false
-                AND nr.userId = :userId
-                OR nr.read = false
-                AND n.type = site.thanhtungle.commons.constant.enums.ENotificationType.ALL
+            WHERE nr.read = false AND nr.userId = :userId
     """)
     Page<NotificationResponseDTO> findUnreadNotificationByUserId(@Param("userId") String userId, Pageable pageable);
 }

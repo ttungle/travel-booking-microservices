@@ -14,6 +14,7 @@ import java.time.Instant;
 @AllArgsConstructor
 public class NotificationResponseDTO {
 
+    private Long id;
     private String title;
     private String content;
     private String url;
