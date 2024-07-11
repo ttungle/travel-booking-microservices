@@ -18,7 +18,7 @@ public interface BookingItemService {
 
     BookingItem updateBookingItem(Long bookingItemId, BookingItemUpdateRequestDTO bookingItemRequestDTO);
 
-    String batchUpdateBookingItemStatus(Long tourId, BookingItemStatusRequestDTO bookingItemStatusRequestDTO);
+    List<BookingItem> batchUpdateBookingItemStatus(Long tourId, BookingItemStatusRequestDTO bookingItemStatusRequestDTO);
 
     @Transactional(readOnly = true)
     BookingItem getBookingItem(Long bookingItemId);

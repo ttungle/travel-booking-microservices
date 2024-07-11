@@ -8,12 +8,15 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import site.thanhtungle.commons.model.response.success.BaseApiResponse;
 import site.thanhtungle.tourservice.model.dto.request.booking.BookingItemStatusRequestDTO;
+import site.thanhtungle.tourservice.model.dto.response.booking.BookingItem;
+
+import java.util.List;
 
 @FeignClient(name = "BOOKING-SERVICE", path = "/api/v1/bookings/items")
 public interface BookingApiClient {
 
     @PutMapping("/tours/{id}")
-    ResponseEntity<BaseApiResponse<String>> batchUpdateBookingItemStatus(
+    ResponseEntity<BaseApiResponse<List<BookingItem>>> batchUpdateBookingItemStatus(
             @PathVariable("id") Long tourId, @RequestBody BookingItemStatusRequestDTO bookingItemStatusRequestDTO);
 
     @GetMapping("/tours/{id}")

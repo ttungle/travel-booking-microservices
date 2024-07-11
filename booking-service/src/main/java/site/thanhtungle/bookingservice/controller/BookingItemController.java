@@ -40,10 +40,10 @@ public class BookingItemController {
     }
 
     @PutMapping("/tours/{id}")
-    public ResponseEntity<BaseApiResponse<String>> batchUpdateBookingItemStatus(
+    public ResponseEntity<BaseApiResponse<List<BookingItem>>> batchUpdateBookingItemStatus(
             @PathVariable("id") Long tourId, @Valid @RequestBody BookingItemStatusRequestDTO bookingItemStatusRequestDTO) {
-        String message = bookingItemService.batchUpdateBookingItemStatus(tourId, bookingItemStatusRequestDTO);
-        BaseApiResponse<String> response = new BaseApiResponse<>(HttpStatus.OK.value(), message);
+        List<BookingItem> bookingItemList = bookingItemService.batchUpdateBookingItemStatus(tourId, bookingItemStatusRequestDTO);
+        BaseApiResponse<List<BookingItem>> response = new BaseApiResponse<>(HttpStatus.OK.value(), bookingItemList);
         return ResponseEntity.ok().body(response);
     }
 
