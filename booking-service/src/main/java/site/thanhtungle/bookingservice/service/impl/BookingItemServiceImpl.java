@@ -8,19 +8,19 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
-import site.thanhtungle.bookingservice.model.dto.response.TourResponseDTO;
-import site.thanhtungle.bookingservice.service.rest.TourApiClient;
-import site.thanhtungle.commons.constant.enums.EBookingItemStatus;
 import site.thanhtungle.bookingservice.mapper.BookingItemMapper;
 import site.thanhtungle.bookingservice.model.criteria.BaseCriteria;
 import site.thanhtungle.bookingservice.model.dto.request.BookingItemRequestDTO;
 import site.thanhtungle.bookingservice.model.dto.request.BookingItemStatusRequestDTO;
 import site.thanhtungle.bookingservice.model.dto.request.BookingItemUpdateRequestDTO;
 import site.thanhtungle.bookingservice.model.dto.request.inventory.BookedQuantityRequestDTO;
+import site.thanhtungle.bookingservice.model.dto.response.TourResponseDTO;
 import site.thanhtungle.bookingservice.model.entity.BookingItem;
 import site.thanhtungle.bookingservice.repository.BookingItemRepository;
 import site.thanhtungle.bookingservice.service.BookingItemService;
 import site.thanhtungle.bookingservice.service.rest.InventoryApiClient;
+import site.thanhtungle.bookingservice.service.rest.TourApiClient;
+import site.thanhtungle.commons.constant.enums.EBookingItemStatus;
 import site.thanhtungle.commons.constant.enums.ETourStatus;
 import site.thanhtungle.commons.exception.CustomBadRequestException;
 import site.thanhtungle.commons.exception.CustomNotFoundException;
@@ -91,18 +91,17 @@ public class BookingItemServiceImpl implements BookingItemService {
     }
 
     @Override
-    public String batchUpdateBookingItemStatus(Long tourId, BookingItemStatusRequestDTO bookingItemStatusRequestDTO) {
+    public List<BookingItem> batchUpdateBookingItemStatus(Long tourId, BookingItemStatusRequestDTO bookingItemStatusRequestDTO) {
         Assert.notNull(tourId, "tourId cannot be null.");
         List<BookingItem> bookingItemList = bookingItemRepository.findByTourId(tourId);
 
         if (bookingItemList.isEmpty()) throw new CustomNotFoundException("No booking item found with that tourId.");
-        bookingItemList.forEach(bookingItem -> {
+        List<BookingItem> updatedBookingItemStatusList = bookingItemList.stream().peek(bookingItem -> {
             if (bookingItem.getStatus() != bookingItemStatusRequestDTO.getStatus()) {
                 bookingItem.setStatus(bookingItemStatusRequestDTO.getStatus());
-                bookingItemRepository.save(bookingItem);
             }
-        });
-        return String.format("The status of %s booking items has been successfully updated.", bookingItemList.size());
+        }).toList();
+        return bookingItemRepository.saveAll(updatedBookingItemStatusList);
     }
 
     @Override

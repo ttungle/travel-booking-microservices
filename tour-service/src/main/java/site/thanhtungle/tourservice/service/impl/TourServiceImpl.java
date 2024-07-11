@@ -9,23 +9,29 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 import org.springframework.web.multipart.MultipartFile;
 import site.thanhtungle.commons.constant.enums.EBookingItemStatus;
+import site.thanhtungle.commons.constant.enums.ENotificationType;
 import site.thanhtungle.commons.constant.enums.ETourStatus;
 import site.thanhtungle.commons.exception.CustomBadRequestException;
 import site.thanhtungle.commons.exception.CustomNotFoundException;
 import site.thanhtungle.commons.model.dto.FileDto;
 import site.thanhtungle.commons.model.dto.PagingDTO;
+import site.thanhtungle.commons.model.response.success.BaseApiResponse;
 import site.thanhtungle.commons.model.response.success.PageInfo;
 import site.thanhtungle.commons.model.response.success.PagingApiResponse;
+import site.thanhtungle.tourservice.kafka.NotificationProducer;
 import site.thanhtungle.tourservice.mapper.TourMapper;
 import site.thanhtungle.tourservice.model.criteria.SearchTourCriteria;
 import site.thanhtungle.tourservice.model.criteria.TourCriteria;
 import site.thanhtungle.tourservice.model.dto.request.booking.BookingItemStatusRequestDTO;
+import site.thanhtungle.tourservice.model.dto.request.notification.NotificationMessageDTO;
 import site.thanhtungle.tourservice.model.dto.request.tour.TourRequestDTO;
 import site.thanhtungle.tourservice.model.dto.request.tour.TourStatusRequestDTO;
+import site.thanhtungle.tourservice.model.dto.response.booking.BookingItem;
 import site.thanhtungle.tourservice.model.dto.response.tour.TourResponseDTO;
 import site.thanhtungle.tourservice.model.entity.Tour;
 import site.thanhtungle.tourservice.model.entity.TourImage;
@@ -38,6 +44,8 @@ import site.thanhtungle.tourservice.util.PageUtil;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import static site.thanhtungle.tourservice.constant.CacheConstants.TOUR_CACHE;
@@ -52,6 +60,7 @@ public class TourServiceImpl implements TourService {
     private final StorageApiClient storageApiClient;
     private final AndFilterSpecification<Tour> andFilterSpecification;
     private final BookingApiClient bookingApiClient;
+    private final NotificationProducer notificationProducer;
 
     @Override
     public TourResponseDTO saveTour(TourRequestDTO tourRequestDTO, List<MultipartFile> fileList,
@@ -99,7 +108,22 @@ public class TourServiceImpl implements TourService {
         // cancel all booking items related to this tour as this tour has been canceled.
         if (tour.getStatus() == ETourStatus.ACTIVE && tourRequestDTO.getStatus() == ETourStatus.CANCELLED) {
             BookingItemStatusRequestDTO body = new BookingItemStatusRequestDTO(EBookingItemStatus.CANCELLED);
-            bookingApiClient.batchUpdateBookingItemStatus(tourId, body);
+            ResponseEntity<BaseApiResponse<List<BookingItem>>> response = bookingApiClient
+                    .batchUpdateBookingItemStatus(tourId, body);
+            List<BookingItem> bookingItemList = Objects.requireNonNull(response.getBody()).getData();
+            Set<String> notificationRecipients = bookingItemList.stream()
+                    .map(BookingItem::getUserId)
+                    .collect(Collectors.toSet());
+
+            // send notification to users
+            NotificationMessageDTO notificationMessage = new NotificationMessageDTO(
+                    "The tour has been canceled",
+                    String.format("Your tour \"%s\" has been canceled.", tour.getName()),
+                    tour.getSlug(),
+                    notificationRecipients,
+                    ENotificationType.USER
+            );
+            notificationProducer.sendNotification(notificationMessage);
         }
         tour.setStatus(tourRequestDTO.getStatus());
         Tour updatedTour = tourRepository.save(tour);

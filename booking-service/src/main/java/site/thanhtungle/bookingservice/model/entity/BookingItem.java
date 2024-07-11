@@ -40,6 +40,9 @@ public class BookingItem extends BaseEntity {
     @Column(name = "start_date")
     private Instant startDate;
 
+    @Column(name = "user_id")
+    private String userId;
+
     @Column(name = "tour_id")
     private Long tourId;
 
