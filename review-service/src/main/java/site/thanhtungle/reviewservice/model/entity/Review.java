@@ -1,12 +1,13 @@
 package site.thanhtungle.reviewservice.model.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import java.util.Set;
 
 @Getter
 @Setter
@@ -33,6 +34,14 @@ public class Review extends BaseEntity {
 
     @Column(name = "like_count")
     private Integer likeCount;
+
+    @JsonManagedReference
+    @OneToMany(
+            mappedBy = "review",
+            fetch = FetchType.LAZY,
+            cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH}
+    )
+    private Set<ReviewLike> likes;
 
     @Column(name = "user_id")
     private String userId;

@@ -16,6 +16,8 @@ public interface ReviewService {
 
     Review updateReview(Long reviewId, ReviewUpdateRequestDTO reviewUpdateRequestDTO);
 
+    String toggleLikeReview(String userId, Long reviewId);
+
     @Transactional(readOnly = true)
     PagingApiResponse<Map<String, Object>> getAllReview(ReviewCriteria reviewCriteria);
 

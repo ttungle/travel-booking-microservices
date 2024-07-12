@@ -7,6 +7,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.util.Assert;
 import site.thanhtungle.commons.constant.enums.ETourStatus;
 import site.thanhtungle.commons.exception.CustomBadRequestException;
 import site.thanhtungle.commons.exception.CustomNotFoundException;
@@ -20,7 +21,9 @@ import site.thanhtungle.reviewservice.model.dto.request.ReviewRequestDTO;
 import site.thanhtungle.reviewservice.model.dto.request.ReviewUpdateRequestDTO;
 import site.thanhtungle.reviewservice.model.dto.response.TourResponseDTO;
 import site.thanhtungle.reviewservice.model.entity.Review;
+import site.thanhtungle.reviewservice.model.entity.ReviewLike;
 import site.thanhtungle.reviewservice.model.entity.ReviewSummary;
+import site.thanhtungle.reviewservice.repository.ReviewLikeRepository;
 import site.thanhtungle.reviewservice.repository.ReviewRepository;
 import site.thanhtungle.reviewservice.repository.ReviewSummaryRepository;
 import site.thanhtungle.reviewservice.service.ReviewService;
@@ -36,6 +39,7 @@ public class ReviewServiceImpl implements ReviewService {
 
     private final ReviewRepository reviewRepository;
     private final ReviewSummaryRepository reviewSummaryRepository;
+    private final ReviewLikeRepository reviewLikeRepository;
     private final ReviewSummaryService reviewSummaryService;
     private final ReviewMapper reviewMapper;
     private final TourApiClient tourApiClient;
@@ -71,6 +75,25 @@ public class ReviewServiceImpl implements ReviewService {
         // calculate & update the review summary
         reviewSummaryService.calculateReviewSummaryByTourId(review.getTourId());
         return reviewRepository.save(review);
+    }
+
+    @Override
+    public String toggleLikeReview(String userId, Long reviewId) {
+        Assert.notNull(reviewId, "reviewId cannot be null.");
+        Review review = reviewRepository.findById(reviewId)
+                .orElseThrow(() -> new CustomNotFoundException("No review found with that id."));
+        Optional<ReviewLike> reviewLike = reviewLikeRepository.findReviewLikeByUserIdAndReviewId(userId, reviewId);
+        if (reviewLike.isEmpty()) {
+            ReviewLike newReviewLike = new ReviewLike(userId, review);
+            reviewLikeRepository.save(newReviewLike);
+            review.setLikeCount(review.getLikeCount() != null ? review.getLikeCount() + 1 : 1);
+            reviewRepository.save(review);
+            return "The like has been added.";
+        }
+        reviewLikeRepository.deleteById(reviewLike.get().getId());
+        review.setLikeCount(review.getLikeCount() > 0 ? review.getLikeCount() - 1: review.getLikeCount());
+        reviewRepository.save(review);
+        return "The like has been removed.";
     }
 
     @Override

@@ -13,6 +13,7 @@ import site.thanhtungle.reviewservice.model.dto.request.ReviewUpdateRequestDTO;
 import site.thanhtungle.reviewservice.model.entity.Review;
 import site.thanhtungle.reviewservice.service.ReviewService;
 
+import java.security.Principal;
 import java.util.Map;
 
 @RestController
@@ -34,6 +35,13 @@ public class ReviewController {
                                                                 @RequestBody ReviewUpdateRequestDTO reviewUpdateRequestDTO) {
         Review review = reviewService.updateReview(reviewId, reviewUpdateRequestDTO);
         BaseApiResponse<Review> response = new BaseApiResponse<>(HttpStatus.OK.value(), review);
+        return ResponseEntity.ok().body(response);
+    }
+
+    @PutMapping("/{id}/like")
+    public ResponseEntity<BaseApiResponse<String>> toggleReviewLike(Principal principal, @PathVariable("id") Long reviewId) {
+        String message = reviewService.toggleLikeReview(principal.getName(), reviewId);
+        BaseApiResponse<String> response = new BaseApiResponse<>(HttpStatus.OK.value(), message);
         return ResponseEntity.ok().body(response);
     }
 
