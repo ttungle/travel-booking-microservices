@@ -19,6 +19,7 @@ import site.thanhtungle.commons.constant.enums.ETourStatus;
 import site.thanhtungle.commons.exception.CustomBadRequestException;
 import site.thanhtungle.commons.exception.CustomNotFoundException;
 import site.thanhtungle.commons.model.dto.FileDto;
+import site.thanhtungle.commons.model.dto.NotificationMessageDTO;
 import site.thanhtungle.commons.model.dto.PagingDTO;
 import site.thanhtungle.commons.model.response.success.BaseApiResponse;
 import site.thanhtungle.commons.model.response.success.PageInfo;
@@ -28,7 +29,6 @@ import site.thanhtungle.tourservice.mapper.TourMapper;
 import site.thanhtungle.tourservice.model.criteria.SearchTourCriteria;
 import site.thanhtungle.tourservice.model.criteria.TourCriteria;
 import site.thanhtungle.tourservice.model.dto.request.booking.BookingItemStatusRequestDTO;
-import site.thanhtungle.tourservice.model.dto.request.notification.NotificationMessageDTO;
 import site.thanhtungle.tourservice.model.dto.request.tour.TourRequestDTO;
 import site.thanhtungle.tourservice.model.dto.request.tour.TourStatusRequestDTO;
 import site.thanhtungle.tourservice.model.dto.response.booking.BookingItem;
@@ -117,8 +117,11 @@ public class TourServiceImpl implements TourService {
 
             // send notification to users
             NotificationMessageDTO notificationMessage = new NotificationMessageDTO(
-                    "The tour has been canceled",
-                    String.format("Your tour \"%s\" has been canceled.", tour.getName()),
+                    "Important: your tour has been canceled",
+                    String.format("We are sorry to announce that the tour you booked \"%s\" has been canceled. " +
+                            "Our team will be reaching out to you shortly to assist with refunds or rescheduling.",
+                            tour.getName()
+                    ),
                     tour.getSlug(),
                     notificationRecipients,
                     ENotificationType.USER

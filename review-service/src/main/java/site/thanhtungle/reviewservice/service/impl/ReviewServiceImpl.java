@@ -8,13 +8,16 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
+import site.thanhtungle.commons.constant.enums.ENotificationType;
 import site.thanhtungle.commons.constant.enums.ETourStatus;
 import site.thanhtungle.commons.exception.CustomBadRequestException;
 import site.thanhtungle.commons.exception.CustomNotFoundException;
+import site.thanhtungle.commons.model.dto.NotificationMessageDTO;
 import site.thanhtungle.commons.model.response.success.BaseApiResponse;
 import site.thanhtungle.commons.model.response.success.PageInfo;
 import site.thanhtungle.commons.model.response.success.PagingApiResponse;
 import site.thanhtungle.commons.util.CommonPageUtil;
+import site.thanhtungle.reviewservice.kafka.NotificationProducer;
 import site.thanhtungle.reviewservice.mapper.ReviewMapper;
 import site.thanhtungle.reviewservice.model.criteria.ReviewCriteria;
 import site.thanhtungle.reviewservice.model.dto.request.ReviewRequestDTO;
@@ -44,6 +47,7 @@ public class ReviewServiceImpl implements ReviewService {
     private final ReviewMapper reviewMapper;
     private final TourApiClient tourApiClient;
     private final AndFilterSpecification<Review> andFilterSpecification;
+    private final NotificationProducer notificationProducer;
 
     @Override
     public Review createReview(ReviewRequestDTO reviewRequestDTO) {
@@ -83,13 +87,23 @@ public class ReviewServiceImpl implements ReviewService {
         Review review = reviewRepository.findById(reviewId)
                 .orElseThrow(() -> new CustomNotFoundException("No review found with that id."));
         Optional<ReviewLike> reviewLike = reviewLikeRepository.findReviewLikeByUserIdAndReviewId(userId, reviewId);
+
         if (reviewLike.isEmpty()) {
             ReviewLike newReviewLike = new ReviewLike(userId, review);
             reviewLikeRepository.save(newReviewLike);
             review.setLikeCount(review.getLikeCount() != null ? review.getLikeCount() + 1 : 1);
             reviewRepository.save(review);
+            NotificationMessageDTO notificationMessage = new NotificationMessageDTO(
+                    "Your review got a like!",
+                    "Someone found your review helpful and gave it a like. Well done!",
+                    reviewId.toString(),
+                    new HashSet<>(Collections.singletonList(review.getUserId())),
+                    ENotificationType.USER
+            );
+            notificationProducer.sendNotification(notificationMessage);
             return "The like has been added.";
         }
+
         reviewLikeRepository.deleteById(reviewLike.get().getId());
         review.setLikeCount(review.getLikeCount() > 0 ? review.getLikeCount() - 1: review.getLikeCount());
         reviewRepository.save(review);
