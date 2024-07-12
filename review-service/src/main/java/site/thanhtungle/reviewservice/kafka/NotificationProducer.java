@@ -1,4 +1,4 @@
-package site.thanhtungle.tourservice.kafka;
+package site.thanhtungle.reviewservice.kafka;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;

@@ -1,4 +1,4 @@
-package site.thanhtungle.tourservice.model.dto.request.notification;
+package site.thanhtungle.commons.model.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -18,5 +18,3 @@ public class NotificationMessageDTO {
     private Set<String> recipientIds;
     private ENotificationType type;
 }
-
-
