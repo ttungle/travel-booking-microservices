@@ -42,7 +42,7 @@ public class BookingItemServiceImpl implements BookingItemService {
     private final TourApiClient tourApiClient;
 
     @Override
-    public BookingItem createBookingItem(BookingItemRequestDTO bookingItemRequestDTO) {
+    public BookingItem createBookingItem(String userId, BookingItemRequestDTO bookingItemRequestDTO) {
         Assert.notNull(bookingItemRequestDTO, "The request body should not be empty.");
 
         ResponseEntity<BaseApiResponse<TourResponseDTO>> response = tourApiClient.getTour(bookingItemRequestDTO.getTourId());
@@ -51,7 +51,7 @@ public class BookingItemServiceImpl implements BookingItemService {
             throw new CustomBadRequestException("Cannot create booking because tour is inactive.");
         }
 
-        BookingItem bookingItem = bookingItemMapper.toBookingItem(bookingItemRequestDTO);
+        BookingItem bookingItem = bookingItemMapper.toBookingItem(bookingItemRequestDTO, userId);
         bookingItem.setStatus(EBookingItemStatus.ACTIVE);
 
         Integer bookedQuantity = getBookedQuantity(bookingItem);

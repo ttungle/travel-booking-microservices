@@ -21,7 +21,6 @@ public class BookingUpdateRequestDTO {
     private boolean paid;
     private String note;
     private EBookingStatus status;
-    private Long userId;
     private Set<Long> bookingItemIds;
     private Set<Long> customerIds;
 }

@@ -37,10 +37,10 @@ public class BookingServiceImpl implements BookingService {
     private final InventoryApiClient inventoryApiClient;
 
     @Override
-    public Booking createBooking(BookingRequestDTO bookingRequestDTO) {
+    public Booking createBooking(String userId, BookingRequestDTO bookingRequestDTO) {
         Assert.notNull(bookingRequestDTO, "The request body cannot be empty.");
 
-        Booking booking = bookingMapper.toEntityBooking(bookingRequestDTO);
+        Booking booking = bookingMapper.toEntityBooking(bookingRequestDTO, userId);
         // new booking will have pending status by default
         booking.setStatus(EBookingStatus.PENDING);
         return bookingRepository.save(booking);

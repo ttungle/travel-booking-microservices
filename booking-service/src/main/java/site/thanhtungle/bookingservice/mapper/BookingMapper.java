@@ -27,9 +27,10 @@ public abstract class BookingMapper {
     @Autowired
     private CustomerRepository customerRepository;
 
-    @Mapping(target = "bookingItems", source = "bookingItemIds", qualifiedByName = "toEntityBookingItemFromId")
-    @Mapping(target = "customers", source = "customerIds", qualifiedByName = "toEntityCustomerFromId")
-    public abstract Booking toEntityBooking(BookingRequestDTO bookingRequestDTO);
+    @Mapping(target = "bookingItems", source = "bookingRequestDTO.bookingItemIds", qualifiedByName = "toEntityBookingItemFromId")
+    @Mapping(target = "customers", source = "bookingRequestDTO.customerIds", qualifiedByName = "toEntityCustomerFromId")
+    @Mapping(target = "userId", source = "userId")
+    public abstract Booking toEntityBooking(BookingRequestDTO bookingRequestDTO, String userId);
 
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "bookingItems", source = "bookingItemIds", qualifiedByName = "toEntityBookingItemFromId")

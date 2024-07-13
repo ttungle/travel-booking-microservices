@@ -12,7 +12,7 @@ import java.util.List;
 @Transactional
 public interface BookingService {
 
-    Booking createBooking(BookingRequestDTO bookingRequestDTO);
+    Booking createBooking(String userId, BookingRequestDTO bookingRequestDTO);
 
     Booking updateBooking(Long bookingId, BookingUpdateRequestDTO bookingUpdateRequestDTO);
 
