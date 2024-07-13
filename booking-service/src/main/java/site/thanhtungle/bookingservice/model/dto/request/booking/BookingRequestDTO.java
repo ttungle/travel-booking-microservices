@@ -1,6 +1,5 @@
 package site.thanhtungle.bookingservice.model.dto.request.booking;
 
-import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -21,8 +20,6 @@ public class BookingRequestDTO {
     private String coupon;
     private boolean paid;
     private String note;
-    @NotNull(message = "userId cannot be null.")
-    private Long userId;
     private Set<Long> bookingItemIds;
     @ListNotEmpty(message = "Booking must contain at lest 1 customerId.")
     private Set<Long> customerIds;

@@ -19,8 +19,9 @@ public abstract class BookingItemMapper {
     @Autowired
     private BookingRepository bookingRepository;
 
-    @Mapping(target = "booking", source = "bookingId", qualifiedByName = "toEntityBookingFromId")
-    public abstract BookingItem toBookingItem(BookingItemRequestDTO bookingItemRequestDTO);
+    @Mapping(target = "booking", source = "bookingItemRequestDTO.bookingId", qualifiedByName = "toEntityBookingFromId")
+    @Mapping(target = "userId", source = "userId")
+    public abstract BookingItem toBookingItem(BookingItemRequestDTO bookingItemRequestDTO, String userId);
 
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "booking", source = "bookingId", qualifiedByName = "toEntityBookingFromId")

@@ -15,6 +15,7 @@ import site.thanhtungle.bookingservice.service.CustomerService;
 import site.thanhtungle.commons.model.response.success.BaseApiResponse;
 import site.thanhtungle.commons.model.response.success.PagingApiResponse;
 
+import java.security.Principal;
 import java.util.List;
 
 @RestController
@@ -27,8 +28,8 @@ public class BookingController {
     private CustomerService customerService;
 
     @PostMapping
-    public ResponseEntity<BaseApiResponse<Booking>> createBooking(@Valid @RequestBody BookingRequestDTO bookingRequestDTO) {
-        Booking booking = bookingService.createBooking(bookingRequestDTO);
+    public ResponseEntity<BaseApiResponse<Booking>> createBooking(Principal principal, @Valid @RequestBody BookingRequestDTO bookingRequestDTO) {
+        Booking booking = bookingService.createBooking(principal.getName(), bookingRequestDTO);
         BaseApiResponse<Booking> response = new BaseApiResponse<>(HttpStatus.CREATED.value(), booking);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }

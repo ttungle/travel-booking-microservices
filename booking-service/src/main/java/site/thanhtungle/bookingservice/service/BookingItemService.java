@@ -14,7 +14,7 @@ import java.util.List;
 public interface BookingItemService {
 
 
-    BookingItem createBookingItem(BookingItemRequestDTO bookingItemRequestDTO);
+    BookingItem createBookingItem(String userId, BookingItemRequestDTO bookingItemRequestDTO);
 
     BookingItem updateBookingItem(Long bookingItemId, BookingItemUpdateRequestDTO bookingItemRequestDTO);
 
