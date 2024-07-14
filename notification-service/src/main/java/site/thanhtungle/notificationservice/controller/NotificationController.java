@@ -1,8 +1,9 @@
 package site.thanhtungle.notificationservice.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -18,11 +19,12 @@ import java.util.List;
 @RestController
 @RequestMapping("${api.url.notification}")
 @RequiredArgsConstructor
-@Slf4j
+@SecurityRequirement(name = "BearerAuth")
 public class NotificationController {
 
     private final NotificationService notificationService;
 
+    @Operation(summary = "Mark all notification as read")
     @PutMapping("/read/all")
     public ResponseEntity<BaseApiResponse<String>> markAllNotificationAsRead(Principal principal) {
         notificationService.markAllNotificationAsRead(principal.getName());
@@ -31,6 +33,7 @@ public class NotificationController {
         return ResponseEntity.ok().body(response);
     }
 
+    @Operation(summary = "Toggle notification read status")
     @PutMapping("/read/{notificationId}")
     public ResponseEntity<BaseApiResponse<String>> toggleNotificationRead(Principal principal, @PathVariable("notificationId") Long notificationId) {
         notificationService.toggleReadNotification(principal.getName(), notificationId);
@@ -39,6 +42,7 @@ public class NotificationController {
         return ResponseEntity.ok().body(response);
     }
 
+    @Operation(summary = "Get the number of unread notification")
     @GetMapping("/unread/count")
     public ResponseEntity<BaseApiResponse<Long>> getUnreadNotificationCount(Principal principal) {
         Long count = notificationService.countUnreadNotification(principal.getName());
@@ -46,12 +50,16 @@ public class NotificationController {
         return ResponseEntity.ok().body(response);
     }
 
+    @Operation(summary = "Get all notifications of current login user", description = "Get all notifications of current " +
+        "login user with pagination and sort")
     @GetMapping
     ResponseEntity<PagingApiResponse<List<NotificationResponseDTO>>> getAllNotification(Principal principal, @Valid BaseCriteria baseCriteria) {
         PagingApiResponse<List<NotificationResponseDTO>> response = notificationService.getAllNotification(principal.getName(), baseCriteria);
         return ResponseEntity.ok().body(response);
     }
 
+    @Operation(summary = "Get all unread notifications of current login user", description = "Get all unread notifications of current " +
+            "login user with pagination and sort")
     @GetMapping("/unread/list")
     ResponseEntity<PagingApiResponse<List<NotificationResponseDTO>>> getUnreadNotification(Principal principal, @Valid BaseCriteria baseCriteria) {
         PagingApiResponse<List<NotificationResponseDTO>> response = notificationService.getUnreadNotification(principal.getName(), baseCriteria);

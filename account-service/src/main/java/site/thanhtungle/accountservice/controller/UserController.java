@@ -1,5 +1,7 @@
 package site.thanhtungle.accountservice.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,10 +18,12 @@ import java.util.List;
 @RestController
 @RequestMapping("${api.url.user}")
 @AllArgsConstructor
+@SecurityRequirement(name = "BearerAuth")
 public class UserController {
 
     private final KeycloakUserService keycloakUserService;
 
+    @Operation(summary = "Create new user")
     @PostMapping
     public ResponseEntity<BaseApiResponse<UserResponseDTO>> createUer(@RequestBody UserRequestDTO userRequestDTO) {
         UserResponseDTO userResponseDTO = keycloakUserService.createUser(userRequestDTO);
@@ -27,6 +31,7 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
+    @Operation(summary = "Update user")
     @PutMapping("/{id}")
     public ResponseEntity<BaseApiResponse<String>> updateUser(@PathVariable("id") String userId,
                                                               @RequestBody UserUpdateRequestDTO userUpdateRequestDTO) {
@@ -36,6 +41,7 @@ public class UserController {
         return ResponseEntity.ok().body(response);
     }
 
+    @Operation(summary = "Get user by id")
     @GetMapping("/{id}")
     public ResponseEntity<BaseApiResponse<UserResponseDTO>> getUser(@PathVariable("id") String userId) {
         UserResponseDTO responseDTO = keycloakUserService.getUser(userId);
@@ -43,6 +49,7 @@ public class UserController {
         return ResponseEntity.ok().body(response);
     }
 
+    @Operation(summary = "Get all users with search and pagination")
     @GetMapping
     public ResponseEntity<PagingApiResponse<List<UserResponseDTO>>> getAllUsers(
             @RequestParam(name = "q", required = false) String search,
@@ -52,6 +59,7 @@ public class UserController {
         return ResponseEntity.ok().body(keycloakUserService.getAllUsers(search, page, pageSize));
     }
 
+    @Operation(summary = "Delete user by id")
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteUser(@PathVariable("id") String userId) {

@@ -88,3 +88,7 @@ redis:
   host: localhost
   port: 6379
   timeout: 3600
+
+springdoc:
+  swagger-ui:
+    path: /tour-service/swagger-ui.html

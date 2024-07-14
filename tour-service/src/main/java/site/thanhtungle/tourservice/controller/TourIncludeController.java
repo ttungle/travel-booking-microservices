@@ -1,5 +1,7 @@
 package site.thanhtungle.tourservice.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,6 +22,8 @@ public class TourIncludeController {
 
     private final TourIncludeService tourIncludeService;
 
+    @Operation(summary = "Create new tour include")
+    @SecurityRequirement(name = "BearerAuth")
     @PostMapping
     @PreAuthorize("hasRole('admin')")
     public ResponseEntity<BaseApiResponse<TourIncludeResponseDTO>> createTourInclude(
@@ -30,6 +34,8 @@ public class TourIncludeController {
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
+    @Operation(summary = "Update tour include")
+    @SecurityRequirement(name = "BearerAuth")
     @PutMapping("/{id}")
     @PreAuthorize("hasRole('admin')")
     public ResponseEntity<BaseApiResponse<TourIncludeResponseDTO>> updateTourInclude(
@@ -40,6 +46,7 @@ public class TourIncludeController {
         return ResponseEntity.ok().body(response);
     }
 
+    @Operation(summary = "Get all tour includes", description = "Get all tour includes with pagination and sort.")
     @GetMapping
     public ResponseEntity<PagingApiResponse<List<TourIncludeResponseDTO>>> getAllTourInclude(
             @RequestParam(name = "page", defaultValue = "1") Integer page,
@@ -50,6 +57,7 @@ public class TourIncludeController {
         return ResponseEntity.ok().body(response);
     }
 
+    @Operation(summary = "Get tour include by id")
     @GetMapping("/{id}")
     public ResponseEntity<BaseApiResponse<TourIncludeResponseDTO>> getTourInclude(@PathVariable("id") Long tourIncludeId) {
         TourIncludeResponseDTO tourIncludeResponse = tourIncludeService.getTourInclude(tourIncludeId);
@@ -57,6 +65,8 @@ public class TourIncludeController {
         return ResponseEntity.ok().body(response);
     }
 
+    @Operation(summary = "Delete tour include by id")
+    @SecurityRequirement(name = "BearerAuth")
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @PreAuthorize("hasRole('admin')")
