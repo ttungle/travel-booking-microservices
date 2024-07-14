@@ -47,3 +47,7 @@ spring:
         jwt:
           issuer-uri: http://localhost:8181/realms/travel-booking
           jwk-set-uri: ${spring.security.oauth2.resourceserver.jwt.issuer-uri}/protocol/openid-connect/certs
+
+springdoc:
+  swagger-ui:
+    path: /booking-service/swagger-ui.html

@@ -1,5 +1,7 @@
 package site.thanhtungle.tourservice.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,6 +22,8 @@ public class TourExcludeController {
 
     private final TourExcludeService tourExcludeService;
 
+    @Operation(summary = "Create new tour exclude")
+    @SecurityRequirement(name = "BearerAuth")
     @PostMapping
     @PreAuthorize("hasRole('admin')")
     public ResponseEntity<BaseApiResponse<TourExcludeResponseDTO>> createTourExclude(
@@ -30,6 +34,8 @@ public class TourExcludeController {
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
+    @Operation(summary = "Update tour exclude")
+    @SecurityRequirement(name = "BearerAuth")
     @PutMapping("/{id}")
     @PreAuthorize("hasRole('admin')")
     public ResponseEntity<BaseApiResponse<TourExcludeResponseDTO>> updateTourExclude(
@@ -40,6 +46,7 @@ public class TourExcludeController {
         return ResponseEntity.ok().body(response);
     }
 
+    @Operation(summary = "Get all tour excludes", description = "Get all tour excludes with pagination and sort.")
     @GetMapping
     public ResponseEntity<PagingApiResponse<List<TourExcludeResponseDTO>>> getAllTourExclude(
             @RequestParam(name = "page", defaultValue = "1") Integer page,
@@ -51,6 +58,7 @@ public class TourExcludeController {
         return ResponseEntity.ok().body(tourExcludeResponse);
     }
 
+    @Operation(summary = "Get tour exclude by id")
     @GetMapping("/{id}")
     public ResponseEntity<BaseApiResponse<TourExcludeResponseDTO>> getTourExclude(@PathVariable("id") Long tourExcludeId) {
         TourExcludeResponseDTO tourExcludeResponse = tourExcludeService.getTour(tourExcludeId);
@@ -59,6 +67,8 @@ public class TourExcludeController {
         return ResponseEntity.ok().body(response);
     }
 
+    @Operation(summary = "Delete tour exclude by id")
+    @SecurityRequirement(name = "BearerAuth")
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @PreAuthorize("hasRole('admin')")

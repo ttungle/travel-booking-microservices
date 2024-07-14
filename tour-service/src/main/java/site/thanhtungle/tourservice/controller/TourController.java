@@ -1,5 +1,8 @@
 package site.thanhtungle.tourservice.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpHeaders;
@@ -27,6 +30,8 @@ public class TourController {
 
     private final TourService tourService;
 
+    @Operation(summary = "Create new tour")
+    @SecurityRequirement(name = "BearerAuth")
     @PostMapping(value = "", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @PreAuthorize("hasRole('admin')")
     public ResponseEntity<BaseApiResponse<TourResponseDTO>> createTour(
@@ -42,6 +47,8 @@ public class TourController {
         return ResponseEntity.status(HttpStatus.CREATED).headers(httpHeaders).body(response);
     }
 
+    @Operation(summary = "Update tour")
+    @SecurityRequirement(name = "BearerAuth")
     @PutMapping("/{id}")
     @PreAuthorize("hasRole('admin')")
     public ResponseEntity<BaseApiResponse<TourResponseDTO>> updateTour(
@@ -57,6 +64,8 @@ public class TourController {
         return ResponseEntity.ok().body(response);
     }
 
+    @Operation(summary = "Update tour status")
+    @SecurityRequirement(name = "BearerAuth")
     @PutMapping("/{id}/status")
     @PreAuthorize("hasRole('admin')")
     public ResponseEntity<BaseApiResponse<TourResponseDTO>> updateTourStatus(
@@ -66,6 +75,7 @@ public class TourController {
         return ResponseEntity.ok().body(response);
     }
 
+    @Operation(summary = "Get tour by id")
     @GetMapping("/{id}")
     public ResponseEntity<BaseApiResponse<TourResponseDTO>> getTour(@PathVariable("id") Long tourId) {
         TourResponseDTO tourResponseDTO = tourService.getTour(tourId);
@@ -73,12 +83,17 @@ public class TourController {
         return ResponseEntity.ok().body(response);
     }
 
+    @Operation(summary = "Get all tours",
+            description = "Get all tours with pagination, sort, filters. Supported filter fields: name, categoryId, " +
+                        "price, priceDiscount, duration, ratingAverage, startDate, startLocation.")
     @GetMapping
     public ResponseEntity<PagingApiResponse<List<TourResponseDTO>>> getAllTours(@Valid TourCriteria tourCriteria) {
         PagingApiResponse<List<TourResponseDTO>> tourResponseList = tourService.getAllTours(tourCriteria);
         return ResponseEntity.ok().body(tourResponseList);
     }
 
+    @Operation(summary = "Delete tour by id")
+    @SecurityRequirement(name = "BearerAuth")
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @PreAuthorize("hasRole('admin')")
@@ -86,6 +101,8 @@ public class TourController {
         tourService.deleteTour(tourId);
     }
 
+    @Operation(summary = "Search all tours",
+            description = "Get all tours with pagination, sort, filters. Search by tour name and start location.")
     @GetMapping("/search")
     public ResponseEntity<PagingApiResponse<List<TourResponseDTO>>> searchTour(@Valid SearchTourCriteria searchTourCriteria) {
         PagingApiResponse<List<TourResponseDTO>> tourList = tourService.searchTours(searchTourCriteria);

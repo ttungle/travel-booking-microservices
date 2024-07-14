@@ -63,3 +63,7 @@ spring:
 server:
   tomcat:
     relaxed-query-chars: '|,{,},[,]'
+
+springdoc:
+  swagger-ui:
+    path: /notification-service/swagger-ui.html

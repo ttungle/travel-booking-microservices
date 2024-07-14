@@ -61,3 +61,7 @@ spring:
     name: ACCOUNT-SERVICE
   config:
     import: optional:configserver:http://localhost:8888
+
+springdoc:
+  swagger-ui:
+    path: /account-service/swagger-ui.html

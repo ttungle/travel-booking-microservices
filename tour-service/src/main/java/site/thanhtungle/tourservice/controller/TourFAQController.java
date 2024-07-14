@@ -1,5 +1,7 @@
 package site.thanhtungle.tourservice.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,6 +22,8 @@ public class TourFAQController {
 
     private final TourFAQService tourFAQService;
 
+    @Operation(summary = "Create tour FAQ")
+    @SecurityRequirement(name = "BearerAuth")
     @PostMapping
     @PreAuthorize("hasRole('admin')")
     public ResponseEntity<BaseApiResponse<TourFAQResponseDTO>> createTourFAQ(@RequestBody TourFAQRequestDTO tourFAQRequestDTO) {
@@ -28,6 +32,8 @@ public class TourFAQController {
         return ResponseEntity.ok().body(response);
     }
 
+    @Operation(summary = "Update tour FAQ")
+    @SecurityRequirement(name = "BearerAuth")
     @PutMapping("/{id}")
     @PreAuthorize("hasRole('admin')")
     public ResponseEntity<BaseApiResponse<TourFAQResponseDTO>> updateTourFAQ(@PathVariable("id") Long tourFAQId,
@@ -37,6 +43,7 @@ public class TourFAQController {
         return ResponseEntity.ok().body(response);
     }
 
+    @Operation(summary = "Get tour FAQ by id")
     @GetMapping("/{id}")
     public ResponseEntity<BaseApiResponse<TourFAQResponseDTO>> getTourFAQ(@PathVariable("id") Long tourFAQId) {
         TourFAQResponseDTO tourFAQResponse = tourFAQService.getTourFAQ(tourFAQId);
@@ -44,6 +51,7 @@ public class TourFAQController {
         return ResponseEntity.ok().body(response);
     }
 
+    @Operation(summary = "Get all tour FAQs", description = "Get all tour FAQs with pagination and sort.")
     @GetMapping
     public ResponseEntity<PagingApiResponse<List<TourFAQResponseDTO>>> getAllTourFAQs(
             @RequestParam(name = "page", defaultValue = "1") Integer page,
@@ -54,6 +62,8 @@ public class TourFAQController {
         return ResponseEntity.ok().body(tourFAQResponse);
     }
 
+    @Operation(summary = "Delete tour FAQ by id")
+    @SecurityRequirement(name = "BearerAuth")
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @PreAuthorize("hasRole('admin')")
