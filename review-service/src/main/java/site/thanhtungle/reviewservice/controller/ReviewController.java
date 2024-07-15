@@ -28,8 +28,8 @@ public class ReviewController {
 
     @Operation(summary = "Create new review")
     @PostMapping
-    public ResponseEntity<BaseApiResponse<Review>> createReview(@Valid @RequestBody ReviewRequestDTO reviewRequestDTO) {
-        Review review = reviewService.createReview(reviewRequestDTO);
+    public ResponseEntity<BaseApiResponse<Review>> createReview(Principal principal, @Valid @RequestBody ReviewRequestDTO reviewRequestDTO) {
+        Review review = reviewService.createReview(principal.getName(), reviewRequestDTO);
         BaseApiResponse<Review> response = new BaseApiResponse<>(HttpStatus.CREATED.value(), review);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }

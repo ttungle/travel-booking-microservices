@@ -22,8 +22,6 @@ public class ReviewRequestDTO {
     private String language;
     @Min(value = 0, message = "rating cannot be less than 0.")
     private Integer rating;
-    @NotNull(message = "userId cannot be null.")
-    private String userId;
     @NotNull(message = "tourId cannot be null.")
     private Long tourId;
 }

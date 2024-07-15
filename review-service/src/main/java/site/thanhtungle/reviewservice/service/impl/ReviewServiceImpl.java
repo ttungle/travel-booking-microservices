@@ -50,7 +50,7 @@ public class ReviewServiceImpl implements ReviewService {
     private final NotificationProducer notificationProducer;
 
     @Override
-    public Review createReview(ReviewRequestDTO reviewRequestDTO) {
+    public Review createReview(String userId, ReviewRequestDTO reviewRequestDTO) {
         ResponseEntity<BaseApiResponse<TourResponseDTO>> response = tourApiClient.getTour(reviewRequestDTO.getTourId());
         if (Objects.isNull(response) || Objects.isNull(response.getBody().getData().getId())) {
             throw new CustomNotFoundException("No tour found with tourId : " + reviewRequestDTO.getTourId());
@@ -64,7 +64,7 @@ public class ReviewServiceImpl implements ReviewService {
             reviewSummaryRepository.save(new ReviewSummary(0F, reviewRequestDTO.getTourId()));
         }
 
-        Review review = reviewMapper.toReview(reviewRequestDTO);
+        Review review = reviewMapper.toReview(reviewRequestDTO, userId);
         Review createdReview = reviewRepository.save(review);
         // calculate & update the review summary
         reviewSummaryService.calculateReviewSummaryByTourId(reviewRequestDTO.getTourId());

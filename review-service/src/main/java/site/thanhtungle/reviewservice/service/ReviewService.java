@@ -12,7 +12,7 @@ import java.util.Map;
 @Transactional
 public interface ReviewService {
 
-    Review createReview(ReviewRequestDTO reviewRequestDTO);
+    Review createReview(String userId, ReviewRequestDTO reviewRequestDTO);
 
     Review updateReview(Long reviewId, ReviewUpdateRequestDTO reviewUpdateRequestDTO);
 
