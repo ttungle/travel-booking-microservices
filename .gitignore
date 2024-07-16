@@ -4,4 +4,8 @@
 *.iml
 *.ipr
 
+## OS X
 .DS_Store
+
+## Log
+logs
