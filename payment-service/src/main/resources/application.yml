@@ -51,5 +51,7 @@ spring:
     import: optional:configserver:http://localhost:8888
 
 springdoc:
+  api-docs:
+    path: /payment-service/v3/api-docs
   swagger-ui:
     path: /payment-service/swagger-ui.html

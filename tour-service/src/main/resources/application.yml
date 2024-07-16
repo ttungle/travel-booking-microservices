@@ -90,5 +90,7 @@ redis:
   timeout: 3600
 
 springdoc:
+  api-docs:
+    path: /tour-service/v3/api-docs
   swagger-ui:
     path: /tour-service/swagger-ui.html
