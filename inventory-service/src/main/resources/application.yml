@@ -43,5 +43,7 @@ spring:
     import: optional:configserver:http://localhost:8888
 
 springdoc:
+  api-docs:
+    path: /inventory-service/v3/api-docs
   swagger-ui:
     path: /inventory-service/swagger-ui.html

@@ -15,31 +15,31 @@ spring:
         - id: TOUR-SERVICE
           uri: lb://TOUR-SERVICE
           predicates:
-            - Path=/api/v1/tours/**
+            - Path=/api/v1/tours/**, /tour-service/v3/api-docs
         - id: BOOKING-SERVICE
           uri: lb://BOOKING-SERVICE
           predicates:
-            - Path=/api/v1/bookings/**
+            - Path=/api/v1/bookings/**, /booking-service/v3/api-docs
         - id: INVENTORY-SERVICE
           uri: lb://INVENTORY-SERVICE
           predicates:
-            - Path=/api/v1/inventory/**
+            - Path=/api/v1/inventory/**, /inventory-service/v3/api-docs
         - id: PAYMENT-SERVICE
           uri: lb://PAYMENT-SERVICE
           predicates:
-            - Path=/api/v1/payments/**
+            - Path=/api/v1/payments/**, /payment-service/v3/api-docs
         - id: REVIEW-SERVICE
           uri: lb://REVIEW-SERVICE
           predicates:
-            - Path=/api/v1/reviews/**
+            - Path=/api/v1/reviews/**, /review-service/v3/api-docs
         - id: ACCOUNT-SERVICE
           uri: lb://ACCOUNT-SERVICE
           predicates:
-            - Path=/api/v1/auth/**, /api/v1/users/**
+            - Path=/api/v1/auth/**, /api/v1/users/**, /account-service/v3/api-docs
         - id: NOTIFICATION-SERVICE
           uri: lb://NOTIFICATION-SERVICE
           predicates:
-            - Path=/api/v1/notifications/**
+            - Path=/api/v1/notifications/**, /notification-service/v3/api-docs
           # discovery server route
         - id: DISCOVERY-SERVER
           uri: http://localhost:8761
@@ -78,3 +78,26 @@ jwt:
     converter:
       resource-id: travel-booking-client
       principle-attribute: preferred_username
+
+springdoc:
+  api-docs:
+    enabled: true
+    path: /v3/api-docs
+  swagger-ui:
+    enabled: true
+    path: /swagger-ui.html
+    urls:
+      - name: Tour Service
+        url: /tour-service/v3/api-docs
+      - name: Review Service
+        url: /review-service/v3/api-docs
+      - name: Payment Service
+        url: /payment-service/v3/api-docs
+      - name: Notification Service
+        url: /notification-service/v3/api-docs
+      - name: Inventory Service
+        url: /inventory-service/v3/api-docs
+      - name: Booking Service
+        url: /booking-service/v3/api-docs
+      - name: Account Service
+        url: /account-service/v3/api-docs
